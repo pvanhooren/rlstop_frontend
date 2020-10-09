@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Overview from './components/Overview/Overview';
+import Overview from './components/Overview/Overview.js';
+import NewTradeForm from './components/NewTradeForm/NewTradeForm.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -9,6 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     {/*<App />*/}
     <Overview />
+    <NewTradeForm />
   </React.StrictMode>,
   document.getElementById('root')
 );

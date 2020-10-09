@@ -1,6 +1,12 @@
+.tableContainer{
+    position:relative;
+    float:left;
+}
+
 .table{
     border-collapse: collapse;
-    width: 40%;
+    width: 800px;
+    position:relative;
     text-align:center;
 }
 
@@ -19,3 +25,46 @@ th {
 .trades{
     padding-left:5px;
 }
+
+.delete{
+    height:10px;
+    width:20px;
+    background:red;
+}
+
+.edit{
+    height:10px;
+    width:20px;
+    background:yellow;
+}
+
+.filter{
+    display:block;
+    margin-left:850px;
+}
+
+.marginButton{
+    position:center;
+    margin-right:5px !important
+}
+
+.editForm{
+    display:none;
+    margin-left:850px;
+}
+
+.input{
+    padding: 12px;
+    height:10px;
+    border: 3px solid;
+    border-color: grey;
+    border-radius: 20px;
+    width: 300px !important;
+    resize: vertical;
+}
+
+.textfield{
+    width:300px;
+    margin-right:10px;
+}
+
