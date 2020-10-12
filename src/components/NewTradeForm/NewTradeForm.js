@@ -3,6 +3,7 @@ import './NewTradeForm.css'
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import {withRouter} from "react-router-dom";
 
 class NewTradeForm extends Component {
     constructor(props) {

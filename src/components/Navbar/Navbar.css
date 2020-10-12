@@ -1,0 +1,13 @@
+.btn{
+    color:white !important;
+}
+
+.root{
+    flexGrow: 1 !important;
+}
+
+.header{
+    display: flex !important;
+    flex: 1 !important;
+    justify-content: space-evenly !important;
+}

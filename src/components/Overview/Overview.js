@@ -5,6 +5,7 @@ import RadioGroup from "@material-ui/core/RadioGroup"
 import Radio from "@material-ui/core/Radio"
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
+import {withRouter} from "react-router-dom";
 
 class Overview extends Component {
     constructor(props){
@@ -156,5 +157,5 @@ class Overview extends Component {
     }
 }
 
-export default Overview
+export default Overview;
 

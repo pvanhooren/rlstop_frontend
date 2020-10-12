@@ -8,9 +8,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    {/*<App />*/}
-    <Overview />
-    <NewTradeForm />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
