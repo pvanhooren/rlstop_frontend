@@ -57,8 +57,6 @@ class Overview extends Component {
                 self.setState({trades: result});
             }
         )
-
-        console.log(this.state.trades);
     }
 
     getFilteredTrades = () =>{

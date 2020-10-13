@@ -54,8 +54,8 @@ const Navbar = props => {
             pageURL: "/new"
         },
         {
-            menuTitle: "About RLStop",
-            pageURL: "/about"
+            menuTitle: "People",
+            pageURL: "/people"
         },
         {
             menuTitle: "Sprint 2 demo",
@@ -126,9 +126,9 @@ const Navbar = props => {
                             </Button>
                             <Button
                                 className="btn"
-                                onClick={() => handleButtonClick("/about")}
+                                onClick={() => handleButtonClick("/people")}
                             >
-                                ABOUT
+                                PEOPLE
                             </Button>
                             <Button
                                 className="btn"
