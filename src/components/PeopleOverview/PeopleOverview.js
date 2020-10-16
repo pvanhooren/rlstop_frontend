@@ -7,9 +7,14 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import Button from "@material-ui/core/Button";
-import "./People.css";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
 
-class People extends React.Component {
+import '../Overview.css';
+
+class PeopleOverview extends React.Component {
     constructor(props) {
         super(props);
 
@@ -65,20 +70,32 @@ class People extends React.Component {
     render(){
         return(
             <div>
-                <div>
-                    <h2 className="filterText">Filter by platform</h2>
-                    <RadioGroup id="platform" className="radioGroup" name="platform">
+
+                    <br/>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                        >
+                            <Typography>Filter by platform</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <div className="filterArea">
+                    <RadioGroup id="platform" className="filterGroup" name="platform">
                         <FormControlLabel value="switch" control={<Radio id="switch" />} label="Nintendo Switch" />
                         <FormControlLabel value="playstation" control={<Radio id="playstation" />} label="PlayStation" />
                         <FormControlLabel value="xbox" control={<Radio id="xbox" />} label="XBox" />
                         <FormControlLabel value="pc" control={<Radio id="pc" />} label="PC" />
                     </RadioGroup>
-                    <div className="buttons">
+                    <div className="filterButtons">
                     <Button className="marginBtn" onClick={this.getFilteredUsers} variant="contained" color="primary">Filter!</Button>
                     <Button onClick={this.getAllUsers} variant="contained" color="secondary">Remove filter</Button>
-                    <br/><br/>
                     </div>
-                </div>
+                    </div>
+                    </AccordionDetails>
+                    </Accordion>
+                        <br/><br/>
+
+
                 <div className="cards">
                 {this.state.users.map(user =>
                             <Card variant="outlined">
@@ -106,4 +123,4 @@ class People extends React.Component {
     }
 }
 
-export default People;
+export default PeopleOverview;

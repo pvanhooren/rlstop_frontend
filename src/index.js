@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Overview from './components/Overview/Overview.js';
+import TradeOverview from './components/TradeOverview/TradeOverview.js';
 import NewTradeForm from './components/NewTradeForm/NewTradeForm.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';

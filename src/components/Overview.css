@@ -1,0 +1,83 @@
+.filterText{
+    text-align:center;
+    position:relative;
+}
+
+.filterButtons{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.marginBtn{
+    margin-right:5px !important;
+}
+
+.filterGroup{
+    text-align:center !important;
+    height: 100px;
+    width:100%;
+}
+
+.filterArea{
+    text-align:center !important;
+    width:100%;
+}
+
+.editForm{
+    display:none;
+}
+
+.btnGroup{
+    text-align:center;
+}
+
+.editTextFields{
+    text-align:center;
+}
+
+.input{
+    margin-left:5% !important;
+    width: 90% !important;
+    text-align:center;
+}
+
+.textField2{
+    margin-left:5% !important;
+    width:40%;
+}
+
+.textField1{
+    width:40%;
+}
+
+.label1{
+    width:40%;
+    margin-left:7.5%;
+}
+
+.label2{
+    width:40%;
+    margin-left: 38.5%;
+}
+
+.icons{
+    float:right;
+    position:relative;
+    margin-top:1.5%;
+}
+
+.cardText{
+    float:left;
+    position:relative;
+}
+
+.icon1{
+    float:right;
+    margin-right:30px;
+}
+
+.icon2{
+    float:right;
+}
+

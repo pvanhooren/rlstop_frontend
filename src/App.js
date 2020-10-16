@@ -1,13 +1,17 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
-import Overview from "./components/Overview/Overview";
+import TradeOverview from "./components/TradeOverview/TradeOverview";
 import NewTradeForm from "./components/NewTradeForm/NewTradeForm";
 import Navbar from "./components/Navbar/Navbar";
 import NotFound from "./components/NotFound/NotFound";
-import People from "./components/People/People";
+import PeopleOverview from "./components/PeopleOverview/PeopleOverview";
 import Demo from "./components/Demo/Demo";
+import WishlistEditor from "./components/WishlistEditor/WishlistEditor";
+import UserTrades from "./components/UserTrades/UserTrades";
+import Settings from "./components/Settings/Settings";
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
+
+import './App.css';
 
 function App() {
   return (
@@ -17,13 +21,16 @@ function App() {
       <Navbar />
       <Switch>
 
-            <Route exact from="/" component={Overview}/>} />
+            <Route exact from="/" component={TradeOverview}/>} />
             <Route exact path="/new" component={NewTradeForm}/>} />
-            <Route exact path="/people" component={People}/>
+            <Route exact path="/people" component={PeopleOverview}/>
             <Route exact path="/demo" component={Demo}/>} />
+            <Route exact path="/me/wishlist" component={WishlistEditor}/>} />
+            <Route exact path="/me/trades" component={UserTrades}/>} />
+            <Route exact path="/me/settings" component={Settings}/>} />
             <Route component={NotFound}/>
 
-        {/*<Route exact path="/about" render="./components/Overview/Overview" />} />*/}
+        {/*<Route exact path="/about" render="./components/TradeOverview/TradeOverview" />} />*/}
       </Switch>
       </Router>
       {/*<header className="App-header">*/}

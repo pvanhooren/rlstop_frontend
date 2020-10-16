@@ -1,12 +1,12 @@
 import React from "react";
-import Overview from "../Overview/Overview";
+import TradeOverview from "../TradeOverview/TradeOverview";
 import NewTradeForm from "../NewTradeForm/NewTradeForm";
 
 class Demo extends React.Component{
     render(){
        return(
            <div>
-            <Overview />
+            <TradeOverview />
             <NewTradeForm />
            </div>
        ) ;

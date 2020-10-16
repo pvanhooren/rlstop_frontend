@@ -46,7 +46,7 @@ const Navbar = props => {
 
     const menuItems = [
         {
-            menuTitle: "Overview",
+            menuTitle: "Trades",
             pageURL: "/"
         },
         {
@@ -57,13 +57,25 @@ const Navbar = props => {
             menuTitle: "People",
             pageURL: "/people"
         },
+        // {
+        //     menuTitle: "Sprint 2 demo",
+        //     pageURL: "/demo"
+        // },
         {
-            menuTitle: "Sprint 2 demo",
-            pageURL: "/demo"
+            menuTitle: "Wishlist",
+            pageURL: "/me/wishlist"
         },
         {
-            menuTitle: "Profile",
-            pageURL: "/profile"
+            menuTitle: "My trades",
+            pageUrl: "/me/trades"
+        },
+        {
+            menuTitle: "Settings",
+            pageUrl: "/me/settings"
+        },
+        {
+            menuTitle: "Log out",
+            pageUrl: "/me/logout"
         }
     ];
 
@@ -116,7 +128,7 @@ const Navbar = props => {
                                 className="btn"
                                 onClick={() => handleButtonClick("/")}
                             >
-                                OVERVIEW
+                                TRADES
                             </Button>
                             <Button
                                 className="btn"
@@ -130,18 +142,31 @@ const Navbar = props => {
                             >
                                 PEOPLE
                             </Button>
+                            {/*<Button*/}
+                            {/*    className="btn"*/}
+                            {/*    onClick={() => handleButtonClick("/demo")}*/}
+                            {/*>*/}
+                            {/*    DEMO*/}
+                            {/*</Button>*/}
                             <Button
                                 className="btn"
-                                onClick={() => handleButtonClick("/demo")}
-                            >
-                                DEMO
-                            </Button>
-                            <Button
-                                className="btn"
-                                onClick={() => handleButtonClick("/profile")}
+                                onClick={handleMenu}
                             >
                                 PROFILE
                             </Button>
+                            <Menu
+                                id="profile-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={() => setAnchorEl(null)}
+                            >
+                                <MenuItem onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
+                                <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
+                                <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
+                                <MenuItem onClick={() => handleMenuClick("/me/logout")}>Log out</MenuItem>
+                            </Menu>
+
                         </div>
                     )}
                 </Toolbar>
