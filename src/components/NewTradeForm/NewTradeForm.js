@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import './NewTradeForm.css'
-import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {withRouter} from "react-router-dom";
+
+import './NewTradeForm.css'
 
 class NewTradeForm extends Component {
     constructor(props) {

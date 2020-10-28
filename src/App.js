@@ -9,6 +9,8 @@ import Demo from "./components/Demo/Demo";
 import WishlistEditor from "./components/WishlistEditor/WishlistEditor";
 import UserTrades from "./components/UserTrades/UserTrades";
 import Settings from "./components/Settings/Settings";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import './App.css';
@@ -28,6 +30,8 @@ function App() {
             <Route exact path="/me/wishlist" component={WishlistEditor}/>} />
             <Route exact path="/me/trades" component={UserTrades}/>} />
             <Route exact path="/me/settings" component={Settings}/>} />
+            <Route exact path="/me/login" component={Login}/>}/>
+            <Route exact path="/me/register" component={Register}/>}/>
             <Route component={NotFound}/>
 
         {/*<Route exact path="/about" render="./components/TradeOverview/TradeOverview" />} />*/}

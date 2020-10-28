@@ -133,52 +133,6 @@ class TradeOverview extends Component {
                 </Accordion>
                 <br/><br/>
 
-
-        {/*<div id="editForm" className="editForm">*/}
-        {/*    <br /><br/>*/}
-        {/*    <label className="label1">I offer...</label>*/}
-        {/*    <label className="label2">In trade for...</label><br/>*/}
-        {/*    <div className="editTextFields">*/}
-        {/*    <TextField className="textField1" id="offers" label={this.state.offers}></TextField>*/}
-        {/*    <TextField className="textField2" id="wants" label={this.state.wants}></TextField>*/}
-        {/*        </div>*/}
-        {/*    <br /><br/>*/}
-        {/*    <div className="editButtons">*/}
-        {/*    <Button className="marginButton" variant="contained" color="primary" onClick={this.editTrade}>Edit trade</Button>*/}
-        {/*    <Button variant="contained" color="secondary" onClick={this.cancelEdit}>Cancel</Button>*/}
-        {/*    </div>*/}
-        {/*    </div>*/}
-                {/*<div className="tableContainer">*/}
-                {/*<h2>All trades</h2>*/}
-                {/*<table className="table">*/}
-                {/*    <thead>*/}
-                {/*    <tr>*/}
-                {/*        <th>Id</th>*/}
-                {/*        <th>Wants</th>*/}
-                {/*        <th>Offers</th>*/}
-                {/*        <th>Username</th>*/}
-                {/*        <th>Platform</th>*/}
-                {/*        <th>Friend ID</th>*/}
-                {/*        <th>Edit</th>*/}
-                {/*        <th>Delete</th>*/}
-                {/*    </tr>*/}
-                {/*    </thead>*/}
-                {/*    <tbody>*/}
-                {/*    {this.state.trades.map(trade=>(*/}
-                {/*        <tr key={trade.postId}>*/}
-                {/*            <td>{trade.postId}</td>*/}
-                {/*            <td>{trade.wants}</td>*/}
-                {/*            <td>{trade.offers}</td>*/}
-                {/*            <td>{trade.user.userName}</td>*/}
-                {/*            <td>{trade.user.platform}</td>*/}
-                {/*            <td>{trade.user.platformID}</td>*/}
-                {/*            <td><button onClick={() => this.showEditForm(trade)} className="edit"></button></td>*/}
-                {/*            <td><button onClick={() => this.deleteTrade(trade.postId)} className="delete"></button></td>*/}
-                {/*        </tr>*/}
-                {/*    ))}*/}
-                {/*    </tbody>*/}
-                {/*</table>*/}
-                {/*</div>*/}
                 <br/>
                 {this.state.trades.map(trade =>
                     <Card variant="outlined">

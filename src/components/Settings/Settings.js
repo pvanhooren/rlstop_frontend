@@ -1,8 +1,8 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
 
 import "../Overview.css";
 import "../userSelection.css";
-import Button from "@material-ui/core/Button";
 
 class Settings extends React.Component{
     constructor(props) {
@@ -30,7 +30,7 @@ class Settings extends React.Component{
         return(
           <div>
               <div className="selectArea">
-                  <h2>Your wishlist</h2>
+                  <h2>User settings</h2>
                   <label>I am...</label>
                   <select className="userSelect" id="userSelect" name="user">
                       {this.state.users.map(el => <option value={el.userId} key={el.userId}> {el.userName} </option>)}
