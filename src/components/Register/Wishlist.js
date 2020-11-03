@@ -68,11 +68,12 @@ class Wishlist extends React.Component{
                                 fullWidth
                                 autoComplete={field.name}
                             />
-                            <DeleteIcon id={field.deleteName} color="secondary" cursor="pointer" onClick={this.deleteField} />
+                            {/*<DeleteIcon id={field.deleteName} color="secondary" cursor="pointer" onClick={this.deleteField} />*/}
                             </div>
                         </Grid>
                 ))}
                     <Button variant="contained" color="primary" onClick={this.addField}>Add item</Button>
+                    <Button className="spacedBtn" variant="contained" color="secondary" onClick={this.deleteField}>Delete last field</Button>
                 </Grid>
 
             </React.Fragment>

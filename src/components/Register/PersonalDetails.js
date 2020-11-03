@@ -32,6 +32,7 @@ export default function PersonalDetails() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
+                        required
                         id="password"
                         name="password"
                         label="Password"

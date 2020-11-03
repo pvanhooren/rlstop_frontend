@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
+
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CardContent from '@material-ui/core/CardContent';
@@ -17,6 +19,8 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 
 import '../Overview.css'
 
+const baseUrl= "http://localhost:8080/";
+
 class TradeOverview extends Component {
     constructor(props){
         super(props);
@@ -28,7 +32,6 @@ class TradeOverview extends Component {
             wants: "",
             offers: ""
         }
-
     }
 
     showEditForm(trade) {
@@ -37,14 +40,14 @@ class TradeOverview extends Component {
         document.getElementById("editForm").style.display = "block";
     }
 
-    editTrade = () =>{
+    editTrade = async() =>{
         const self = this;
         if(document.getElementById("wants").value != "" && document.getElementById("offers").value != "") {
-            fetch("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId, {method: 'PUT'});
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("editForm").style.display = "none";
             document.getElementById("filter").style.display = "block";
-            window.location.reload(false);
+            this.getAllTrades();
         } else {
             alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
         }
@@ -56,15 +59,15 @@ class TradeOverview extends Component {
     }
 
     deleteTrade(tradeId){
-        fetch("http://localhost:8080/trades/" + tradeId, {method:'DELETE'})
+        fetch(baseUrl + "trades/" + tradeId, {method:'DELETE'})
         window.location.reload(false);
     }
 
     getAllTrades = () => {
         const self = this;
-        fetch("http://localhost:8080/trades/all").then(rse => rse.json()).then(
+        axios.get(baseUrl + "trades/all").then(
             result => {
-                self.setState({trades: result});
+                self.setState({trades: result.data});
             }
         )
     }
@@ -72,27 +75,27 @@ class TradeOverview extends Component {
     getFilteredTrades = () =>{
         const self = this;
         if(document.getElementById("switch").checked){
-            fetch("http://localhost:8080/trades/filter?platform=NintendoSwitch").then(rse => rse.json()).then(
+            axios.get(baseUrl + "trades/filter?platform=NintendoSwitch").then(
                 result => {
-                    self.setState({trades: result});
+                    self.setState({trades: result.data});
                 }
             )
         } else if (document.getElementById("playstation").checked) {
-            fetch("http://localhost:8080/trades/filter?platform=PlayStation").then(rse => rse.json()).then(
+            axios.get(baseUrl + "trades/filter?platform=PlayStation").then(
                 result => {
-                    self.setState({trades: result});
+                    self.setState({trades: result.data});
                 }
             )
         } else if (document.getElementById("xbox").checked) {
-            fetch("http://localhost:8080/trades/filter?platform=XBox").then(rse => rse.json()).then(
+            axios.get(baseUrl + "trades/filter?platform=XBox").then(
                 result => {
-                    self.setState({trades: result});
+                    self.setState({trades: result.data});
                 }
             )
         } else if (document.getElementById("pc").checked) {
-            fetch("http://localhost:8080/trades/filter?platform=PC").then(rse => rse.json()).then(
+            axios.get(baseUrl + "trades/filter?platform=PC").then(
                 result => {
-                    self.setState({trades: result});
+                    self.setState({trades: result.data});
                 }
             )
         } else {
@@ -131,7 +134,6 @@ class TradeOverview extends Component {
                         </div>
                     </AccordionDetails>
                 </Accordion>
-                <br/><br/>
 
                 <br/>
                 {this.state.trades.map(trade =>
@@ -142,8 +144,8 @@ class TradeOverview extends Component {
                                 {trade.user.userName}
                             </Typography>
                             <Typography variant="h5" component="h2">
-                                Wants: {trade.wants} -
-                                Offers: {trade.offers}
+                                Offers: {trade.wants} -
+                                Wants: {trade.offers}
                             </Typography>
                             <Typography color="textSecondary">
                                 {trade.user.platform} ID: {trade.user.platformID}

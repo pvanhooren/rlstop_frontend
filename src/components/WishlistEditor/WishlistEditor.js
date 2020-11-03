@@ -1,4 +1,6 @@
 import React from "react";
+import axios from 'axios';
+
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -8,6 +10,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import "../Overview.css";
 import "../userSelection.css";
+
+const baseUrl= "http://localhost:8080/";
 
 class WishlistEditor extends React.Component{
     constructor(props) {
@@ -20,30 +24,47 @@ class WishlistEditor extends React.Component{
         }
     }
 
-    selectUser = () => {
-        this.setState({ userId: document.getElementById("userSelect").value });
-        fetch("http://localhost:8080/users/" + document.getElementById("userSelect").value).then(rse => rse.json()).then(
+    getWishlist = async () =>{
+        await axios.get(baseUrl + "users/" + this.state.userId).then(
             result => {
-                this.setState({wishlist:result.wishlist})
+                this.setState({wishlist:result.data.wishlist})
+                console.log(this.state.wishlist);
+            }
+        )
+    }
+
+    selectUser = async() => {
+        this.setState({ userId: document.getElementById("userSelect").value });
+        await axios.get(baseUrl + "users/" + document.getElementById("userSelect").value).then(
+            result => {
+                this.setState({wishlist:result.data.wishlist})
                 console.log(this.state.wishlist);
             }
         )
         document.getElementById("wishlistEditor").style.display = "block";
     }
 
-    deleteItem(item){
-        fetch("http://localhost:8080/users/" + this.state.userId + "/remove/" + item, {method: 'PUT'})
-        window.location.reload(false);
+    async deleteItem(item) {
+        var r = window.confirm("Are you sure you want to delete this item?");
+
+        if(r) {
+            await axios.put(baseUrl + "users/" + this.state.userId + "/remove/" + item)
+            await this.getWishlist();
+        }
     }
 
-    addItem = () => {
-        fetch("http://localhost:8080/users/" + this.state.userId + "/add/" + document.getElementById("newItem").value, {method:'PUT'});
-        window.location.reload(false);
+    addItem = async () => {
+        await axios.put(baseUrl + "users/" + this.state.userId + "/add/" + document.getElementById("newItem").value);
+        await this.getWishlist();
     }
 
-    clearWishlist = () =>{
-        fetch("http://localhost:8080/users/" + this.state.userId + "/clear", {method: 'PUT'});
-        window.location.reload(false);
+    clearWishlist = async () => {
+        var r = window.confirm("Are you sure you want to clear your wishlist?");
+
+        if(r) {
+            await axios.put(baseUrl + "users/" + this.state.userId + "/clear");
+            await this.getWishlist();
+        }
     }
 
     componentDidMount() {
@@ -51,9 +72,9 @@ class WishlistEditor extends React.Component{
     }
 
     getAllUsers() {
-        fetch("http://localhost:8080/users/all").then(rse => rse.json()).then(
+        axios.get(baseUrl + "users/all").then(
             result => {
-                this.setState({users: result})
+                    this.setState({users: result.data})
             }
         )
     }

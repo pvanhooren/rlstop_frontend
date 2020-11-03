@@ -1,8 +1,12 @@
 import React, {Component} from "react";
+import axios from 'axios';
+
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 import './NewTradeForm.css'
+
+const baseUrl= "http://localhost:8080/";
 
 class NewTradeForm extends Component {
     constructor(props) {
@@ -14,9 +18,9 @@ class NewTradeForm extends Component {
     }
 
     getAllUsers() {
-        fetch("http://localhost:8080/users/all").then(rse => rse.json()).then(
+        axios.get(baseUrl + "users/all").then(
             result => {
-                this.setState({users:result})
+                this.setState({users:result.data})
                 // this.putUsersInSelect();
             }
         )
@@ -33,7 +37,7 @@ class NewTradeForm extends Component {
 
     submitForm() {
         if (document.getElementById("newWants").value !== "" && document.getElementById("newOffers").value !== "" && document.getElementById("selectBox").value !== "") {
-            fetch("http://localhost:8080/trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + document.getElementById("selectBox").value, {method: 'POST'});
+            axios.post(baseUrl +"trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + document.getElementById("selectBox").value);
             window.location.reload(false);
         } else {
             alert("The trade cannot be added because it is not complete");

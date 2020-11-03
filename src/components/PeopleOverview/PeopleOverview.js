@@ -1,4 +1,6 @@
 import React from "react";
+import axios from 'axios';
+
 import Card from '@material-ui/core/Card';
 import Typography from "@material-ui/core/Typography";
 import CardContent from '@material-ui/core/CardContent';
@@ -14,6 +16,8 @@ import Accordion from "@material-ui/core/Accordion";
 
 import '../Overview.css';
 
+const baseUrl= "http://localhost:8080/";
+
 class PeopleOverview extends React.Component {
     constructor(props) {
         super(props);
@@ -24,9 +28,9 @@ class PeopleOverview extends React.Component {
     }
 
     getAllUsers = () => {
-        fetch("http://localhost:8080/users/all").then(rse => rse.json()).then(
+        axios.get(baseUrl + "users/all").then(
             result => {
-                this.setState({users:result})
+                this.setState({users:result.data})
             }
         )
     }
@@ -34,27 +38,27 @@ class PeopleOverview extends React.Component {
     getFilteredUsers = () =>{
         const self = this;
         if(document.getElementById("switch").checked){
-            fetch("http://localhost:8080/users/filter?platform=NintendoSwitch").then(rse => rse.json()).then(
+            axios.get(baseUrl + "users/filter?platform=NintendoSwitch").then(
                 result => {
-                    self.setState({users: result});
+                    self.setState({users: result.data});
                 }
             )
         } else if (document.getElementById("playstation").checked) {
-            fetch("http://localhost:8080/users/filter?platform=PlayStation").then(rse => rse.json()).then(
+            axios.get(baseUrl + "users/filter?platform=PlayStation").then(
                 result => {
-                    self.setState({users: result});
+                    self.setState({users: result.data});
                 }
             )
         } else if (document.getElementById("xbox").checked) {
-            fetch("http://localhost:8080/users/filter?platform=XBox").then(rse => rse.json()).then(
+            axios.get(baseUrl + "users/filter?platform=XBox").then(
                 result => {
-                    self.setState({users: result});
+                    self.setState({users: result.data});
                 }
             )
         } else if (document.getElementById("pc").checked) {
-            fetch("http://localhost:8080/users/filter?platform=PC").then(rse => rse.json()).then(
+            axios.get(baseUrl + "users/filter?platform=PC").then(
                 result => {
-                    self.setState({users: result});
+                    self.setState({users: result.data});
                 }
             )
         } else {
@@ -93,8 +97,7 @@ class PeopleOverview extends React.Component {
                     </div>
                     </AccordionDetails>
                     </Accordion>
-                        <br/><br/>
-
+                        <br/>
 
                 <div className="cards">
                 {this.state.users.map(user =>

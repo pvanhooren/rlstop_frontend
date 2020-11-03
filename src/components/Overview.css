@@ -26,14 +26,20 @@
 
 .editForm{
     display:none;
+    height:100px;
 }
 
 .btnGroup{
-    text-align:center;
+    text-align:center !important;
 }
 
 .editTextFields{
-    text-align:center;
+    float:left;
+    position:relative;
+}
+
+.marginField{
+    margin-right: 10px !important;
 }
 
 .input{
@@ -42,29 +48,23 @@
     text-align:center;
 }
 
-.textField2{
-    margin-left:5% !important;
-    width:40%;
+.fullCard{
+    height: 105px !important;
 }
 
-.textField1{
-    width:40%;
-}
+/*.textField2{*/
+/*    margin-left:5% !important;*/
+/*    width:40%;*/
+/*}*/
 
-.label1{
-    width:40%;
-    margin-left:7.5%;
-}
-
-.label2{
-    width:40%;
-    margin-left: 38.5%;
-}
+/*.textField1{*/
+/*    width:40%;*/
+/*}*/
 
 .icons{
     float:right;
     position:relative;
-    margin-top:1.5%;
+    margin-top: 1.5%;
 }
 
 .cardText{
