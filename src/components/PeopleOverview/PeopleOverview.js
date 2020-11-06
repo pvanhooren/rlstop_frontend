@@ -15,6 +15,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
 
 import '../Overview.css';
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const baseUrl= "http://localhost:8080/";
 
@@ -80,7 +81,8 @@ class PeopleOverview extends React.Component {
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                         >
-                            <Typography>Filter by platform</Typography>
+                            <FilterListIcon />
+                            <Typography> Filter by platform</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <div className="filterArea">

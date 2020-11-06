@@ -11,6 +11,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { withRouter } from "react-router-dom";
 import "./Navbar.css";
+import PermIdentity from '@material-ui/icons/PermIdentity';
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
@@ -20,6 +22,15 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down("xs")]: {
             flexGrow: 1
         }
+    },
+    profileTab: {
+        marginLeft: 5,
+        color: "white"
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        color: "blue",
+        backgroundColor: "white"
     }
 }));
 
@@ -123,6 +134,7 @@ const Navbar = props => {
                             </Menu>
                         </>
                     ) : (
+                        <>
                         <div className="header">
                             <Button
                                 className="btn"
@@ -148,10 +160,14 @@ const Navbar = props => {
                             {/*>*/}
                             {/*    DEMO*/}
                             {/*</Button>*/}
+                        </div>
                             <Button
-                                className="btn"
+                                className={classes.profileTab}
                                 onClick={handleMenu}
                             >
+                                <Avatar className={classes.avatar}>
+                                    <PermIdentity />
+                                </Avatar>
                                 PROFILE
                             </Button>
                             <Menu
@@ -166,8 +182,7 @@ const Navbar = props => {
                                 <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
                                 <MenuItem onClick={() => handleMenuClick("/me/logout")}>Log out</MenuItem>
                             </Menu>
-
-                        </div>
+                        </>
                     )}
                 </Toolbar>
             </AppBar>

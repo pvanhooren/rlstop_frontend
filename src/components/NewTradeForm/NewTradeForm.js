@@ -56,6 +56,7 @@ class NewTradeForm extends Component {
 
     render(){
         return(
+            <div>
             <div className="newTradeForm">
                 <h2>Post new trade</h2>
                         <label>I am...</label>
@@ -63,11 +64,33 @@ class NewTradeForm extends Component {
                             {this.state.users.map(el => <option value={el.userId} key={el.userId}> {el.userName} </option>)}
                         </select>
                         <Button className="marginButton" variant="contained" color="primary" onClick={this.submitForm}>Post</Button><br/>
+                        <br/>
                         {/*<input className="input" type="hidden"></input><br />*/}
                         {/*<label>I offer...</label><br />*/}
-                        <TextField className="textfield" id="newOffers" label="I offer..."></TextField>
+                        <TextField variant="outlined" className="textfield" id="newOffers" multiline rows={7} label="I offer..."></TextField>
                         {/*<label>In trade for...</label><br />*/}
-                        <TextField className="textfield" id="newWants" label="In trade for..."></TextField>
+                        <TextField variant="outlined" className="textfield" id="newWants" multiline rows={7} label="In trade for..."></TextField>
+            </div>
+            {/*<div>*/}
+            {/*    <Card variant="outlined">*/}
+            {/*        <CardContent>*/}
+            {/*            <div className="cardText">*/}
+            {/*                <Typography color="textSecondary" gutterBottom>*/}
+            {/*                    {this.state.users[document.getElementById("selectBox").value - 1].userName}*/}
+            {/*                </Typography>*/}
+            {/*                <Typography variant="h5" component="h2">*/}
+            {/*                    Offers: {document.getElementById("newOffers").value} -*/}
+            {/*                    Wants: {document.getElementById("newWants").value}*/}
+            {/*                </Typography>*/}
+            {/*                <Typography color="textSecondary">*/}
+            {/*                    {this.state.users[document.getElementById("selectBox").value - 1].platform} ID:*/}
+            {/*                    {this.state.users[document.getElementById("selectBox").value - 1].platformID}*/}
+            {/*                </Typography>*/}
+            {/*            </div>*/}
+
+            {/*        </CardContent>*/}
+            {/*    </Card>*/}
+            {/*</div>*/}
             </div>
         );
     }

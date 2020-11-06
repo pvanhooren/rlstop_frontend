@@ -6,7 +6,7 @@ class NotFound extends React.Component{
 
     render() {
         return(
-        <div>
+        <div style={{textAlign: 'center'}}>
             <h1>Whoops! Seems you are lost....</h1>
             <Button color="primary" variant="contained" href="/">
                 Return Home

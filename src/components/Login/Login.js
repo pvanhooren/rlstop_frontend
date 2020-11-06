@@ -1,4 +1,6 @@
 import React from 'react'
+import axios from 'axios';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+
+const baseUrl= "http://localhost:8080/";
 
 function Login() {
     return (
@@ -44,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
+//
+// function signIn(){
+//     console.log("I have reached the sign in function.");
+//     axios.get(baseUrl + "users/signin?email=" + document.getElementById("email").value + "&password=" + document.getElementById("password").value).then( result =>{
+//         window.alert(result.data)
+//     });
+// }
 
 export default function SignIn() {
     const classes = useStyles();
@@ -86,11 +97,11 @@ export default function SignIn() {
                         label="Remember me"
                     />
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        // onClick = {signIn}
                     >
                         Sign In
                     </Button>

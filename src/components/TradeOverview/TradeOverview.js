@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 import '../Overview.css'
 
@@ -117,7 +118,8 @@ class TradeOverview extends Component {
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
-                        <Typography>Filter by platform</Typography>
+                        <FilterListIcon />
+                        <Typography> Filter by platform</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <div className="filterArea">
