@@ -9,7 +9,7 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import "./Navbar.css";
 import PermIdentity from '@material-ui/icons/PermIdentity';
 import Avatar from "@material-ui/core/Avatar";
@@ -41,37 +41,36 @@ const Navbar = props => {
     const open = Boolean(anchorEl);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+    var isLoggedIn = false;
+
+    if(localStorage.getItem('creds') != null & localStorage.getItem('creds') != ""){
+        isLoggedIn = true;
+    }
+
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClick = pageURL => {
-        history.push(pageURL);
-        setAnchorEl(null);
+        if(pageURL != "/me/logout") {
+            history.push(pageURL);
+            setAnchorEl(null);
+        } else {
+            signOut();
+        }
+    };
+
+    function signOut(){
+        localStorage.clear();
+        history.push("/me/login")
     };
 
     const handleButtonClick = pageURL => {
         history.push(pageURL);
     };
 
-    const menuItems = [
-        {
-            menuTitle: "Trades",
-            pageURL: "/"
-        },
-        {
-            menuTitle: "Create trade",
-            pageURL: "/new"
-        },
-        {
-            menuTitle: "People",
-            pageURL: "/people"
-        },
-        // {
-        //     menuTitle: "Sprint 2 demo",
-        //     pageURL: "/demo"
-        // },
+    const loggedInItems = [
         {
             menuTitle: "Wishlist",
             pageURL: "/me/wishlist"
@@ -88,7 +87,37 @@ const Navbar = props => {
             menuTitle: "Log out",
             pageUrl: "/me/logout"
         }
-    ];
+    ]
+
+    const loggedOutItems = [
+        {
+            menuTitle: "Log in",
+            pageUrl: "me/login"
+        },
+        {
+            menuTitle: "Register",
+            pageUrl: "/me/register"
+        }
+    ]
+
+    var menuItems = [
+        {
+            menuTitle: "Trades",
+            pageURL: "/"
+        },
+        {
+            menuTitle: "Create trade",
+            pageURL: "/new"
+        },
+        {
+            menuTitle: "People",
+            pageURL: "/people"
+        }
+        // {
+        //     menuTitle: "Sprint 2 demo",
+        //     pageURL: "/demo"
+        // },
+    ]
 
     return (
         <div className="root">
@@ -131,6 +160,23 @@ const Navbar = props => {
                                         </MenuItem>
                                     );
                                 })}
+                                {isLoggedIn ? (
+                                    loggedInItems.map(menuItem => {
+                                        const {menuTitle, pageURL} = menuItem;
+                                        return (
+                                            <MenuItem onClick={() => handleMenuClick(pageURL)}>
+                                                {menuTitle}
+                                            </MenuItem>
+                                        );
+                                    })) : (
+                                    loggedOutItems.map(menuItem => {
+                                    const {menuTitle, pageURL} = menuItem;
+                                    return (
+                                        <MenuItem onClick={() => handleMenuClick(pageURL)}>
+                                            {menuTitle}
+                                        </MenuItem>
+                                    );
+                                }))}
                             </Menu>
                         </>
                     ) : (
@@ -161,6 +207,7 @@ const Navbar = props => {
                             {/*    DEMO*/}
                             {/*</Button>*/}
                         </div>
+                            <div>
                             <Button
                                 className={classes.profileTab}
                                 onClick={handleMenu}
@@ -168,7 +215,7 @@ const Navbar = props => {
                                 <Avatar className={classes.avatar}>
                                     <PermIdentity />
                                 </Avatar>
-                                PROFILE
+                                ACCOUNT
                             </Button>
                             <Menu
                                 id="profile-menu"
@@ -177,17 +224,27 @@ const Navbar = props => {
                                 open={Boolean(anchorEl)}
                                 onClose={() => setAnchorEl(null)}
                             >
-                                <MenuItem onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
-                                <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
-                                <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
-                                <MenuItem onClick={() => handleMenuClick("/me/logout")}>Log out</MenuItem>
+                                {isLoggedIn ? (
+                                    <>
+                                    <MenuItem onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
+                                    <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
+                                    <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
+                                    <MenuItem onClick={() => signOut() }>Log out</MenuItem>
+                                    </>
+                                    ) : (
+                                    <>
+                                    <MenuItem onClick={() => handleMenuClick("/me/login")}>Sign in</MenuItem>
+                                        <MenuItem onClick={() => handleMenuClick("/me/register")}>Register</MenuItem>
+                                    </>
+                                    )}
                             </Menu>
+                            </div>
                         </>
                     )}
                 </Toolbar>
             </AppBar>
         </div>
     );
-};
+}
 
 export default withRouter(Navbar);

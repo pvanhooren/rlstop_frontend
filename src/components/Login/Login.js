@@ -49,17 +49,46 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 //
-// function signIn(){
-//     console.log("I have reached the sign in function.");
-//     axios.get(baseUrl + "users/signin?email=" + document.getElementById("email").value + "&password=" + document.getElementById("password").value).then( result =>{
-//         window.alert(result.data)
-//     });
-// }
+function signIn(){
+    // console.log("I have reached the sign in function.");
+    if(document.getElementById("username").value != "" && document.getElementById("password").value != "") {
+        // fetch("http://localhost:8080/user", {
+        //         //     mode: 'no-cors',
+        //         //     credentials: 'include',
+        //         //     headers : {
+        //         //         authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
+        //         //     }}).then(response => {
+        //         //                 localStorage.setItem('creds', window.btoa(document.getElementById("username") + ":" + document.getElementById("password")));
+        //         //                 console.log("Credentials stored in local storage.");
+        //         //                 document.getElementById("login").style.display = "none";
+        //         //                 document.getElementById("main").style.display = "block";
+        //         //     }
+        //         // ).catch((e) => {
+        //         //     window.alert("Incorrect credentials");
+        //         // })
+        axios.get("http://localhost:8080/user", {
+            withCredentials : true,
+            headers : {
+                authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
+            }}).then(response => {
+                localStorage.setItem('creds', window.btoa(document.getElementById("username") + ":" + document.getElementById("password")));
+                console.log("Credentials stored in local storage.");
+                    }
+                ).catch((e) => {
+                    window.alert("Incorrect username or password. Please try again!");
+            }
+        )
+    } else {
+        window.alert("Please fill in username and password.")
+    }
+}
 
 export default function SignIn() {
     const classes = useStyles();
 
     return (
+        <div>
+        <div id="login">
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
@@ -75,10 +104,10 @@ export default function SignIn() {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
                         autoFocus
                     />
                     <TextField
@@ -101,7 +130,7 @@ export default function SignIn() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        // onClick = {signIn}
+                        onClick = {signIn}
                     >
                         Sign In
                     </Button>
@@ -121,5 +150,7 @@ export default function SignIn() {
                 </form>
             </div>
         </Container>
+        </div>
+    </div>
     );
 }

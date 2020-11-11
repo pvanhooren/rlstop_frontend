@@ -22,7 +22,6 @@ function App() {
       <Router>
       <Navbar />
       <Switch>
-
             <Route exact from="/" component={TradeOverview}/>} />
             <Route exact path="/new" component={NewTradeForm}/>} />
             <Route exact path="/people" component={PeopleOverview}/>
