@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import TradeOverview from "./components/TradeOverview/TradeOverview";
 import NewTradeForm from "./components/NewTradeForm/NewTradeForm";
 import Navbar from "./components/Navbar/Navbar";

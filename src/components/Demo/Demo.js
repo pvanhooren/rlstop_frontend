@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 
 import TradeOverview from "../TradeOverview/TradeOverview";
 import NewTradeForm from "../NewTradeForm/NewTradeForm";

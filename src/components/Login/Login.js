@@ -16,18 +16,18 @@ import Container from '@material-ui/core/Container';
 
 const baseUrl= "http://localhost:8080/";
 
-function Login() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Login() {
+//     return (
+//         <Typography variant="body2" color="textSecondary" align="center">
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://material-ui.com/">
+//                 Your Website
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 //
 function signIn(){
     // console.log("I have reached the sign in function.");
-    if(document.getElementById("username").value != "" && document.getElementById("password").value != "") {
+    if(document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
         // fetch("http://localhost:8080/user", {
         //         //     mode: 'no-cors',
         //         //     credentials: 'include',
@@ -66,13 +66,14 @@ function signIn(){
         //         // ).catch((e) => {
         //         //     window.alert("Incorrect credentials");
         //         // })
-        axios.get("http://localhost:8080/user", {
+        axios.get(baseUrl + "auth?userName=" + document.getElementById("username").value , {
             withCredentials : true,
             headers : {
                 authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
             }}).then(response => {
                 localStorage.setItem('creds', window.btoa(document.getElementById("username") + ":" + document.getElementById("password")));
                 console.log("Credentials stored in local storage.");
+                console.log(response.data);
                     }
                 ).catch((e) => {
                     window.alert("Incorrect username or password. Please try again!");

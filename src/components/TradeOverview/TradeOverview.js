@@ -4,14 +4,10 @@ import axios from 'axios';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from "@material-ui/core/CardActions";
 import RadioGroup from "@material-ui/core/RadioGroup"
 import Radio from "@material-ui/core/Radio"
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -43,7 +39,7 @@ class TradeOverview extends Component {
 
     editTrade = async() =>{
         const self = this;
-        if(document.getElementById("wants").value != "" && document.getElementById("offers").value != "") {
+        if(document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
             await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("editForm").style.display = "none";

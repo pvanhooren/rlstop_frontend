@@ -6,24 +6,23 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import PersonalDetails from './PersonalDetails';
 import PlatformDetails from './PlatformDetails';
 import Wishlist from './Wishlist';
 
-function Register() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://fontys.nl/">
-                FontysIn
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Register() {
+//     return (
+//         <Typography variant="body2" color="textSecondary" align="center">
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://fontys.nl/">
+//                 FontysIn
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const useStyles = makeStyles((theme) => ({
     appBar: {

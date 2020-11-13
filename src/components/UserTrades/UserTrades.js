@@ -68,7 +68,7 @@ class UserTrades extends React.Component{
 
     editTrade = async() =>{
         const self = this;
-        if(document.getElementById("wants" + self.state.tradeId).value != "" && document.getElementById("offers" + self.state.tradeId).value != "") {
+        if(document.getElementById("wants" + self.state.tradeId).value !== "" && document.getElementById("offers" + self.state.tradeId).value !== "") {
             await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + self.state.userId);
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("edit" + self.state.tradeId).style.display = "none";
