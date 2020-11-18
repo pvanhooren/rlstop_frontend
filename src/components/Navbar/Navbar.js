@@ -84,7 +84,7 @@ const Navbar = props => {
             pageUrl: "/me/settings"
         },
         {
-            menuTitle: "Log out",
+            menuTitle: "Sign out",
             pageUrl: "/me/logout"
         }
     ]
@@ -229,7 +229,7 @@ const Navbar = props => {
                                     <MenuItem onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
                                     <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
                                     <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
-                                    <MenuItem onClick={() => signOut() }>Log out</MenuItem>
+                                    <MenuItem onClick={() => signOut() }>Sign out</MenuItem>
                                     </>
                                     ) : (
                                     <>

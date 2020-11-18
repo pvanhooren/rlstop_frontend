@@ -21,8 +21,6 @@ class UserTrades extends React.Component{
         super(props);
 
         this.state = {
-            users: [],
-            userId: 0,
             tradeId: 0,
             trades: [],
             wants: "",
@@ -30,36 +28,28 @@ class UserTrades extends React.Component{
         }
     }
 
-    getAllUsers(){
-        axios.get( baseUrl + "users/all").then(
-            result => {
-                this.setState({users: result.data})
-            }
-        )
-    }
-
-    getUserTrades = async() => {
-        await axios.get(baseUrl + "trades/user?id=" + this.state.userId).then(
-            result => {
-                this.setState({trades: result.data})
-            }
-        )
-    }
-
-    selectUser = async() =>{
-        this.setState({userId: document.getElementById("userSelect").value});
-        document.getElementById("userTrades").style.display = "block";
-
-        await axios.get(baseUrl + "trades/user?id=" + document.getElementById("userSelect").value).then(
-            result => {
-                this.setState({trades: result.data})
-            }
-        )
+    getUserTrades() {
+        if(localStorage.getItem("userId") != null) {
+            axios.get(baseUrl + "trades/user?id=" + localStorage.getItem('userId'), {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}
+                ).then(
+                result => {
+                    this.setState({trades: result.data})
+                }
+            ).catch((e) => {
+                this.props.history.push("/me/login");
+            })
+        } else {
+            this.props.history.push("/me/login");
+        }
     }
 
     showEditForm(trade) {
         console.log(trade);
-        this.setState({ tradeId: trade.postId, userId: trade.user.userId, wants: trade.wants, offers: trade.offers})
+        this.setState({ tradeId: trade.postId, wants: trade.wants, offers: trade.offers})
         document.getElementById("edit" + trade.postId).style.display = "block";
         document.getElementById("view" + trade.postId).style.display = "none";
         document.getElementById("offers" + trade.postId).value = trade.offers;
@@ -69,13 +59,19 @@ class UserTrades extends React.Component{
     editTrade = async() =>{
         const self = this;
         if(document.getElementById("wants" + self.state.tradeId).value !== "" && document.getElementById("offers" + self.state.tradeId).value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + self.state.userId);
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).catch((e) => {
+                    alert("Something went wrong editing the trade. Please try again!");
+            } );
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("edit" + self.state.tradeId).style.display = "none";
             document.getElementById("view" + self.state.tradeId).style.display = "block";
             await this.getUserTrades();
         } else {
-            window.confirm("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
+            alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
         }
     }
 
@@ -94,23 +90,14 @@ class UserTrades extends React.Component{
     }
 
     componentDidMount(){
-        this.getAllUsers();
+        this.getUserTrades();
     }
 
     render(){
         return(
             <div>
-                <div className="selectArea">
-                    <h2>Your trades</h2>
-                    <label>I am...</label>
-                    <select className="userSelect" id="userSelect" name="user">
-                        {this.state.users.map(el => <option value={el.userId} key={el.userId}> {el.userName} </option>)}
-                    </select>
-                    <Button className="marginBtn" onClick={this.selectUser} variant="contained" color="primary">Confirm</Button>
-                    <br/><br/>
-                </div>
-                <div className="AreaToMakeVisible" id="userTrades">
-                    <br/>
+                <div className="mainArea" id="userTrades">
+                    <h2 className="title">Your trades</h2>
                     {this.state.trades.map(trade =>
                         <Card className="fullCard" variant="outlined">
                             <CardContent>

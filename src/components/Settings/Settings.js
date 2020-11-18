@@ -20,50 +20,67 @@ class Settings extends React.Component{
         super(props);
 
         this.state = {
-            users: [],
-            userId: 0,
             user: Object
         }
     }
 
-    selectUser = async() =>{
-        this.setState({userId: document.getElementById("userSelect").value});
-        document.getElementById("userSettings").style.display = "block";
-
-        await axios.get(baseUrl + "users/" + document.getElementById("userSelect").value).then(
-            result => {
-                this.setState({user: result.data})
-            }
-        )
-
-        document.getElementById("email").value = this.state.user.emailAddress;
-        document.getElementById("username").value = this.state.user.userName;
-        document.getElementById("platformID").value = this.state.user.platformID;
+    getUserInfo() {
+        if(localStorage.getItem("userId") != null){
+            axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
+                headers : {
+                        withCredentials: true,
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(response => {
+                    this.setState({ user: response.data })
+                document.getElementById("email").value = response.data.emailAddress;
+                document.getElementById("username").value = response.data.userName;
+                document.getElementById("platformID").value = response.data.platformID;
+                }
+            ).catch((e) => {
+                this.props.history.push("/me/login");
+            });
+        } else {
+            this.props.history.push("/me/login");
+        }
     }
 
     componentDidMount() {
-        this.getAllUsers();
-    }
-
-    getAllUsers() {
-        axios.get(baseUrl + "users/all").then(
-            result => {
-                this.setState({users: result.data})
-            }
-        )
+        this.getUserInfo();
     }
 
     saveSettings = async() => {
-        await axios.put(baseUrl + "users/" + this.state.user.userId + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platformID=" + document.getElementById("platformID").value);
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platformID=" + document.getElementById("platformID").value, {
+            headers : {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }}).catch((e) => {
+
+        })
 
         if(document.getElementById("switch").checked){
-            await axios.put(baseUrl + "users/" + this.state.user.userId +  "?platform=NintendoSwitch");
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') +  "?platform=NINTENDOSWITCH",{
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }});
         } else if (document.getElementById("playstation").checked) {
-            await axios.put(baseUrl + + "users/" + this.state.user.userId + "?platform=PlayStation");
+            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=PLAYSTATION", {
+                    headers : {
+                        withCredentials: true,
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }});
         } else if (document.getElementById("xbox").checked) {
-            await axios.put(baseUrl + + "users/" + this.state.user.userId + "?platform=XBox");
+            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=XBOX", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }});
         } else if (document.getElementById("pc").checked) {
-            await axios.put(baseUrl + +"users/" + this.state.user.userId + "?platform=PC");
+            await axios.put(baseUrl + +"users/" + localStorage.getItem('userId') + "?platform=PC", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }});
         }
 
         window.location.reload(false);
@@ -72,16 +89,8 @@ class Settings extends React.Component{
     render(){
         return(
           <div>
-              <div className="selectArea">
-                  <h2>User settings</h2>
-                  <label>I am...</label>
-                  <select className="userSelect" id="userSelect" name="user">
-                      {this.state.users.map(el => <option value={el.userId} key={el.userId}> {el.userName} </option>)}
-                  </select>
-                  <Button className="btnMargin" onClick={this.selectUser} variant="contained" color="primary">Confirm</Button>
-                  <br/><br/>
-              </div>
-              <div className="AreaToMakeVisible" id="userSettings">
+              <div className="mainArea" id="userSettings">
+                  <h2 className="title">User settings</h2>
                   <Grid container spacing={3}>
                       <Grid item xs={6}>
                   <TextField variant="outlined"
@@ -117,9 +126,9 @@ class Settings extends React.Component{
                       <Grid item xs={12}>
                           <h5>Platform</h5>
                           <RadioGroup id="platform" className="selectGroup" name="platform">
-                              <FormControlLabel value="switch" control={<Radio id="switch" />} label="Nintendo Switch" checked={this.state.user.platform === "NintendoSwitch"} />
-                              <FormControlLabel value="playstation" control={<Radio id="playstation" />} label="PlayStation" checked={this.state.user.platform === "PlayStation"} />
-                              <FormControlLabel value="xbox" control={<Radio id="xbox" />} label="XBox" checked={this.state.user.platform === "XBox"}/>
+                              <FormControlLabel value="switch" control={<Radio id="switch" />} label="Nintendo Switch" checked={this.state.user.platform === "NINTENDOSWITCH"} />
+                              <FormControlLabel value="playstation" control={<Radio id="playstation" />} label="PlayStation" checked={this.state.user.platform === "PLAYSTATION"} />
+                              <FormControlLabel value="xbox" control={<Radio id="xbox" />} label="XBox" checked={this.state.user.platform === "XBOX"}/>
                               <FormControlLabel value="pc" control={<Radio id="pc" />} label="PC" checked={this.state.user.platform === "PC"}/>
                           </RadioGroup>
                       </Grid>

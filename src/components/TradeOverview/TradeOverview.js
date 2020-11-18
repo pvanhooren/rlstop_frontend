@@ -40,7 +40,15 @@ class TradeOverview extends Component {
     editTrade = async() =>{
         const self = this;
         if(document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId,
+                {
+                    withCredentials: true,
+                    headers : {
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }
+                }).catch((e) => {
+                    alert("Something went wrong editing the trade. Please try again!");
+            });
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("editForm").style.display = "none";
             document.getElementById("filter").style.display = "block";
@@ -56,45 +64,77 @@ class TradeOverview extends Component {
     }
 
     deleteTrade(tradeId){
-        fetch(baseUrl + "trades/" + tradeId, {method:'DELETE'})
-        window.location.reload(false);
+        axios.delete(baseUrl + "trades/" + tradeId, {
+            withCredentials: true,
+            headers : {
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }
+        }).catch((e) => {
+            alert("Something went wrong deleting the trade. Please try again!")
+        });
+            window.location.reload(false);
     }
 
     getAllTrades = () => {
         const self = this;
-        axios.get(baseUrl + "trades/all").then(
+        axios.get(baseUrl + "trades/all", {
+            headers : {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }}).then(
             result => {
                 self.setState({trades: result.data});
-            }
-        )
+            }).catch((e) => {
+                this.props.history.push('/me/login');
+            });
     }
 
     getFilteredTrades = () =>{
         const self = this;
         if(document.getElementById("switch").checked){
-            axios.get(baseUrl + "trades/filter?platform=NintendoSwitch").then(
+            axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
+                withCredentials: true,
+                headers : {
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({trades: result.data});
-                }
-            )
+                }).catch((e) => {
+                    window.alert("Something went wrong filtering trades. Please try again!");
+                });
         } else if (document.getElementById("playstation").checked) {
-            axios.get(baseUrl + "trades/filter?platform=PlayStation").then(
+            axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
+                withCredentials: true,
+                headers : {
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({trades: result.data});
-                }
-            )
+                }).catch((e) => {
+                window.alert("Something went wrong filtering trades. Please try again!");
+            });
         } else if (document.getElementById("xbox").checked) {
-            axios.get(baseUrl + "trades/filter?platform=XBox").then(
+            axios.get(baseUrl + "trades/filter?platform=XBOX", {
+                withCredentials: true,
+                headers : {
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({trades: result.data});
-                }
-            )
+                }).catch((e) => {
+                window.alert("Something went wrong filtering trades. Please try again!");
+            });
         } else if (document.getElementById("pc").checked) {
-            axios.get(baseUrl + "trades/filter?platform=PC").then(
+            axios.get(baseUrl + "trades/filter?platform=PC", {
+                withCredentials: true,
+                headers : {
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({trades: result.data});
-                }
-            )
+                }).catch((e) => {
+                window.alert("Something went wrong filtering trades. Please try again!");
+            });
         } else {
             alert("No filter is selected, so all trades will be displayed.")
             this.getAllTrades();
@@ -108,7 +148,6 @@ class TradeOverview extends Component {
     render (){
         return (
             <div>
-
                 <br/>
                 <Accordion>
                     <AccordionSummary
@@ -142,8 +181,8 @@ class TradeOverview extends Component {
                                 {trade.user.userName}
                             </Typography>
                             <Typography variant="h5" component="h2">
-                                Offers: {trade.wants} -
-                                Wants: {trade.offers}
+                                Offers: {trade.offers} -
+                                Wants: {trade.wants}
                             </Typography>
                             <Typography color="textSecondary">
                                 {trade.user.platform} ID: {trade.user.platformID}
@@ -163,7 +202,6 @@ class TradeOverview extends Component {
                             {/*</CardActions>*/}
                     </Card>
                 )}
-
             </div>
         );
     }

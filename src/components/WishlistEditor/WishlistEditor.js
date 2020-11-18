@@ -18,80 +18,80 @@ class WishlistEditor extends React.Component{
         super(props);
 
         this.state = {
-            users: [],
-            userId: 0,
             wishlist: []
         }
     }
 
-    getWishlist = async () =>{
-        await axios.get(baseUrl + "users/" + this.state.userId).then(
-            result => {
-                this.setState({wishlist:result.data.wishlist})
-                console.log(this.state.wishlist);
-            }
-        )
-    }
-
-    selectUser = async() => {
-        this.setState({ userId: document.getElementById("userSelect").value });
-        await axios.get(baseUrl + "users/" + document.getElementById("userSelect").value).then(
-            result => {
-                this.setState({wishlist:result.data.wishlist})
-                console.log(this.state.wishlist);
-            }
-        )
-        document.getElementById("wishlistEditor").style.display = "block";
+    getWishlist(){
+        if(localStorage.getItem("userId") != null) {
+            axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }
+            }).then(
+                result => {
+                    this.setState({wishlist: result.data.wishlist})
+                    console.log(this.state.wishlist);
+                }).catch((e) => {
+                    this.props.history.push("/me/login");
+                })
+        } else {
+            this.props.history.push("/me/login");
+        }
     }
 
     async deleteItem(item) {
         var r = window.confirm("Are you sure you want to delete this item?");
 
         if(r) {
-            await axios.put(baseUrl + "users/" + this.state.userId + "/remove/" + item)
-            await this.getWishlist();
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + item, {
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then( await this.getWishlist() )
+                .catch((e) => {
+                    alert("Something went wrong deleting this item. Please try again!")
+                })
         }
     }
 
     addItem = async () => {
-        await axios.put(baseUrl + "users/" + this.state.userId + "/add/" + document.getElementById("newItem").value);
-        await this.getWishlist();
+        await axios.put(baseUrl + "users/" + this.state.userId + "/add/" + document.getElementById("newItem").value, {
+            headers: {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }}).then( await this.getWishlist() )
+            .catch((e) => {
+                alert("Something went wrong adding this item. Please try again!")
+        })
     }
 
     clearWishlist = async () => {
         var r = window.confirm("Are you sure you want to clear your wishlist?");
 
         if(r) {
-            await axios.put(baseUrl + "users/" + this.state.userId + "/clear");
-            await this.getWishlist();
+            await axios.put(baseUrl + "users/" + this.state.userId + "/clear", {
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(await this.getWishlist() )
+                .catch((e) => {
+                    alert("Something went wrong clearing this wishlist. Please try again!")
+                });
+
         }
     }
 
     componentDidMount() {
-        this.getAllUsers();
-    }
-
-    getAllUsers() {
-        axios.get(baseUrl + "users/all").then(
-            result => {
-                    this.setState({users: result.data})
-            }
-        )
+        this.getWishlist();
     }
 
     render(){
         return(
           <div>
-              <div className="selectArea">
-              <h2>Your wishlist</h2>
-              <label>I am...</label>
-              <select className="userSelect" id="userSelect" name="user">
-                  {this.state.users.map(el => <option value={el.userId} key={el.userId}> {el.userName} </option>)}
-              </select>
-                  <Button onClick={this.selectUser} variant="contained" color="primary">Confirm</Button>
-                <br/><br/>
-              </div>
-              <div className="AreaToMakeVisible" id="wishlistEditor">
+              <div className="mainArea" id="wishlistEditor">
+                  <h2 className="title">Your wishlist</h2>
                   <TextField className="input" id="newItem" label="New wishlist item"></TextField><br/><br/>
                   <div className="btnGroup">
                       <br/>

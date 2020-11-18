@@ -24,8 +24,11 @@
     text-align: center !important;
 }
 
-.AreaToMakeVisible{
-    display:none;
+.title{
+    text-align:center;
+}
+
+.mainArea{
     margin-left:1%;
     margin-right:1%;
 }

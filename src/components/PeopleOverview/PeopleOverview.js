@@ -29,37 +29,66 @@ class PeopleOverview extends React.Component {
     }
 
     getAllUsers = () => {
-        axios.get(baseUrl + "users/all").then(
+        axios.get(baseUrl + "users/all", {
+            headers : {
+                withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+            }}).then(
             result => {
                 this.setState({users:result.data})
-            }
-        )
+            }).catch((e) => {
+            this.props.history.push('/me/login');
+        });
     }
 
     getFilteredUsers = () =>{
         const self = this;
         if(document.getElementById("switch").checked){
-            axios.get(baseUrl + "users/filter?platform=NintendoSwitch").then(
+            axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({users: result.data});
+                }).catch((e) => {
+                    window.alert("Something went wrong filtering people. Please try again!");
                 }
             )
         } else if (document.getElementById("playstation").checked) {
-            axios.get(baseUrl + "users/filter?platform=PlayStation").then(
+            axios.get(baseUrl + "users/filter?platform=PLAYSTATION", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({users: result.data});
+                }).catch((e) => {
+                    window.alert("Something went wrong filtering people. Please try again!");
                 }
             )
         } else if (document.getElementById("xbox").checked) {
-            axios.get(baseUrl + "users/filter?platform=XBox").then(
+            axios.get(baseUrl + "users/filter?platform=XBOX", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({users: result.data});
+                }).catch((e) => {
+                    window.alert("Something went wrong filtering people. Please try again!");
                 }
             )
         } else if (document.getElementById("pc").checked) {
-            axios.get(baseUrl + "users/filter?platform=PC").then(
+            axios.get(baseUrl + "users/filter?platform=PC", {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}).then(
                 result => {
                     self.setState({users: result.data});
+                }).catch((e) => {
+                    window.alert("Something went wrong filtering people. Please try again!");
                 }
             )
         } else {
@@ -115,7 +144,7 @@ class PeopleOverview extends React.Component {
                                         {user.platform} ID: {user.platformID}
                                     </Typography>
                                     <Typography variant="body2" component="p">
-                                        Wishlist: {user.wishlist}
+                                        Wishlist: {user.wishlist.toString()}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>

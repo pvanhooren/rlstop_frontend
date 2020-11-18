@@ -16,19 +16,6 @@ import Container from '@material-ui/core/Container';
 
 const baseUrl= "http://localhost:8080/";
 
-// function Login() {
-//     return (
-//         <Typography variant="body2" color="textSecondary" align="center">
-//             {'Copyright © '}
-//             <Link color="inherit" href="https://material-ui.com/">
-//                 Your Website
-//             </Link>{' '}
-//             {new Date().getFullYear()}
-//             {'.'}
-//         </Typography>
-//     );
-// }
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -46,50 +33,37 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-    },
+    }
 }));
 //
-function signIn(){
-    // console.log("I have reached the sign in function.");
-    if(document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
-        // fetch("http://localhost:8080/user", {
-        //         //     mode: 'no-cors',
-        //         //     credentials: 'include',
-        //         //     headers : {
-        //         //         authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
-        //         //     }}).then(response => {
-        //         //                 localStorage.setItem('creds', window.btoa(document.getElementById("username") + ":" + document.getElementById("password")));
-        //         //                 console.log("Credentials stored in local storage.");
-        //         //                 document.getElementById("login").style.display = "none";
-        //         //                 document.getElementById("main").style.display = "block";
-        //         //     }
-        //         // ).catch((e) => {
-        //         //     window.alert("Incorrect credentials");
-        //         // })
-        axios.get(baseUrl + "auth?userName=" + document.getElementById("username").value , {
-            withCredentials : true,
-            headers : {
-                authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
-            }}).then(response => {
-                localStorage.setItem('creds', window.btoa(document.getElementById("username") + ":" + document.getElementById("password")));
-                console.log("Credentials stored in local storage.");
-                console.log(response.data);
-                    }
-                ).catch((e) => {
-                    window.alert("Incorrect username or password. Please try again!");
-            }
-        )
-    } else {
-        window.alert("Please fill in username and password.")
-    }
-}
 
-export default function SignIn() {
+export default function SignIn(props) {
     const classes = useStyles();
+    const { history } = props;
+
+    function signIn(){
+        if(document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
+            axios.get(baseUrl + "users/name/" + document.getElementById("username").value , {
+                withCredentials : true,
+                headers : {
+                    authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
+                }}).then(response => {
+                    localStorage.setItem('creds', window.btoa(document.getElementById("username").value + ":" + document.getElementById("password").value));
+                    localStorage.setItem('userId', response.data.userId);
+                    history.push("/");
+                }
+            ).catch((e) => {
+                    window.alert("Incorrect username or password. Please try again!");
+                }
+            )
+        } else {
+            window.alert("Please fill in username and password.")
+        }
+    }
 
     return (
         <div>
-        <div id="login">
+        <div id="login" style={{display:'block'}}>
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
@@ -155,3 +129,5 @@ export default function SignIn() {
     </div>
     );
 }
+
+// export default withRouter(SignIn);
