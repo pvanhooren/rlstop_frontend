@@ -53,6 +53,7 @@ const Navbar = props => {
     };
 
     const handleMenuClick = pageURL => {
+        console.log(pageURL);
         if(pageURL !== "/me/logout") {
             history.push(pageURL);
             setAnchorEl(null);
@@ -64,6 +65,7 @@ const Navbar = props => {
     function signOut(){
         localStorage.clear();
         history.push("/me/login")
+        setAnchorEl(null);
     };
 
     const handleButtonClick = pageURL => {
@@ -77,26 +79,26 @@ const Navbar = props => {
         },
         {
             menuTitle: "My trades",
-            pageUrl: "/me/trades"
+            pageURL: "/me/trades"
         },
         {
             menuTitle: "Settings",
-            pageUrl: "/me/settings"
+            pageURL: "/me/settings"
         },
         {
             menuTitle: "Sign out",
-            pageUrl: "/me/logout"
+            pageURL: "/me/logout"
         }
     ]
 
     const loggedOutItems = [
         {
             menuTitle: "Log in",
-            pageUrl: "me/login"
+            pageURL: "/me/login"
         },
         {
             menuTitle: "Register",
-            pageUrl: "/me/register"
+            pageURL: "/me/register"
         }
     ]
 

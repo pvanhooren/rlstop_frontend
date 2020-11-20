@@ -11,19 +11,6 @@ import PersonalDetails from './PersonalDetails';
 import PlatformDetails from './PlatformDetails';
 import Wishlist from './Wishlist';
 
-// function Register() {
-//     return (
-//         <Typography variant="body2" color="textSecondary" align="center">
-//             {'Copyright © '}
-//             <Link color="inherit" href="https://fontys.nl/">
-//                 FontysIn
-//             </Link>{' '}
-//             {new Date().getFullYear()}
-//             {'.'}
-//         </Typography>
-//     );
-// }
-
 const useStyles = makeStyles((theme) => ({
     appBar: {
         position: 'relative',
@@ -81,8 +68,14 @@ export default function ProfileSetup() {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const handleNext = () => {
+        if(activeStep === steps.length - 1){
+            register();
+        }
         setActiveStep(activeStep + 1);
     };
+
+    const register = () => {
+    }
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);

@@ -181,8 +181,8 @@ class TradeOverview extends Component {
                                 {trade.user.userName}
                             </Typography>
                             <Typography variant="h5" component="h2">
-                                Offers: {trade.offers} -
-                                Wants: {trade.wants}
+                                Offers: {trade.wants} -
+                                Wants: {trade.offers}
                             </Typography>
                             <Typography color="textSecondary">
                                 {trade.user.platform} ID: {trade.user.platformID}

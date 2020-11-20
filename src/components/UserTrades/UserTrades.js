@@ -49,11 +49,11 @@ class UserTrades extends React.Component{
 
     showEditForm(trade) {
         console.log(trade);
-        this.setState({ tradeId: trade.postId, wants: trade.wants, offers: trade.offers})
-        document.getElementById("edit" + trade.postId).style.display = "block";
-        document.getElementById("view" + trade.postId).style.display = "none";
-        document.getElementById("offers" + trade.postId).value = trade.offers;
-        document.getElementById("wants" + trade.postId).value = trade.wants;
+        this.setState({ tradeId: trade.tradeId, wants: trade.wants, offers: trade.offers})
+        document.getElementById("edit" + trade.tradeId).style.display = "block";
+        document.getElementById("view" + trade.tradeId).style.display = "none";
+        document.getElementById("offers" + trade.tradeId).value = trade.offers;
+        document.getElementById("wants" + trade.tradeId).value = trade.wants;
     }
 
     editTrade = async() =>{
@@ -101,7 +101,7 @@ class UserTrades extends React.Component{
                     {this.state.trades.map(trade =>
                         <Card className="fullCard" variant="outlined">
                             <CardContent>
-                        <div className="view" id={"view" + trade.postId}>
+                        <div className="view" id={"view" + trade.tradeId}>
                                 <div className="cardText">
                                     <Typography color="textSecondary" gutterBottom>
                                         {trade.user.userName}
@@ -118,18 +118,18 @@ class UserTrades extends React.Component{
                                     {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
                                     {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
 
-                                    <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.postId)} />
+                                    <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.tradeId)} />
                                     <CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />
                                 </div>
                         </div>
-                                <div className="editForm" id={"edit" + trade.postId}>
+                                <div className="editForm" id={"edit" + trade.tradeId}>
                                     <div className="editTextFields">
                                     <Typography color="textSecondary" gutterBottom>
                                         {trade.user.userName}
                                     </Typography>
 
-                                        <TextField className="marginField" id={"offers" + trade.postId} label="Offers..." InputLabelProps={{shrink: true}}></TextField>
-                                        <TextField id={"wants" + trade.postId} label="In trade for..." InputLabelProps={{shrink: true}}></TextField>
+                                        <TextField className="marginField" id={"offers" + trade.tradeId} label="Offers..." InputLabelProps={{shrink: true}}></TextField>
+                                        <TextField id={"wants" + trade.tradeId} label="In trade for..." InputLabelProps={{shrink: true}}></TextField>
                                     </div>
 
                                     <div className="icons">

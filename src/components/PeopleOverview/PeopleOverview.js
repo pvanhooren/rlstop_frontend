@@ -32,7 +32,7 @@ class PeopleOverview extends React.Component {
         axios.get(baseUrl + "users/all", {
             headers : {
                 withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Basic ' + localStorage.getItem("creds")
             }}).then(
             result => {
                 this.setState({users:result.data})
