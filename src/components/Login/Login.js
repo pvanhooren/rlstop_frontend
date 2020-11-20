@@ -44,8 +44,8 @@ export default function SignIn(props) {
     function signIn(){
         if(document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
             axios.get(baseUrl + "users/name/" + document.getElementById("username").value , {
-                withCredentials : true,
                 headers : {
+                    withCredentials : true,
                     authorization : 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
                 }}).then(response => {
                     localStorage.setItem('creds', window.btoa(document.getElementById("username").value + ":" + document.getElementById("password").value));

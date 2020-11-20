@@ -42,8 +42,8 @@ class TradeOverview extends Component {
         if(document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
             await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId,
                 {
-                    withCredentials: true,
                     headers : {
+                        withCredentials: true,
                         authorization: 'Basic ' + localStorage.getItem("creds")
                     }
                 }).catch((e) => {
@@ -65,8 +65,8 @@ class TradeOverview extends Component {
 
     deleteTrade(tradeId){
         axios.delete(baseUrl + "trades/" + tradeId, {
-            withCredentials: true,
             headers : {
+                withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
             }
         }).catch((e) => {
@@ -93,8 +93,8 @@ class TradeOverview extends Component {
         const self = this;
         if(document.getElementById("switch").checked){
             axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
-                withCredentials: true,
                 headers : {
+                    withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }}).then(
                 result => {
@@ -104,8 +104,8 @@ class TradeOverview extends Component {
                 });
         } else if (document.getElementById("playstation").checked) {
             axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
-                withCredentials: true,
                 headers : {
+                    withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }}).then(
                 result => {
@@ -115,8 +115,8 @@ class TradeOverview extends Component {
             });
         } else if (document.getElementById("xbox").checked) {
             axios.get(baseUrl + "trades/filter?platform=XBOX", {
-                withCredentials: true,
                 headers : {
+                    withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }}).then(
                 result => {
