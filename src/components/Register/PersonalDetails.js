@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
-export default function PersonalDetails() {
+export default function PersonalDetails(props) {
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -28,6 +28,8 @@ export default function PersonalDetails() {
                         label="Username"
                         fullWidth
                         autoComplete="userName"
+                        inputRef={props.userName}
+                        onChange={test}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>

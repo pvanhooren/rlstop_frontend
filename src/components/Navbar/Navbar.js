@@ -72,6 +72,13 @@ const Navbar = props => {
         history.push(pageURL);
     };
 
+    function getUserName(){
+        if(localStorage.getItem('userName') != null){
+            return localStorage.getItem('userName');
+        }
+        return "ACCOUNT"
+    }
+
     const loggedInItems = [
         {
             menuTitle: "Wishlist",
@@ -217,7 +224,7 @@ const Navbar = props => {
                                 <Avatar className={classes.avatar}>
                                     <PermIdentity />
                                 </Avatar>
-                                ACCOUNT
+                                { getUserName() }
                             </Button>
                             <Menu
                                 id="profile-menu"

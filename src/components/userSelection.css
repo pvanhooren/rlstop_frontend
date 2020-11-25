@@ -32,3 +32,15 @@
     margin-left:1%;
     margin-right:1%;
 }
+
+.registerForm{
+    display:block;
+    text-align:center;
+    margin-left:5%;
+}
+
+.welcome{
+    display:none;
+    text-align:center;
+    margin-top:15%;
+}

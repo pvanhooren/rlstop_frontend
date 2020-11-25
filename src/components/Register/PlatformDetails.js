@@ -6,7 +6,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 
-export default function PlatformDetails() {
+export default function PlatformDetails(props) {
+
+
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -29,6 +31,7 @@ export default function PlatformDetails() {
                         label="Friend code / Platform username"
                         fullWidth
                         autoComplete="platformID"
+                        onChange={test}
                     />
                 </Grid>
             </Grid>

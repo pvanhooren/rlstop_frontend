@@ -50,6 +50,7 @@ export default function SignIn(props) {
                 }}).then(response => {
                     localStorage.setItem('creds', window.btoa(document.getElementById("username").value + ":" + document.getElementById("password").value));
                     localStorage.setItem('userId', response.data.userId);
+                    localStorage.setItem('userName', response.data.userName);
                     history.push("/");
                 }
             ).catch((e) => {
