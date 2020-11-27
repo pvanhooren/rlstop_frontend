@@ -27,17 +27,15 @@ class Register extends React.Component{
 
     handleChange = (event) => {
         this.setState({platform : event.target.value});
-        console.log(event.target.value);
-        console.log(document.getElementById('platform').value);
     };
 
     validate = () => {
         const self = this;
-        if(document.getElementById("email").value != "" && document.getElementById("userName").value != ""
-        && document.getElementById("password").value != "" && document.getElementById("confirmPassword").value != ""
-            && self.state.platform != "" &&  self.state.platform != null
-        && document.getElementById("platformID").value != "" && document.getElementById("wishlist").value != ""){
-            if(document.getElementById("password").value == document.getElementById("confirmPassword").value){
+        if(document.getElementById("email").value !== "" && document.getElementById("userName").value !== ""
+        && document.getElementById("password").value !== "" && document.getElementById("confirmPassword").value !== ""
+            && self.state.platform !== "" &&  self.state.platform != null
+        && document.getElementById("platformID").value !== "" && document.getElementById("wishlist").value !== ""){
+            if(document.getElementById("password").value === document.getElementById("confirmPassword").value){
                 if(regExp.test(document.getElementById("email").value)) {
                     axios.post(baseUrl + "users/new?name=" + document.getElementById("userName").value + "&email=" + document.getElementById("email").value + "&password=" + document.getElementById("password").value
                         + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value)
@@ -50,8 +48,6 @@ class Register extends React.Component{
                         }).catch((e) => {
                             console.log(e.response.data);
                         alert("There is already a user in our system with that username or email. Please try again!")
-                        console.log(baseUrl + "users/new?name=" + document.getElementById("userName").value + "&email=" + document.getElementById("email").value + "&password=" + document.getElementById("password").value
-                            + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value);
                     });
                 } else {
                     alert("The provided email address is not recognized as an email address. Please correct it.")
@@ -173,7 +169,7 @@ class Register extends React.Component{
                             margin="normal"
                             id="wishlist"
                             name="wishlist"
-                            label="Items you really want, seperated by a comma"
+                            label="Items you really want, separated by a comma"
                             fullWidth
                             autoComplete="wishlist"
                             InputLabelProps={{

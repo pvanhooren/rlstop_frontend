@@ -35,17 +35,17 @@ class NewTradeForm extends Component {
     //     console.log(document.getElementById("wants").value);
     // }
 
-    submitForm() {
+    submitForm = async() => {
         if (document.getElementById("newWants").value !== "" && document.getElementById("newOffers").value !== "" && localStorage.getItem("userId") != null) {
-            axios.post(baseUrl +"trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), {
+            await axios.post(baseUrl +"trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), null,{
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }}).then(
-                    window.location.reload(false)
-                ).catch((e) => {
+                }}).catch((e) => {
                     alert("Something went wrong posting the trade. Please try again!")
             });
+
+            this.props.history.push("/")
         } else {
             alert("The trade cannot be added because it is not complete");
         }

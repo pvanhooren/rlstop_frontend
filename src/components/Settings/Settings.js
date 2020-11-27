@@ -49,41 +49,41 @@ class Settings extends React.Component{
     }
 
     saveSettings = async() => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platformID=" + document.getElementById("platformID").value, {
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platformID=" + document.getElementById("platformID").value, null,{
             headers : {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
             }}).catch((e) => {
-
+            alert("Something went wrong changing settings. Please try again!")
         })
 
         if(document.getElementById("switch").checked){
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') +  "?platform=NINTENDOSWITCH",{
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') +  "?platform=NINTENDOSWITCH",null,{
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }});
         } else if (document.getElementById("playstation").checked) {
-            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=PLAYSTATION", {
+            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=PLAYSTATION", null, {
                     headers : {
                         withCredentials: true,
                         authorization: 'Basic ' + localStorage.getItem("creds")
                     }});
         } else if (document.getElementById("xbox").checked) {
-            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=XBOX", {
+            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=XBOX", null, {
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }});
         } else if (document.getElementById("pc").checked) {
-            await axios.put(baseUrl + +"users/" + localStorage.getItem('userId') + "?platform=PC", {
+            await axios.put(baseUrl + +"users/" + localStorage.getItem('userId') + "?platform=PC", null, {
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }});
         }
 
-        window.location.reload(false);
+        this.props.history.push("/")
     }
 
     render(){

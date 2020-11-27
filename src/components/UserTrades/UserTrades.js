@@ -1,7 +1,6 @@
 import React from "react";
 import axios from 'axios';
 
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -59,7 +58,7 @@ class UserTrades extends React.Component{
     editTrade = async() =>{
         const self = this;
         if(document.getElementById("wants" + self.state.tradeId).value !== "" && document.getElementById("offers" + self.state.tradeId).value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), {
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), null, {
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
@@ -81,10 +80,17 @@ class UserTrades extends React.Component{
     }
 
     async deleteTrade(tradeId){
-        var r = window.confirm("Are you sure you want to delete this trade?");
+        let r = window.confirm("Are you sure you want to delete this trade?");
 
         if(r) {
-            await axios.delete(baseUrl + "trades/" + tradeId)
+            await axios.delete(baseUrl + "trades/" + tradeId, {
+                headers : {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }}
+            ).catch((e) => {
+                alert("The trade couldn't be deleted, please try again!")
+            })
             await this.getUserTrades();
         }
     }

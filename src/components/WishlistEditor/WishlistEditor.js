@@ -45,41 +45,44 @@ class WishlistEditor extends React.Component{
         var r = window.confirm("Are you sure you want to delete this item?");
 
         if(r) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + item, {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + item, null ,{
                 headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }}).then( await this.getWishlist() )
-                .catch((e) => {
+                }}
+                ).catch((e) => {
                     alert("Something went wrong deleting this item. Please try again!")
                 })
+
+            await this.getWishlist();
         }
     }
 
     addItem = async () => {
-        await axios.put(baseUrl + "users/" + this.state.userId + "/add/" + document.getElementById("newItem").value, {
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null,{
             headers: {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
-            }}).then( await this.getWishlist() )
-            .catch((e) => {
+            }}).catch((e) => {
                 alert("Something went wrong adding this item. Please try again!")
         })
+
+        await this.getWishlist();
     }
 
     clearWishlist = async () => {
         var r = window.confirm("Are you sure you want to clear your wishlist?");
 
         if(r) {
-            await axios.put(baseUrl + "users/" + this.state.userId + "/clear", {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
                 headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }}).then(await this.getWishlist() )
-                .catch((e) => {
+                }}).catch((e) => {
                     alert("Something went wrong clearing this wishlist. Please try again!")
                 });
 
+            await this.getWishlist();
         }
     }
 
