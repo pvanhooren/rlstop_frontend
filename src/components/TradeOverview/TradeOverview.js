@@ -85,7 +85,11 @@ class TradeOverview extends Component {
             result => {
                 self.setState({trades: result.data});
             }).catch((e) => {
-                this.props.history.push('/me/login');
+                if(e.response.status != '404') {
+                    this.props.history.push('/me/login');
+                } else {
+                    document.getElementById('noTrades').style.display = 'block';
+                }
             });
     }
 
@@ -181,8 +185,8 @@ class TradeOverview extends Component {
                                 {trade.user.userName}
                             </Typography>
                             <Typography variant="h5" component="h2">
-                                Offers: {trade.wants} -
-                                Wants: {trade.offers}
+                                Offers: {trade.offers} -
+                                Wants: {trade.wants}
                             </Typography>
                             <Typography color="textSecondary">
                                 {trade.user.platform} ID: {trade.user.platformID}
@@ -202,6 +206,10 @@ class TradeOverview extends Component {
                             {/*</CardActions>*/}
                     </Card>
                 )}
+                <div className="noTrades" id="noTrades">
+                    This is awkward... It seems like there have been no trades posted yet. You can be the first one!
+                    <br/><br/><Button variant="contained" color="primary" onClick={() => this.props.history.push("/new")}>Post new trade</Button>
+                </div>
             </div>
         );
     }

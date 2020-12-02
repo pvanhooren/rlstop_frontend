@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import {makeStyles, useTheme} from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = props => {
-    const { history } = props;
+    const {history} = props;
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -43,7 +43,7 @@ const Navbar = props => {
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
     var isLoggedIn = false;
 
-    if(localStorage.getItem('creds') != null & localStorage.getItem('creds') !== ""){
+    if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
         isLoggedIn = true;
     }
 
@@ -54,7 +54,7 @@ const Navbar = props => {
 
     const handleMenuClick = pageURL => {
         console.log(pageURL);
-        if(pageURL !== "/me/logout") {
+        if (pageURL !== "/me/logout") {
             history.push(pageURL);
             setAnchorEl(null);
         } else {
@@ -62,7 +62,7 @@ const Navbar = props => {
         }
     };
 
-    function signOut(){
+    function signOut() {
         localStorage.clear();
         history.push("/me/login")
         setAnchorEl(null);
@@ -72,8 +72,8 @@ const Navbar = props => {
         history.push(pageURL);
     };
 
-    function getUserName(){
-        if(localStorage.getItem('userName') != null){
+    function getUserName() {
+        if (localStorage.getItem('userName') != null) {
             return localStorage.getItem('userName');
         }
         return "ACCOUNT"
@@ -144,7 +144,7 @@ const Navbar = props => {
                                 aria-label="menu"
                                 onClick={handleMenu}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -162,7 +162,7 @@ const Navbar = props => {
                                 onClose={() => setAnchorEl(null)}
                             >
                                 {menuItems.map(menuItem => {
-                                    const { menuTitle, pageURL } = menuItem;
+                                    const {menuTitle, pageURL} = menuItem;
                                     return (
                                         <MenuItem onClick={() => handleMenuClick(pageURL)}>
                                             {menuTitle}
@@ -179,74 +179,77 @@ const Navbar = props => {
                                         );
                                     })) : (
                                     loggedOutItems.map(menuItem => {
-                                    const {menuTitle, pageURL} = menuItem;
-                                    return (
-                                        <MenuItem onClick={() => handleMenuClick(pageURL)}>
-                                            {menuTitle}
-                                        </MenuItem>
-                                    );
-                                }))}
+                                        const {menuTitle, pageURL} = menuItem;
+                                        return (
+                                            <MenuItem onClick={() => handleMenuClick(pageURL)}>
+                                                {menuTitle}
+                                            </MenuItem>
+                                        );
+                                    }))}
                             </Menu>
                         </>
                     ) : (
                         <>
-                        <div className="header">
-                            <Button
-                                className="btn"
-                                onClick={() => handleButtonClick("/")}
-                            >
-                                TRADES
-                            </Button>
-                            <Button
-                                className="btn"
-                                onClick={() => handleButtonClick("/new")}
-                            >
-                                NEW TRADE
-                            </Button>
-                            <Button
-                                className="btn"
-                                onClick={() => handleButtonClick("/people")}
-                            >
-                                PEOPLE
-                            </Button>
-                            {/*<Button*/}
-                            {/*    className="btn"*/}
-                            {/*    onClick={() => handleButtonClick("/demo")}*/}
-                            {/*>*/}
-                            {/*    DEMO*/}
-                            {/*</Button>*/}
-                        </div>
+                            <div className="header">
+                                <Button
+                                    className="btn"
+                                    onClick={() => handleButtonClick("/")}
+                                >
+                                    TRADES
+                                </Button>
+                                <Button
+                                    className="btn"
+                                    onClick={() => handleButtonClick("/new")}
+                                >
+                                    NEW TRADE
+                                </Button>
+                                <Button
+                                    className="btn"
+                                    onClick={() => handleButtonClick("/people")}
+                                >
+                                    PEOPLE
+                                </Button>
+                                {/*<Button*/}
+                                {/*    className="btn"*/}
+                                {/*    onClick={() => handleButtonClick("/demo")}*/}
+                                {/*>*/}
+                                {/*    DEMO*/}
+                                {/*</Button>*/}
+                            </div>
                             <div>
-                            <Button
-                                className={classes.profileTab}
-                                onClick={handleMenu}
-                            >
-                                <Avatar className={classes.avatar}>
-                                    <PermIdentity />
-                                </Avatar>
-                                { getUserName() }
-                            </Button>
-                            <Menu
-                                id="profile-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={() => setAnchorEl(null)}
-                            >
-                                {isLoggedIn ? (
-                                    <>
-                                    <MenuItem onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
-                                    <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
-                                    <MenuItem onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
-                                    <MenuItem onClick={() => signOut() }>Sign out</MenuItem>
-                                    </>
+                                <Button
+                                    className={classes.profileTab}
+                                    onClick={handleMenu}
+                                >
+                                    <Avatar className={classes.avatar}>
+                                        <PermIdentity/>
+                                    </Avatar>
+                                    {getUserName()}
+                                </Button>
+                                <Menu
+                                    id="profile-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={() => setAnchorEl(null)}
+                                >
+                                    {isLoggedIn ? (
+                                        <>
+                                            <MenuItem
+                                                onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
+                                            <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
+                                            <MenuItem
+                                                onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
+                                            <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
+                                        </>
                                     ) : (
-                                    <>
-                                    <MenuItem onClick={() => handleMenuClick("/me/login")}>Sign in</MenuItem>
-                                        <MenuItem onClick={() => handleMenuClick("/me/register")}>Register</MenuItem>
-                                    </>
+                                        <>
+                                            <MenuItem onClick={() => handleMenuClick("/me/login")}>Sign in</MenuItem>
+                                            <MenuItem
+                                                onClick={() => handleMenuClick("/me/register")}>Register</MenuItem>
+                                        </>
                                     )}
-                            </Menu>
+                                </Menu>
                             </div>
                         </>
                     )}

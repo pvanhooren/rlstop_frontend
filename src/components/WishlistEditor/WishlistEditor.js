@@ -10,6 +10,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import "../Overview.css";
 import "../userSelection.css";
+import ClearIcon from "@material-ui/icons/Clear";
+import CheckIcon from "@material-ui/icons/Check";
 
 const baseUrl= "http://localhost:8080/";
 
@@ -18,7 +20,9 @@ class WishlistEditor extends React.Component{
         super(props);
 
         this.state = {
-            wishlist: []
+            wishlist: [],
+            item: "",
+            index: 0
         }
     }
 
@@ -41,11 +45,20 @@ class WishlistEditor extends React.Component{
         }
     }
 
-    async deleteItem(item) {
-        var r = window.confirm("Are you sure you want to delete this item?");
+    showDeleteForm(item, index){
+        this.setState({ item: item, index: index})
+        document.getElementById("delete" + index).style.display = "block";
+        document.getElementById("view" + index).style.display = "none";
+    }
 
-        if(r) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + item, null ,{
+    cancelDelete = () => {
+        document.getElementById("delete" + this.state.index).style.display = "none";
+        document.getElementById("delete" + this.state.index).style.height = document.getElementById("view" + this.state.index).style.height
+        document.getElementById("view" + this.state.index).style.display = "block";
+    }
+
+    deleteItem = async() => {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null ,{
                 headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
@@ -55,7 +68,6 @@ class WishlistEditor extends React.Component{
                 })
 
             await this.getWishlist();
-        }
     }
 
     addItem = async () => {
@@ -102,10 +114,16 @@ class WishlistEditor extends React.Component{
                       <Button onClick={this.clearWishlist} variant="contained" color="secondary">Clear wishlist</Button>
                   </div>
                   <br/><br/>
-                  {this.state.wishlist.map(item =>
-                      <Card variant="outlined">
+
+                  {this.state.wishlist.map((item, index) =>
+                      <Card className="itemCard" variant="outlined">
                           <CardContent>
+                      <div>
+                        <div id={"view" + index}>
                               <div className="cardText">
+                                  <Typography color="textSecondary" gutterBottom>
+                                      Item {index + 1}
+                                  </Typography>
                                   <Typography variant="h5" component="h2">
                                       {item}
                                   </Typography>
@@ -114,15 +132,28 @@ class WishlistEditor extends React.Component{
                                   {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
                                   {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
 
-                                  <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteItem(item)} />
+                                  <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.showDeleteForm(item, index)} />
                               </div>
+                        </div>
 
+                        <div className="deleteForm" id={"delete" + index}>
+                              <div className="deleteText">
+                                  <Typography color="textSecondary" gutterBottom>
+                                      Are you sure you want to delete this item?
+                                  </Typography>
+                                  <Typography variant="h5" component="h2">
+                                      {item}
+                                  </Typography>
+                              </div>
+                              <div className="icons">
+                                  <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2" onClick={this.cancelDelete}/>
+                                  <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1" onClick={this.deleteItem}/>
+                              </div>
+                        </div>
+                      </div>
                           </CardContent>
-                          {/*<CardActions>*/}
-
-                          {/*</CardActions>*/}
                       </Card>
-                  )}
+                      )}
               </div>
           </div>
         );

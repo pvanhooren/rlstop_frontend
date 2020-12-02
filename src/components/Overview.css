@@ -29,8 +29,18 @@
     height:100px;
 }
 
+.deleteForm{
+    display:none;
+    height:100px;
+}
+
 .btnGroup{
     text-align:center !important;
+}
+
+.deleteText{
+    float:left;
+    position:relative;
 }
 
 .editTextFields{
@@ -48,8 +58,12 @@
     text-align:center;
 }
 
-.fullCard{
-    /*height: 105px !important;*/
+.tradeCard{
+    height:105px !important;
+}
+
+.itemCard{
+    height:90px !important;
 }
 
 /*.textField2{*/
@@ -65,6 +79,11 @@
     float:right;
     position:relative;
     margin-top: 1.5%;
+}
+
+.noTrades{
+    display:none;
+    text-align: center;
 }
 
 .cardText{

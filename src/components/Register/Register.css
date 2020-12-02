@@ -1,0 +1,22 @@
+.image{
+    background-image: url(https://cdn.arstechnica.net/wp-content/uploads/2020/07/rocket-league-f2p-800x450.jpg);
+    background-repeat: no-repeat;
+    background-color: grey;
+    background-size: cover;
+    background-position: center;
+}
+
+.registerForm{
+    display:block;
+    text-align:center;
+    margin-left:5%;
+}
+
+.welcome{
+    display:none;
+    text-align:center;
+}
+
+.welcomeText{
+    margin-top:40%;
+}

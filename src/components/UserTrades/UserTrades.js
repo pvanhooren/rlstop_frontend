@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
+import Button from "@material-ui/core/Button";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -39,7 +40,11 @@ class UserTrades extends React.Component{
                     this.setState({trades: result.data})
                 }
             ).catch((e) => {
-                this.props.history.push("/me/login");
+                if(e.response.status != '404') {
+                    this.props.history.push("/me/login");
+                } else {
+                    document.getElementById('noTrades').style.display = 'block';
+                }
             })
         } else {
             this.props.history.push("/me/login");
@@ -53,6 +58,12 @@ class UserTrades extends React.Component{
         document.getElementById("view" + trade.tradeId).style.display = "none";
         document.getElementById("offers" + trade.tradeId).value = trade.offers;
         document.getElementById("wants" + trade.tradeId).value = trade.wants;
+    }
+
+    showDeleteForm(tradeId){
+        this.setState({ tradeId: tradeId})
+        document.getElementById("delete" + tradeId).style.display = "block";
+        document.getElementById("view" + tradeId).style.display = "none";
     }
 
     editTrade = async() =>{
@@ -74,25 +85,27 @@ class UserTrades extends React.Component{
         }
     }
 
+    async deleteTrade(){
+        await axios.delete(baseUrl + "trades/" + this.state.tradeId, {
+            headers : {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }}
+        ).catch((e) => {
+            alert("The trade couldn't be deleted, please try again!")
+        })
+
+        await this.getUserTrades();
+    }
+
     cancelEdit = () => {
         document.getElementById("edit" + this.state.tradeId).style.display = "none";
         document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
 
-    async deleteTrade(tradeId){
-        let r = window.confirm("Are you sure you want to delete this trade?");
-
-        if(r) {
-            await axios.delete(baseUrl + "trades/" + tradeId, {
-                headers : {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }}
-            ).catch((e) => {
-                alert("The trade couldn't be deleted, please try again!")
-            })
-            await this.getUserTrades();
-        }
+    cancelDelete = () => {
+        document.getElementById("delete" + this.state.tradeId).style.display = "none";
+        document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
 
     componentDidMount(){
@@ -105,7 +118,7 @@ class UserTrades extends React.Component{
                 <div className="mainArea" id="userTrades">
                     <h2 className="title">Your trades</h2>
                     {this.state.trades.map(trade =>
-                        <Card className="fullCard" variant="outlined">
+                        <Card className="tradeCard" variant="outlined">
                             <CardContent>
                         <div className="view" id={"view" + trade.tradeId}>
                                 <div className="cardText">
@@ -124,7 +137,7 @@ class UserTrades extends React.Component{
                                     {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
                                     {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
 
-                                    <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.tradeId)} />
+                                    <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.showDeleteForm(trade.tradeId)} />
                                     <CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />
                                 </div>
                         </div>
@@ -133,7 +146,6 @@ class UserTrades extends React.Component{
                                     <Typography color="textSecondary" gutterBottom>
                                         {trade.user.userName}
                                     </Typography>
-
                                         <TextField className="marginField" id={"offers" + trade.tradeId} label="Offers..." InputLabelProps={{shrink: true}}></TextField>
                                         <TextField id={"wants" + trade.tradeId} label="In trade for..." InputLabelProps={{shrink: true}}></TextField>
                                     </div>
@@ -143,12 +155,35 @@ class UserTrades extends React.Component{
                                         <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1" onClick={this.editTrade}/>
                                     </div>
                                 </div>
+
+                                <div className="deleteForm" id={"delete" + trade.tradeId}>
+                                    <div className="deleteText">
+                                    <Typography color="textSecondary" gutterBottom>
+                                        Are you sure you want to delete this trade?
+                                    </Typography>
+                                    <Typography variant="h5" component="h2">
+                                        Offers: {trade.offers} -
+                                        Wants: {trade.wants}
+                                    </Typography>
+                                        <Typography color="textSecondary">
+                                            {trade.user.platform} ID: {trade.user.platformID}
+                                        </Typography>
+                                    </div>
+                                    <div className="icons">
+                                        <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2" onClick={this.cancelDelete}/>
+                                        <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1" onClick={this.deleteTrade}/>
+                                    </div>
+                                </div>
                             </CardContent>
                             {/*<CardActions>*/}
 
                             {/*</CardActions>*/}
                         </Card>
                     )}
+                    <div className="noTrades" id="noTrades">
+                        It seems like you have not posted any trades yet. Click the button below to change this!
+                        <br/><br/><Button variant="contained" color="primary" onClick={() => this.props.history.push("/new")}>Post new trade</Button>
+                    </div>
                 </div>
             </div>
         );
