@@ -89,6 +89,10 @@ const Navbar = props => {
             pageURL: "/me/trades"
         },
         {
+            menuTitle: "Interesting trades",
+            pageURL: "/me/interested"
+        },
+        {
             menuTitle: "Settings",
             pageURL: "/me/settings"
         },
@@ -238,6 +242,8 @@ const Navbar = props => {
                                             <MenuItem
                                                 onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
                                             <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
+                                            <MenuItem onClick={() => handleMenuClick("/me/interested")}>Interesting
+                                                trades</MenuItem>
                                             <MenuItem
                                                 onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
                                             <MenuItem onClick={() => signOut()}>Sign out</MenuItem>

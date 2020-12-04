@@ -13,28 +13,40 @@ import Radio from "@material-ui/core/Radio";
 
 import '../userSelection.css';
 
-const baseUrl= "http://localhost:8080/";
+const regExp = RegExp(
+    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+)
 
-class Settings extends React.Component{
+const baseUrl = "http://localhost:8080/";
+
+class Settings extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: Object
+            user: Object,
+            userNameError: false,
+            userNameErrorText: "",
+            emailError: false,
+            emailErrorText: "",
+            friendCodeError: false,
+            friendCodeErrorText: "",
+            anyError: false
         }
     }
 
     getUserInfo() {
-        if(localStorage.getItem("userId") != null){
+        if (localStorage.getItem("userId") != null) {
             axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
-                headers : {
-                        withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
-                }}).then(response => {
-                    this.setState({ user: response.data })
-                document.getElementById("email").value = response.data.emailAddress;
-                document.getElementById("username").value = response.data.userName;
-                document.getElementById("platformID").value = response.data.platformID;
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }
+            }).then(response => {
+                    this.setState({user: response.data})
+                    document.getElementById("email").value = response.data.emailAddress;
+                    document.getElementById("username").value = response.data.userName;
+                    document.getElementById("platformID").value = response.data.platformID;
                 }
             ).catch((e) => {
                 this.props.history.push("/me/login");
@@ -48,110 +60,139 @@ class Settings extends React.Component{
         this.getUserInfo();
     }
 
-    saveSettings = async() => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platformID=" + document.getElementById("platformID").value, null,{
-            headers : {
-                withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
-            }}).catch((e) => {
-            alert("Something went wrong changing settings. Please try again!")
+    saveSettings = async () => {
+        this.setState({
+            anyError: false,
+            emailError: false,
+            userNameError: false,
+            userNameErrorText: "",
+            emailErrorText: "",
+            friendCodeError: false,
+            friendCodeErrorText: ""
         })
 
-        if(document.getElementById("switch").checked){
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') +  "?platform=NINTENDOSWITCH",null,{
-                headers : {
+        var selectedPlatform = this.state.user.platform;
+        if (document.getElementById("switch").checked) { selectedPlatform = "NINTENDOSWITCH" }
+        else if (document.getElementById("playstation").checked) { selectedPlatform = "PLAYSTATION"}
+        else if (document.getElementById("xbox").checked) { selectedPlatform = "XBOX" }
+        else if (document.getElementById("pc").checked) { selectedPlatform = "PC" }
+
+        if (regExp.test(document.getElementById("email").value)) {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, {
+                headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }});
-        } else if (document.getElementById("playstation").checked) {
-            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=PLAYSTATION", null, {
-                    headers : {
-                        withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
-                    }});
-        } else if (document.getElementById("xbox").checked) {
-            await axios.put(baseUrl + + "users/" + localStorage.getItem('userId') + "?platform=XBOX", null, {
-                headers : {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }});
-        } else if (document.getElementById("pc").checked) {
-            await axios.put(baseUrl + +"users/" + localStorage.getItem('userId') + "?platform=PC", null, {
-                headers : {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }});
+                }
+            }).catch((e) => {
+                if (e.response.data.message.includes("username")) {
+                    this.setState({
+                        anyError: true,
+                        userNameError: true,
+                        userNameErrorText: e.response.data.message
+                    })
+                } else if (e.response.data.message.includes("email")) {
+                    this.setState({
+                        anyError: true,
+                        emailError: true,
+                        emailErrorText: e.response.data.message
+                    })
+                } else {
+                    this.setState({
+                        anyError: true,
+                        emailError: true,
+                        userNameError: true,
+                        friendCodeError: true,
+                        friendCodeErrorText: e.response.data.message
+                    })
+                }
+            })
+        } else {
+            this.setState({
+                anyError: true,
+                emailError: true,
+                emailErrorText: "The provided email address is not recognized as an email address. Please correct it."
+            })
         }
 
-        this.props.history.push("/")
+        if (!this.state.anyError) {
+            this.props.history.push("/");
+        }
     }
 
-    render(){
-        return(
-          <div>
-              <div className="mainArea" id="userSettings">
-                  <h2 className="title">User settings</h2>
-                  <Grid container spacing={3}>
-                      <Grid item xs={6}>
-                  <TextField variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                             InputLabelProps={{
-                                 shrink: true,
-                             }}
-                      // defaultValue={this.state.user.emailAddress}
-                      autoFocus/>
-                      </Grid>
-                      <Grid item xs={6}>
-                  <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="username"
-                      label="Username"
-                      id="username"
-                      autoComplete="username"
-                      InputLabelProps={{
-                          shrink: true,
-                      }}
-                      // defaultValue={this.state.user.userName}
-                  />
-                      </Grid>
-                      <Grid item xs={12}>
-                          <h5>Platform</h5>
-                          <RadioGroup id="platform" className="selectGroup" name="platform">
-                              <FormControlLabel value="switch" control={<Radio id="switch" />} label="Nintendo Switch" checked={this.state.user.platform === "NINTENDOSWITCH"} />
-                              <FormControlLabel value="playstation" control={<Radio id="playstation" />} label="PlayStation" checked={this.state.user.platform === "PLAYSTATION"} />
-                              <FormControlLabel value="xbox" control={<Radio id="xbox" />} label="XBox" checked={this.state.user.platform === "XBOX"}/>
-                              <FormControlLabel value="pc" control={<Radio id="pc" />} label="PC" checked={this.state.user.platform === "PC"}/>
-                          </RadioGroup>
-                      </Grid>
-                      <Grid item xs={12}>
-                          <TextField
-                              required
-                              id="platformID"
-                              name="platformID"
-                              label="Friend code / Platform username"
-                              fullWidth
-                              autoComplete="platformID"
-                              InputLabelProps={{
-                                  shrink: true,
-                              }}
-                              // defaultValue={this.state.user.platformID}
-                          />
-                      </Grid>
-                  </Grid>
-                  <div className="saveBtn">
-                  <Button variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
-                  </div>
-                  </div>
-          </div>
+    render() {
+        return (
+            <div>
+                <div className="mainArea" id="userSettings">
+                    <h2 className="title">User settings</h2>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField variant="outlined"
+                                       margin="normal"
+                                       required
+                                       fullWidth
+                                       id="email"
+                                       label="Email Address"
+                                       name="email"
+                                       autoComplete="email"
+                                       error={this.state.emailError}
+                                       helperText={this.state.emailErrorText}
+                                       InputLabelProps={{
+                                           shrink: true,
+                                       }}
+                                // defaultValue={this.state.user.emailAddress}
+                                       autoFocus/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="username"
+                                label="Username"
+                                id="username"
+                                autoComplete="username"
+                                error={this.state.userNameError}
+                                helperText={this.state.userNameErrorText}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                // defaultValue={this.state.user.userName}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <h5>Platform (Current: {this.state.user.platform})</h5>
+                            <RadioGroup id="platform" className="selectGroup" name="platform">
+                                <FormControlLabel value="switch" control={<Radio id="switch"/>}
+                                                  label="Nintendo Switch"/>
+                                <FormControlLabel value="playstation" control={<Radio id="playstation"/>}
+                                                  label="PlayStation"/>
+                                <FormControlLabel value="xbox" control={<Radio id="xbox"/>} label="XBox"/>
+                                <FormControlLabel value="pc" control={<Radio id="pc"/>} label="PC"/>
+                            </RadioGroup>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                id="platformID"
+                                name="platformID"
+                                label="Friend code / Platform username"
+                                fullWidth
+                                autoComplete="platformID"
+                                error={this.state.friendCodeError}
+                                helperText={this.state.friendCodeErrorText}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                // defaultValue={this.state.user.platformID}
+                            />
+                        </Grid>
+                    </Grid>
+                    <div className="saveBtn">
+                        <Button variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
+                    </div>
+                </div>
+            </div>
         );
     }
 }

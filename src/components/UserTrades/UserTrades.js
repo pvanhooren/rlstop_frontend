@@ -44,6 +44,7 @@ class UserTrades extends React.Component{
                     this.props.history.push("/me/login");
                 } else {
                     document.getElementById('noTrades').style.display = 'block';
+                    this.setState({trades : []})
                 }
             })
         } else {
@@ -85,7 +86,7 @@ class UserTrades extends React.Component{
         }
     }
 
-    async deleteTrade(){
+    deleteTrade = async() => {
         await axios.delete(baseUrl + "trades/" + this.state.tradeId, {
             headers : {
                 withCredentials: true,
@@ -180,7 +181,7 @@ class UserTrades extends React.Component{
                             {/*</CardActions>*/}
                         </Card>
                     )}
-                    <div className="noTrades" id="noTrades">
+                    <div className="nothingToDisplay" id="noTrades">
                         It seems like you have not posted any trades yet. Click the button below to change this!
                         <br/><br/><Button variant="contained" color="primary" onClick={() => this.props.history.push("/new")}>Post new trade</Button>
                     </div>

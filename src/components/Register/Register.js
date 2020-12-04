@@ -44,10 +44,12 @@ class Register extends React.Component {
     };
 
     validate = () => {
-        this.setState({
+        const self = this;
+        self.setState({
             emailError: false,
             emailErrorText: '',
             userNameError: false,
+            userNameErrorText: "",
             passwordError: false,
             passwordErrorText: '',
             confirmPasswordError: false,
@@ -56,53 +58,55 @@ class Register extends React.Component {
             wishlistError: false,
             wishlistErrorText: ''
         })
-        const self = this;
-        if (document.getElementById("email").value !== "" && document.getElementById("userName").value !== ""
-            && document.getElementById("password").value !== "" && document.getElementById("confirmPassword").value !== ""
-            && self.state.platform !== "" && self.state.platform != null
-            && document.getElementById("platformID").value !== "" && document.getElementById("wishlist").value !== "") {
-            if (document.getElementById("password").value === document.getElementById("confirmPassword").value) {
-                if (regExp.test(document.getElementById("email").value)) {
-                    var creds = window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value);
-                    axios.post(baseUrl + "users/new?creds=" + creds + "&email=" + document.getElementById("email").value
-                        + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value)
-                        .then((response) => {
-                            localStorage.setItem('creds', window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value));
-                            localStorage.setItem('userId', response.data.userId);
-                            localStorage.setItem('userName', response.data.userName);
-                            document.getElementById("registerForm").style.display = 'none';
-                            document.getElementById("welcome").style.display = 'block';
-                        }).catch((e) => {
+
+        if (document.getElementById("password").value === document.getElementById("confirmPassword").value) {
+            if (regExp.test(document.getElementById("email").value)) {
+                var creds = window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value);
+                axios.post(baseUrl + "users/new?creds=" + creds + "&email=" + document.getElementById("email").value
+                    + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value)
+                    .then((response) => {
+                        localStorage.setItem('creds', window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value));
+                        localStorage.setItem('userId', response.data.userId);
+                        localStorage.setItem('userName', response.data.userName);
+                        document.getElementById("registerForm").style.display = 'none';
+                        document.getElementById("welcome").style.display = 'block';
+                    }).catch((e) => {
+                    if (e.response.data.message.includes("username")) {
+                        self.setState({
+                            userNameError: true,
+                            userNameErrorText: e.response.data.message
+                        })
+                    } else if (e.response.data.message.includes("email")) {
                         self.setState({
                             emailError: true,
-                            userNameError: true,
-                            emailErrorText: "There is already a user in our system with that username or email. Please try again!"
+                            emailErrorText: e.response.data.message
                         })
-                    });
-                } else {
-                    self.setState({
-                        emailError: true,
-                        emailErrorText: "The provided email address is not recognized as an email address. Please correct it."
-                    })
-                }
+                    } else {
+                        self.setState({
+                            wishlistErrorText: e.response.data.message,
+                            emailError: true,
+                            userNameError: true,
+                            passwordError: true,
+                            confirmPasswordError: true,
+                            platformError: true,
+                            platformIDError: true,
+                            wishlistError: true
+                        })
+                    }
+
+                });
             } else {
                 self.setState({
-                    passwordError: true,
-                    confirmPasswordError: true,
-                    passwordErrorText: "Password and confirm password don't have the same value. Please make sure they are identical!"
+                    emailError: true,
+                    emailErrorText: "The provided email address is not recognized as an email address. Please correct it."
                 })
             }
         } else {
             self.setState({
-                wishlistErrorText: "Not all fields have been filled in. Please fill in the missing fields.",
-                emailError: true,
-                userNameError: true,
                 passwordError: true,
                 confirmPasswordError: true,
-                platformError: true,
-                platformIDError: true,
-                wishlistError: true
-            });
+                passwordErrorText: "Password and confirm password don't have the same value. Please make sure they are identical!"
+            })
         }
     }
 
@@ -136,6 +140,7 @@ class Register extends React.Component {
                                 id="userName"
                                 autoComplete="username"
                                 error={this.state.userNameError}
+                                helperText={this.state.userNameErrorText}
                             />
                         </Grid>
                         <Grid item xs={6}>

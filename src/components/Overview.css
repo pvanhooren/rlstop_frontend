@@ -10,7 +10,7 @@
 }
 
 .marginBtn{
-    margin-right:5px !important;
+    margin-right:10px !important;
 }
 
 .filterGroup{
@@ -26,12 +26,17 @@
 
 .editForm{
     display:none;
-    height:100px;
+    height:20%;
 }
 
 .deleteForm{
     display:none;
-    height:100px;
+    height:20%;
+}
+
+.interestForm{
+    display:none;
+    height: 20%;
 }
 
 .btnGroup{
@@ -48,6 +53,17 @@
     position:relative;
 }
 
+.interestTextField{
+    float:left;
+    position: relative;
+    width: 70%;
+    padding-bottom: 1%;
+}
+
+.interestField{
+    width: 100%;
+}
+
 .marginField{
     margin-right: 10px !important;
 }
@@ -59,11 +75,11 @@
 }
 
 .tradeCard{
-    height:105px !important;
+    height:20% !important;
 }
 
 .itemCard{
-    height:90px !important;
+    height:15% !important;
 }
 
 /*.textField2{*/
@@ -81,7 +97,7 @@
     margin-top: 1.5%;
 }
 
-.noTrades{
+.nothingToDisplay{
     display:none;
     text-align: center;
 }

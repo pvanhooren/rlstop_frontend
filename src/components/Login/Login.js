@@ -73,7 +73,9 @@ export default function SignIn(props) {
             ).catch((e) => {
                     setUserNameError(true);
                     setPasswordError(true);
+
                     setPasswordErrorText("Incorrect username or password. Please try again!");
+                    // setPasswordErrorText("Our apologies, it seems like there are server issues. Please come back later");
                 }
             )
         } else {

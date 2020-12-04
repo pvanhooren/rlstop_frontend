@@ -13,7 +13,10 @@ class NewTradeForm extends Component {
         super(props);
 
         this.state = {
-            user: Object
+            user: Object,
+            offersError: false,
+            wantsError: false,
+            errorText: ""
         }
     }
 
@@ -36,18 +39,23 @@ class NewTradeForm extends Component {
     // }
 
     submitForm = async() => {
+        this.setState({offersError: false, wantsError: false, errorText: ""})
         if (document.getElementById("newWants").value !== "" && document.getElementById("newOffers").value !== "" && localStorage.getItem("userId") != null) {
             await axios.post(baseUrl +"trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), null,{
                 headers : {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
                 }}).catch((e) => {
-                    alert("Something went wrong posting the trade. Please try again!")
+                    if(e.response.data != null) {
+                        this.setState({offersError: true, wantsError: true,errorText: e.response.data.message})
+                    } else {
+                        this.setState({offersError: true, wantsError: true, errorText: "Something at our end went wrong posting the trade. Please try again later!"})
+                    }
             });
 
             this.props.history.push("/")
         } else {
-            alert("The trade cannot be added because it is not complete");
+            this.setState({offersError: true, wantsError: true, errorText: "The trade cannot be added because it is not complete"})
         }
     }
 
@@ -90,9 +98,9 @@ class NewTradeForm extends Component {
                         <br/>
                         {/*<input className="input" type="hidden"></input><br />*/}
                         {/*<label>I offer...</label><br />*/}
-                        <TextField variant="outlined" className="textfield" id="newOffers" multiline rows={7} label="I offer..."></TextField>
+                        <TextField error={this.state.offersError} helperText={this.state.errorText} variant="outlined" className="textfield" id="newOffers" multiline rows={7} label="I offer..."></TextField>
                         {/*<label>In trade for...</label><br />*/}
-                        <TextField variant="outlined" className="textfield" id="newWants" multiline rows={7} label="In trade for..."></TextField>
+                        <TextField error={this.state.wantsError} variant="outlined" className="textfield" id="newWants" multiline rows={7} label="In trade for..."></TextField>
                 <br/><br/>
                 <Button className="marginButton" variant="contained" color="primary" onClick={this.submitForm}>Post</Button><br/>
             </div>

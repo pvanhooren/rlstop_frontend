@@ -7,6 +7,7 @@ import PeopleOverview from "./components/PeopleOverview/PeopleOverview";
 import Demo from "./components/Demo/Demo";
 import WishlistEditor from "./components/WishlistEditor/WishlistEditor";
 import UserTrades from "./components/UserTrades/UserTrades";
+import Interested from "./components/Interested/Interested";
 import Settings from "./components/Settings/Settings";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/demo" component={Demo}/>} />
             <Route exact path="/me/wishlist" component={WishlistEditor}/>} />
             <Route exact path="/me/trades" component={UserTrades}/>} />
+            <Route exact path="/me/interested" component={Interested}/>}/>
             <Route exact path="/me/settings" component={Settings}/>} />
             <Route exact path="/me/login" component={Login}/>}/>
             <Route exact path="/me/register" component={Register}/>}/>
