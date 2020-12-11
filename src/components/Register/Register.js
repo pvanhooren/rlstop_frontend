@@ -15,7 +15,7 @@ import Container from "@material-ui/core/Container";
 import "./Register.css"
 
 const regExp = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+    /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
 const baseUrl = "http://localhost:8080/";
@@ -36,6 +36,12 @@ class Register extends React.Component {
             platformIDError: false,
             wishlistError: false,
             wishlistErrorText: ''
+        }
+    }
+
+    componentDidMount() {
+        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+            this.props.history.push("/")
         }
     }
 

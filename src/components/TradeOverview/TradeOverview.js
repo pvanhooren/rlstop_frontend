@@ -27,6 +27,7 @@ class TradeOverview extends Component {
 
         this.state = {
             trades: [],
+            busy: false,
             interests: [],
             tradeId: 0,
             userId: 0,
@@ -35,8 +36,17 @@ class TradeOverview extends Component {
         }
     }
 
+    isLoggedIn() {
+        console.log(localStorage.getItem('creds'))
+        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+            return true
+        } else {
+            return false
+        }
+    }
+
     isInterested(tradeId) {
-        if(this.state.interests.find((x) => x.trade.tradeId == tradeId) != null){
+        if (this.state.interests.find((x) => x.trade.tradeId === tradeId) != null) {
             return true;
         }
 
@@ -44,15 +54,19 @@ class TradeOverview extends Component {
     }
 
     showInterestForm(tradeId) {
-        this.setState({tradeId: tradeId})
-        document.getElementById("view" + tradeId).style.display = "none";
-        document.getElementById("interest" + tradeId).style.display = "block";
+        if (!this.state.busy) {
+            this.setState({tradeId: tradeId, busy: true})
+            document.getElementById("view" + tradeId).style.display = "none";
+            document.getElementById("interest" + tradeId).style.display = "block";
+        }
     }
 
-    showRemoveForm(tradeId){
-        this.setState({tradeId: tradeId})
-        document.getElementById("view" + tradeId).style.display = "none";
-        document.getElementById("remove" + tradeId).style.display = "block";
+    showRemoveForm(tradeId) {
+        if (!this.state.busy) {
+            this.setState({tradeId: tradeId, busy: true})
+            document.getElementById("view" + tradeId).style.display = "none";
+            document.getElementById("remove" + tradeId).style.display = "block";
+        }
     }
 
     editTrade = async () => {
@@ -71,17 +85,20 @@ class TradeOverview extends Component {
             document.getElementById("editForm").style.display = "none";
             document.getElementById("filter").style.display = "block";
             this.getAllTrades();
+            this.setState({busy: false})
         } else {
             alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
         }
     }
 
     cancelInterest = () => {
+        this.setState({busy: false})
         document.getElementById("interest" + this.state.tradeId).style.display = "none";
         document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
 
     cancelRemove = () => {
+        this.setState({busy: false})
         document.getElementById("remove" + this.state.tradeId).style.display = "none";
         document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
@@ -92,6 +109,8 @@ class TradeOverview extends Component {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
             }
+        }).then(() => {
+            this.setState({busy: false})
         }).catch((e) => {
             alert("Something went wrong deleting the trade. Please try again!")
         });
@@ -99,6 +118,7 @@ class TradeOverview extends Component {
 
     getAllTrades = () => {
         const self = this;
+
         axios.get(baseUrl + "trades/all", {
             headers: {
                 withCredentials: true,
@@ -108,17 +128,18 @@ class TradeOverview extends Component {
             result => {
                 self.setState({trades: result.data});
             }).catch((e) => {
-
             if (e.response == null) {
-                this.props.history.push('/me/login');
-            } else if(e.response.status == '404'){
+                document.getElementById('serverError').style.display = 'block';
+            } else if (e.response.status == '404') {
                 document.getElementById('noTrades').style.display = 'block';
             }
         });
     }
 
-    getAllInterests = () =>{
+
+    getAllInterests = () => {
         const self = this;
+
         axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
             headers: {
                 withCredentials: true,
@@ -127,18 +148,25 @@ class TradeOverview extends Component {
         }).then((response) => {
             self.setState({interests: response.data})
         }).catch((e) => {
-            self.setState({interests: []})
+            if (e.response == null) {
+                document.getElementById('serverError').style.display = 'block';
+            } else if (e.response.status == '404') {
+                self.setState({interests: []})
+            }
         })
     }
 
-    removeInterest = async() => {
-        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId , {
-            headers : {
+    removeInterest = async () => {
+        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, {
+            headers: {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
-            }}
+            }
+        }).then(() => {
+                this.setState({busy: false})
+            }
         ).catch((e) => {
-            alert("The interest couldn't be deleted, please try again!")
+            document.getElementById('serverError').style.display = 'block';
         })
 
         await this.getAllInterests();
@@ -148,14 +176,17 @@ class TradeOverview extends Component {
         document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
 
-    showInterest = async() =>{
-        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value , null, {
-            headers : {
+    showInterest = async () => {
+        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, {
+            headers: {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
-            }}
+            }
+        }).then(() => {
+                this.setState({busy: false})
+            }
         ).catch((e) => {
-            alert("The interest couldn't be added, please try again!")
+            document.getElementById('serverError').style.display = 'block';
         })
 
         await this.getAllInterests();
@@ -166,64 +197,85 @@ class TradeOverview extends Component {
     }
 
     getFilteredTrades = () => {
-        const self = this;
-        if (document.getElementById("switch").checked) {
-            axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
-                headers: {
+        if (!this.state.busy) {
+            const self = this;
+            if (document.getElementById("switch").checked) {
+                axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
+                    headers: {
+                        withCredentials: true,
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }
+                }).then(
+                    result => {
+                        self.setState({trades: result.data});
+                    }).catch((e) => {
+                    if (e.response == null) {
+                        document.getElementById('serverError').style.display = 'block';
+                    } else {
+                        self.setState({trades: []})
+                    }
+                });
+            } else if (document.getElementById("playstation").checked) {
+                axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
+                    headers: {
+                        withCredentials: true,
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }
+                }).then(
+                    result => {
+                        self.setState({trades: result.data});
+                    }).catch((e) => {
+                    if (e.response == null) {
+                        document.getElementById('serverError').style.display = 'block';
+                    } else {
+                        self.setState({trades: []})
+                    }
+                });
+            } else if (document.getElementById("xbox").checked) {
+                axios.get(baseUrl + "trades/filter?platform=XBOX", {
+                    headers: {
+                        withCredentials: true,
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }
+                }).then(
+                    result => {
+                        self.setState({trades: result.data});
+                    }).catch((e) => {
+                    if (e.response == null) {
+                        document.getElementById('serverError').style.display = 'block';
+                    } else {
+                        self.setState({trades: []})
+                    }
+                });
+            } else if (document.getElementById("pc").checked) {
+                axios.get(baseUrl + "trades/filter?platform=PC", {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(
-                result => {
-                    self.setState({trades: result.data});
-                }).catch((e) => {
-                window.alert("Something went wrong filtering trades. Please try again!");
-            });
-        } else if (document.getElementById("playstation").checked) {
-            axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(
-                result => {
-                    self.setState({trades: result.data});
-                }).catch((e) => {
-                window.alert("Something went wrong filtering trades. Please try again!");
-            });
-        } else if (document.getElementById("xbox").checked) {
-            axios.get(baseUrl + "trades/filter?platform=XBOX", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(
-                result => {
-                    self.setState({trades: result.data});
-                }).catch((e) => {
-                window.alert("Something went wrong filtering trades. Please try again!");
-            });
-        } else if (document.getElementById("pc").checked) {
-            axios.get(baseUrl + "trades/filter?platform=PC", {
-                withCredentials: true,
-                headers: {
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(
-                result => {
-                    self.setState({trades: result.data});
-                }).catch((e) => {
-                window.alert("Something went wrong filtering trades. Please try again!");
-            });
-        } else {
-            alert("No filter is selected, so all trades will be displayed.")
-            this.getAllTrades();
+                    headers: {
+                        authorization: 'Basic ' + localStorage.getItem("creds")
+                    }
+                }).then(
+                    result => {
+                        self.setState({trades: result.data});
+                    }).catch((e) => {
+                    if (e.response == null) {
+                        document.getElementById('serverError').style.display = 'block';
+                    } else {
+                        self.setState({trades: []})
+                    }
+                });
+            } else {
+                this.getAllTrades();
+            }
         }
     }
 
     componentDidMount() {
-        this.getAllTrades();
-        this.getAllInterests()
+        if (this.isLoggedIn()) {
+            this.getAllTrades();
+            this.getAllInterests();
+        } else {
+            this.props.history.push('/me/login');
+        }
     }
 
     render() {
@@ -249,47 +301,57 @@ class TradeOverview extends Component {
                             </RadioGroup>
                             <div className="filterButtons">
                                 <Button className="marginBtn" onClick={this.getFilteredTrades} variant="contained"
-                                        color="primary">Filter!</Button>
-                                <Button onClick={this.getAllTrades} variant="contained" color="secondary">Remove
+                                        color="primary" disabled={this.state.busy}>Filter!</Button>
+                                <Button onClick={this.getAllTrades} variant="contained" color="secondary"
+                                        disabled={this.state.busy}>Remove
                                     filter</Button>
                             </div>
                         </div>
                     </AccordionDetails>
                 </Accordion>
 
+                <div className="serverError" id="serverError">
+                    It looks like something went wrong on our end, our apologies for the inconvenience. Please try
+                    again later!
+                </div>
+
                 <br/>
                 {this.state.trades.map(trade =>
                     <Card variant="outlined">
                         <CardContent>
                             <div className="view" id={"view" + trade.tradeId}>
-                            <div className="cardText">
-                                <Typography color="textSecondary" gutterBottom>
-                                    {trade.user.userName}
-                                </Typography>
-                                <Typography variant="h5" component="h2">
-                                    Offers: {trade.offers} -
-                                    Wants: {trade.wants}
-                                </Typography>
-                                <Typography color="textSecondary">
-                                    {trade.user.platform}
-                                </Typography>
-                            </div>
-                            <div className="icons">
-                                {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
-                                {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
-                                {
-                                    trade.user.userId != localStorage.getItem('userId') ? (
-                                    this.isInterested(trade.tradeId) ? (
-                                        <Button variant="contained" color="secondary" onClick={() => this.showRemoveForm(trade.tradeId)}>Remove interest</Button>
-                                    ) : (
-                                        <Button variant="contained" color="primary" onClick={() => this.showInterestForm(trade.tradeId)}>I'm interested!</Button>
-                                    )) : (
-                                        <></>
-                                    )
-                                }
-                                {/*<DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.postId)} />*/}
-                                {/*<CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />*/}
-                            </div>
+                                <div className="cardText">
+                                    <Typography color="textSecondary" gutterBottom>
+                                        {trade.lastModified.substring(0, 10)}, {trade.lastModified.substring(11, 16)}
+                                    </Typography>
+                                    <Typography variant="h5" component="h2">
+                                        Offers: {trade.offers} -
+                                        Wants: {trade.wants}
+                                    </Typography>
+                                    <Typography color="textSecondary">
+                                        {trade.user.userName} ({trade.user.platform})
+                                    </Typography>
+                                </div>
+                                <div className="icons">
+                                    {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
+                                    {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
+                                    {
+                                        trade.user.userId != localStorage.getItem('userId') ? (
+                                            this.isInterested(trade.tradeId) ? (
+                                                <Button variant="contained" color="secondary" disabled={this.state.busy}
+                                                        onClick={() => this.showRemoveForm(trade.tradeId)}>Remove
+                                                    interest</Button>
+                                            ) : (
+                                                <Button variant="contained" color="primary" disabled={this.state.busy}
+                                                        onClick={() => this.showInterestForm(trade.tradeId)}>I'm
+                                                    interested!</Button>
+                                            )) : (
+                                            <></>
+                                        )
+                                    }
+                                    {/*<DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.postId)} />*/}
+                                    {/*<CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />*/}
+                                </div>
                             </div>
 
                             <div className="interestForm" id={"interest" + trade.tradeId}>
@@ -297,12 +359,15 @@ class TradeOverview extends Component {
                                     <Typography color="textSecondary" gutterBottom>
                                         Offers: {trade.offers}, wants: {trade.wants}
                                     </Typography>
-                                    <TextField className={"interestField"} id={"comment" + trade.tradeId} label="Comment (optional)"></TextField>
+                                    <TextField className={"interestField"} id={"comment" + trade.tradeId}
+                                               label="Comment (optional)"></TextField>
                                 </div>
 
                                 <div className="icons">
-                                    <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2" onClick={this.cancelInterest}/>
-                                    <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1" onClick={this.showInterest}/>
+                                    <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2"
+                                               onClick={this.cancelInterest}/>
+                                    <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1"
+                                               onClick={this.showInterest}/>
                                 </div>
                             </div>
 

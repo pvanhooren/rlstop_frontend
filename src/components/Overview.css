@@ -1,85 +1,87 @@
-.filterText{
-    text-align:center;
-    position:relative;
+.filterText {
+    text-align: center;
+    position: relative;
 }
 
-.filterButtons{
+.filterButtons {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
 }
 
-.marginBtn{
-    margin-right:10px !important;
+.marginBtn {
+    margin-right: 10px !important;
 }
 
-.filterGroup{
-    text-align:center !important;
+.filterGroup {
+    text-align: center !important;
     height: 100px;
-    width:100%;
+    width: 100%;
 }
 
-.filterArea{
-    text-align:center !important;
-    width:100%;
+.filterArea {
+    text-align: center !important;
+    width: 100%;
 }
 
-.editForm{
-    display:none;
-    height:20%;
-}
-
-.deleteForm{
-    display:none;
-    height:20%;
-}
-
-.interestForm{
-    display:none;
+.editForm {
+    display: none;
     height: 20%;
 }
 
-.btnGroup{
-    text-align:center !important;
+.deleteForm {
+    display: none;
+    height: 20%;
 }
 
-.deleteText{
-    float:left;
-    position:relative;
+.interestForm {
+    display: none;
+    height: 20%;
 }
 
-.editTextFields{
-    float:left;
-    position:relative;
+.btnGroup {
+    text-align: center !important;
 }
 
-.interestTextField{
-    float:left;
+.deleteText {
+    float: left;
+    position: relative;
+}
+
+.editTextFields {
+    float: left;
+    position: relative;
+}
+
+.interestTextField {
+    float: left;
     position: relative;
     width: 70%;
     padding-bottom: 1%;
 }
 
-.interestField{
+.interestField {
     width: 100%;
 }
 
-.marginField{
+.marginField {
     margin-right: 10px !important;
 }
 
-.input{
-    margin-left:5% !important;
+.input {
+    margin-left: 5% !important;
     width: 90% !important;
-    text-align:center;
+    text-align: center;
 }
 
-.tradeCard{
-    height:20% !important;
+.tradeCard {
+    min-height: 15%;
+    height: 20% !important;
+    overflow-y: scroll !important;
 }
 
-.itemCard{
-    height:15% !important;
+.itemCard {
+    height: 15% !important;
 }
 
 /*.textField2{*/
@@ -91,28 +93,51 @@
 /*    width:40%;*/
 /*}*/
 
-.icons{
-    float:right;
-    position:relative;
+.icons {
+    float: right;
+    position: relative;
     margin-top: 1.5%;
 }
 
-.nothingToDisplay{
-    display:none;
+.nothingToDisplay {
+    display: none;
     text-align: center;
 }
 
-.cardText{
-    float:left;
-    position:relative;
+.serverError {
+    display: none;
+    text-align: center;
+    color: red;
 }
 
-.icon1{
-    float:right;
-    margin-right:30px;
+.cardText {
+    float: left;
+    position: relative;
 }
 
-.icon2{
+.icon1 {
+    float: right;
+    margin-right: 30px;
+}
+
+.interests {
+    display: none;
+}
+
+.interestsText{
+    float: left;
+}
+
+.noInterests {
+    display: none;
+}
+
+.icon2 {
+    float: right;
+}
+
+.icon3 {
     float:right;
+    margin-right: 30px;
 }
 

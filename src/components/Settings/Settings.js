@@ -35,29 +35,37 @@ class Settings extends React.Component {
         }
     }
 
-    getUserInfo() {
-        if (localStorage.getItem("userId") != null) {
-            axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(response => {
-                    this.setState({user: response.data})
-                    document.getElementById("email").value = response.data.emailAddress;
-                    document.getElementById("username").value = response.data.userName;
-                    document.getElementById("platformID").value = response.data.platformID;
-                }
-            ).catch((e) => {
-                this.props.history.push("/me/login");
-            });
+    isLoggedIn() {
+        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+            return true
         } else {
-            this.props.history.push("/me/login");
+            return false
         }
     }
 
+    getUserInfo() {
+        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
+            headers: {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }
+        }).then(response => {
+                this.setState({user: response.data})
+                document.getElementById("email").value = response.data.emailAddress;
+                document.getElementById("username").value = response.data.userName;
+                document.getElementById("platformID").value = response.data.platformID;
+            }
+        ).catch((e) => {
+            document.getElementById('serverError').style.display = 'block'
+        });
+    }
+
     componentDidMount() {
-        this.getUserInfo();
+        if (this.isLoggedIn()) {
+            this.getUserInfo();
+        } else {
+            this.props.history.push("/me/login")
+        }
     }
 
     saveSettings = async () => {
@@ -72,10 +80,15 @@ class Settings extends React.Component {
         })
 
         var selectedPlatform = this.state.user.platform;
-        if (document.getElementById("switch").checked) { selectedPlatform = "NINTENDOSWITCH" }
-        else if (document.getElementById("playstation").checked) { selectedPlatform = "PLAYSTATION"}
-        else if (document.getElementById("xbox").checked) { selectedPlatform = "XBOX" }
-        else if (document.getElementById("pc").checked) { selectedPlatform = "PC" }
+        if (document.getElementById("switch").checked) {
+            selectedPlatform = "NINTENDOSWITCH"
+        } else if (document.getElementById("playstation").checked) {
+            selectedPlatform = "PLAYSTATION"
+        } else if (document.getElementById("xbox").checked) {
+            selectedPlatform = "XBOX"
+        } else if (document.getElementById("pc").checked) {
+            selectedPlatform = "PC"
+        }
 
         if (regExp.test(document.getElementById("email").value)) {
             await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, {
@@ -124,6 +137,10 @@ class Settings extends React.Component {
             <div>
                 <div className="mainArea" id="userSettings">
                     <h2 className="title">User settings</h2>
+                    <div className="serverError" id="serverError">
+                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
+                        again later!
+                    </div>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <TextField variant="outlined"

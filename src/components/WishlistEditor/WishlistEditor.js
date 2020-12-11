@@ -13,70 +13,81 @@ import "../userSelection.css";
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 
-const baseUrl= "http://localhost:8080/";
+const baseUrl = "http://localhost:8080/";
 
-class WishlistEditor extends React.Component{
+class WishlistEditor extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             wishlist: [],
+            busy: false,
             item: "",
             index: 0
         }
     }
 
-    getWishlist(){
-        if(localStorage.getItem("userId") != null) {
-            axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
-                }
-            }).then(
-                result => {
-                    this.setState({wishlist: result.data.wishlist})
-                    console.log(this.state.wishlist);
-                }).catch((e) => {
-                    this.props.history.push("/me/login");
-                })
+    isLoggedIn() {
+        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+            return true
         } else {
-            this.props.history.push("/me/login");
+            return false
         }
     }
 
-    showDeleteForm(item, index){
-        this.setState({ item: item, index: index})
-        document.getElementById("delete" + index).style.display = "block";
-        document.getElementById("view" + index).style.display = "none";
+    getWishlist() {
+        axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
+            headers: {
+                withCredentials: true,
+                authorization: 'Basic ' + localStorage.getItem("creds")
+            }
+        }).then(
+            result => {
+                this.setState({wishlist: result.data.wishlist})
+                console.log(this.state.wishlist);
+            }).catch((e) => {
+            document.getElementById('serverError').style.display = 'block'
+        })
+    }
+
+    showDeleteForm(item, index) {
+        if (!this.state.busy) {
+            this.setState({item: item, index: index, busy: true})
+            document.getElementById("delete" + index).style.display = "block";
+            document.getElementById("view" + index).style.display = "none";
+        }
     }
 
     cancelDelete = () => {
+        this.setState({busy: false})
         document.getElementById("delete" + this.state.index).style.display = "none";
         document.getElementById("delete" + this.state.index).style.height = document.getElementById("view" + this.state.index).style.height
         document.getElementById("view" + this.state.index).style.display = "block";
     }
 
-    deleteItem = async() => {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null ,{
+    deleteItem = async () => {
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, {
                 headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }}
-                ).catch((e) => {
-                    alert("Something went wrong deleting this item. Please try again!")
-                })
+                }
+            }
+        ).catch((e) => {
+            alert("Something went wrong deleting this item. Please try again!")
+        })
 
-            await this.getWishlist();
+        this.setState({busy: false})
+        await this.getWishlist();
     }
 
     addItem = async () => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null,{
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, {
             headers: {
                 withCredentials: true,
                 authorization: 'Basic ' + localStorage.getItem("creds")
-            }}).catch((e) => {
-                alert("Something went wrong adding this item. Please try again!")
+            }
+        }).catch((e) => {
+            alert("Something went wrong adding this item. Please try again!")
         })
 
         await this.getWishlist();
@@ -85,77 +96,94 @@ class WishlistEditor extends React.Component{
     clearWishlist = async () => {
         var r = window.confirm("Are you sure you want to clear your wishlist?");
 
-        if(r) {
+        if (r) {
             await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
                 headers: {
                     withCredentials: true,
                     authorization: 'Basic ' + localStorage.getItem("creds")
-                }}).catch((e) => {
-                    alert("Something went wrong clearing this wishlist. Please try again!")
-                });
+                }
+            }).catch((e) => {
+                alert("Something went wrong clearing this wishlist. Please try again!")
+            });
 
             await this.getWishlist();
         }
     }
 
     componentDidMount() {
-        this.getWishlist();
+        if (this.isLoggedIn()) {
+            this.getWishlist();
+        } else {
+            this.props.history.push("/me/login")
+        }
     }
 
-    render(){
-        return(
-          <div>
-              <div className="mainArea" id="wishlistEditor">
-                  <h2 className="title">Your wishlist</h2>
-                  <TextField className="input" id="newItem" label="New wishlist item"></TextField><br/><br/>
-                  <div className="btnGroup">
-                      <br/>
-                      <Button className="marginBtn" onClick={this.addItem} variant="contained" color="primary">Add to wishlist</Button>
-                      <Button onClick={this.clearWishlist} variant="contained" color="secondary">Clear wishlist</Button>
-                  </div>
-                  <br/><br/>
+    render() {
+        return (
+            <div>
+                <div className="mainArea" id="wishlistEditor">
+                    <h2 className="title">Your wishlist</h2>
+                    <TextField className="input" id="newItem" label="New wishlist item"></TextField><br/><br/>
+                    <div className="btnGroup">
+                        <br/>
+                        <Button className="marginBtn" onClick={this.addItem} variant="contained" color="primary">Add to
+                            wishlist</Button>
+                        <Button onClick={this.clearWishlist} variant="contained" color="secondary">Clear
+                            wishlist</Button>
+                    </div>
+                    <br/><br/>
 
-                  {this.state.wishlist.map((item, index) =>
-                      <Card className="itemCard" variant="outlined">
-                          <CardContent>
-                      <div>
-                        <div id={"view" + index}>
-                              <div className="cardText">
-                                  <Typography color="textSecondary" gutterBottom>
-                                      Item {index + 1}
-                                  </Typography>
-                                  <Typography variant="h5" component="h2">
-                                      {item}
-                                  </Typography>
-                              </div>
-                              <div className="icons">
-                                  {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
-                                  {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
+                    <div className="serverError" id="serverError">
+                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
+                        again later!
+                    </div>
 
-                                  <DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.showDeleteForm(item, index)} />
-                              </div>
-                        </div>
+                    {this.state.wishlist.map((item, index) =>
+                        <Card className="itemCard" variant="outlined">
+                            <CardContent>
+                                <div>
+                                    <div id={"view" + index}>
+                                        <div className="cardText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Item {index + 1}
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                {item}
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
+                                            {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
 
-                        <div className="deleteForm" id={"delete" + index}>
-                              <div className="deleteText">
-                                  <Typography color="textSecondary" gutterBottom>
-                                      Are you sure you want to delete this item?
-                                  </Typography>
-                                  <Typography variant="h5" component="h2">
-                                      {item}
-                                  </Typography>
-                              </div>
-                              <div className="icons">
-                                  <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2" onClick={this.cancelDelete}/>
-                                  <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1" onClick={this.deleteItem}/>
-                              </div>
-                        </div>
-                      </div>
-                          </CardContent>
-                      </Card>
-                      )}
-              </div>
-          </div>
+                                            <DeleteIcon className="icon2"
+                                                        color={this.state.busy ? "disabled" : "secondary"}
+                                                        fontSize="large" cursor="pointer"
+                                                        onClick={() => this.showDeleteForm(item, index)}/>
+                                        </div>
+                                    </div>
+
+                                    <div className="deleteForm" id={"delete" + index}>
+                                        <div className="deleteText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Are you sure you want to delete this item?
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                {item}
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            <ClearIcon color="secondary" fontSize="large" cursor="pointer"
+                                                       className="icon2" onClick={this.cancelDelete}/>
+                                            <CheckIcon color="primary" fontSize="large" cursor="pointer"
+                                                       className="icon1" onClick={this.deleteItem}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
+            </div>
         );
     }
 }

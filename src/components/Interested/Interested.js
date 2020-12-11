@@ -9,50 +9,65 @@ import CheckIcon from "@material-ui/icons/Check";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 
-const baseUrl= "http://localhost:8080/";
+const baseUrl = "http://localhost:8080/";
 
-class Interested extends React.Component{
-    constructor(props){
+class Interested extends React.Component {
+    constructor(props) {
         super(props)
 
         this.state = {
             interests: [],
+            busy: false,
             interestId: 0
         }
     }
 
-    getAllInterests(){
-        const self = this;
-        console.log(localStorage.getItem('userId'));
-        axios.get(baseUrl + "interests/user?id=" +  localStorage.getItem('userId'), {
-            headers : {
-                withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem('creds')
-            }}).then(result => {
+    isLoggedIn() {
+        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    getAllInterests() {
+            const self = this;
+            axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem('creds')
+                }
+            }).then(result => {
                 self.setState({interests: result.data});
             }).catch((e) => {
                 console.log(e);
-                if(e.response.status != '404') {
-                    this.props.history.push('/me/login');
+                if (e.response.status != '404') {
+                    document.getElementById('serverError').style.display = 'block'
                 } else {
                     document.getElementById('noInterests').style.display = 'block';
-                    this.setState({interests : []})
+                    this.setState({interests: []})
                 }
-        });
+            });
     }
 
-    showDeleteForm(interestId){
-        this.setState({ interestId: interestId})
-        document.getElementById("delete" + interestId).style.display = "block";
-        document.getElementById("view" + interestId).style.display = "none";
+    showDeleteForm(interestId) {
+        if (!this.state.busy) {
+            this.setState({interestId: interestId, busy: true})
+            document.getElementById("delete" + interestId).style.display = "block";
+            document.getElementById("view" + interestId).style.display = "none";
+        }
     }
 
-    removeInterest = async() => {
+    removeInterest = async () => {
         await axios.delete(baseUrl + "interests/" + this.state.interestId, {
-            headers : {
-                withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
-            }}
+                headers: {
+                    withCredentials: true,
+                    authorization: 'Basic ' + localStorage.getItem("creds")
+                }
+            }
+        ).then(() => {
+                this.setState({busy: false})
+            }
         ).catch((e) => {
             alert("The interest couldn't be deleted, please try again!")
         })
@@ -61,12 +76,17 @@ class Interested extends React.Component{
     }
 
     cancelDelete = () => {
+        this.setState({busy: false})
         document.getElementById("delete" + this.state.interestId).style.display = "none";
         document.getElementById("view" + this.state.interestId).style.display = "block";
     }
 
     componentDidMount() {
-        this.getAllInterests();
+        if (this.isLoggedIn()) {
+            this.getAllInterests();
+        } else {
+            this.props.history.push("/me/login")
+        }
     }
 
     render() {
@@ -74,6 +94,10 @@ class Interested extends React.Component{
             <div>
                 <div className="mainArea" id="interestedTrades">
                     <h2 className="title">Trades you are interested in</h2>
+                    <div className="serverError" id="serverError">
+                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
+                        again later!
+                    </div>
                     {this.state.interests.map(interest =>
                         <Card className="tradeCard" variant="outlined">
                             <CardContent>
@@ -93,7 +117,7 @@ class Interested extends React.Component{
                                     <div className="icons">
                                         {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
                                         {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
-                                        <Button variant="contained" color="secondary"
+                                        <Button variant="contained" color="secondary" disabled={this.state.busy}
                                                 onClick={() => this.showDeleteForm(interest.interestId)}>Remove
                                             interest</Button>
                                         {/*<DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.showDeleteForm(trade.tradeId)} />*/}
