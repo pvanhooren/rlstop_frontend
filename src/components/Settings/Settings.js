@@ -36,7 +36,7 @@ class Settings extends React.Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             return true
         } else {
             return false
@@ -47,7 +47,7 @@ class Settings extends React.Component {
         axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(response => {
                 this.setState({user: response.data})
@@ -66,6 +66,28 @@ class Settings extends React.Component {
         } else {
             this.props.history.push("/me/login")
         }
+    }
+
+    promptDelete = () =>{
+        var r = prompt("Are you sure that you want to delete your account? Please type " + this.state.user.userName + " to confirm.")
+
+        if(r == this.state.user.userName){
+            this.deleteAccount();
+        }
+    }
+
+    deleteAccount = async () => {
+        await axios.delete(baseUrl + "users/" + this.state.user.userId, {
+            headers: {
+                withCredentials: true,
+                authorization: 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then((response) => {
+            localStorage.clear()
+            this.props.history.push("/me/login")
+        }).catch((e) => {
+            document.getElementById('serverError').style.display = 'block'
+        });
     }
 
     saveSettings = async () => {
@@ -94,7 +116,7 @@ class Settings extends React.Component {
             await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
                 if (e.response.data.message.includes("username")) {
@@ -207,6 +229,7 @@ class Settings extends React.Component {
                     </Grid>
                     <div className="saveBtn">
                         <Button variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
+                        <Button variant="contained" color="secondary" onClick={this.promptDelete}>Delete account</Button>
                     </div>
                 </div>
             </div>

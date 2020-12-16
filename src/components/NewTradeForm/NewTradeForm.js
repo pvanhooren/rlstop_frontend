@@ -21,11 +21,7 @@ class NewTradeForm extends Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
-            return true
-        } else {
-            return false
-        }
+        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
     }
 
     submitForm = async () => {
@@ -34,7 +30,7 @@ class NewTradeForm extends Component {
             await axios.post(baseUrl + "trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), null, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
                 if (e.response.data != null) {
@@ -62,7 +58,7 @@ class NewTradeForm extends Component {
         axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(response => {
                 this.setState({user: response.data})

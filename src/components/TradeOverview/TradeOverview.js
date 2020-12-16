@@ -37,8 +37,7 @@ class TradeOverview extends Component {
     }
 
     isLoggedIn() {
-        console.log(localStorage.getItem('creds'))
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             return true
         } else {
             return false
@@ -76,7 +75,7 @@ class TradeOverview extends Component {
                 {
                     headers: {
                         withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
+                        authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 }).catch((e) => {
                 alert("Something went wrong editing the trade. Please try again!");
@@ -107,7 +106,7 @@ class TradeOverview extends Component {
         axios.delete(baseUrl + "trades/" + tradeId, {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(() => {
             this.setState({busy: false})
@@ -122,7 +121,7 @@ class TradeOverview extends Component {
         axios.get(baseUrl + "trades/all", {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(
             result => {
@@ -143,7 +142,7 @@ class TradeOverview extends Component {
         axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then((response) => {
             self.setState({interests: response.data})
@@ -160,7 +159,7 @@ class TradeOverview extends Component {
         await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(() => {
                 this.setState({busy: false})
@@ -180,7 +179,7 @@ class TradeOverview extends Component {
         await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(() => {
                 this.setState({busy: false})
@@ -203,7 +202,7 @@ class TradeOverview extends Component {
                 axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
                     headers: {
                         withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
+                        authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 }).then(
                     result => {
@@ -219,7 +218,7 @@ class TradeOverview extends Component {
                 axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
                     headers: {
                         withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
+                        authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 }).then(
                     result => {
@@ -235,7 +234,7 @@ class TradeOverview extends Component {
                 axios.get(baseUrl + "trades/filter?platform=XBOX", {
                     headers: {
                         withCredentials: true,
-                        authorization: 'Basic ' + localStorage.getItem("creds")
+                        authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 }).then(
                     result => {
@@ -251,7 +250,7 @@ class TradeOverview extends Component {
                 axios.get(baseUrl + "trades/filter?platform=PC", {
                     withCredentials: true,
                     headers: {
-                        authorization: 'Basic ' + localStorage.getItem("creds")
+                        authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 }).then(
                     result => {

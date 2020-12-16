@@ -29,18 +29,14 @@ class PeopleOverview extends React.Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
-            return true
-        } else {
-            return false
-        }
+        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
     }
 
     getAllUsers = () => {
             axios.get(baseUrl + "users/all", {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(
                 result => {
@@ -56,7 +52,7 @@ class PeopleOverview extends React.Component {
             axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(
                 result => {
@@ -67,14 +63,13 @@ class PeopleOverview extends React.Component {
                     } else {
                         self.setState({trades: []})
                     }
-                    ;
                 }
             )
         } else if (document.getElementById("playstation").checked) {
             axios.get(baseUrl + "users/filter?platform=PLAYSTATION", {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(
                 result => {
@@ -91,7 +86,7 @@ class PeopleOverview extends React.Component {
             axios.get(baseUrl + "users/filter?platform=XBOX", {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(
                 result => {
@@ -108,7 +103,7 @@ class PeopleOverview extends React.Component {
             axios.get(baseUrl + "users/filter?platform=PC", {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(
                 result => {

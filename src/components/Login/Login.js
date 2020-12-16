@@ -62,7 +62,7 @@ export default function SignIn(props) {
     const {history} = props;
 
     useEffect(() => {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             history.push("/")
         }
     })
@@ -72,13 +72,9 @@ export default function SignIn(props) {
         setPasswordError(false);
         setUserNameError(false);
         if (document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
-            axios.get(baseUrl + "users/name/" + document.getElementById("username").value, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Basic ' + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value)
-                }
-            }).then(response => {
-                    localStorage.setItem('creds', window.btoa(document.getElementById("username").value + ":" + document.getElementById("password").value));
+            axios.get(baseUrl + "users/auth?creds=" + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value))
+            .then(response => {
+                    localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId);
                     localStorage.setItem('userName', response.data.userName);
                     history.push("/");
@@ -88,7 +84,6 @@ export default function SignIn(props) {
                     setPasswordError(true);
 
                     setPasswordErrorText("Incorrect username or password. Please try again!");
-                    // setPasswordErrorText("Our apologies, it seems like there are server issues. Please come back later");
                 }
             )
         } else {

@@ -28,18 +28,14 @@ class WishlistEditor extends React.Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
-            return true
-        } else {
-            return false
-        }
+        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
     }
 
     getWishlist() {
         axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then(
             result => {
@@ -69,7 +65,7 @@ class WishlistEditor extends React.Component {
         await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }
         ).catch((e) => {
@@ -84,7 +80,7 @@ class WishlistEditor extends React.Component {
         await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, {
             headers: {
                 withCredentials: true,
-                authorization: 'Basic ' + localStorage.getItem("creds")
+                authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).catch((e) => {
             alert("Something went wrong adding this item. Please try again!")
@@ -100,7 +96,7 @@ class WishlistEditor extends React.Component {
             await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
                 alert("Something went wrong clearing this wishlist. Please try again!")

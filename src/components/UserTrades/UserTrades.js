@@ -32,7 +32,7 @@ class UserTrades extends React.Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             return true
         } else {
             return false
@@ -43,7 +43,7 @@ class UserTrades extends React.Component {
         axios.get(baseUrl + "trades/user?id=" + localStorage.getItem('userId'), {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }
         ).then(
@@ -69,7 +69,7 @@ class UserTrades extends React.Component {
             await axios.get(baseUrl + "interests/trade?id=" + tradeId, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).then((response) => {
                 self.setState({interests: response.data})
@@ -112,7 +112,7 @@ class UserTrades extends React.Component {
             await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), null, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
                 document.getElementById('serverError').style.display = 'block'
@@ -131,7 +131,7 @@ class UserTrades extends React.Component {
         await axios.delete(baseUrl + "trades/" + this.state.tradeId, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }
         ).catch((e) => {

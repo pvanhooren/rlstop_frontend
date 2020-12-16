@@ -23,7 +23,7 @@ class Interested extends React.Component {
     }
 
     isLoggedIn() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             return true
         } else {
             return false
@@ -35,7 +35,7 @@ class Interested extends React.Component {
             axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem('creds')
+                    authorization: 'Bearer ' + localStorage.getItem('token')
                 }
             }).then(result => {
                 self.setState({interests: result.data});
@@ -62,7 +62,7 @@ class Interested extends React.Component {
         await axios.delete(baseUrl + "interests/" + this.state.interestId, {
                 headers: {
                     withCredentials: true,
-                    authorization: 'Basic ' + localStorage.getItem("creds")
+                    authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }
         ).then(() => {

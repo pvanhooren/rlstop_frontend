@@ -43,7 +43,7 @@ const Navbar = props => {
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
     var isLoggedIn = false;
 
-    if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+    if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
         isLoggedIn = true;
     }
 
@@ -66,7 +66,7 @@ const Navbar = props => {
         localStorage.clear();
         history.push("/me/login")
         setAnchorEl(null);
-    };
+    }
 
     const handleButtonClick = pageURL => {
         history.push(pageURL);

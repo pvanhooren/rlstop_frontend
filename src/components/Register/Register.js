@@ -40,7 +40,7 @@ class Register extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('creds') != null & localStorage.getItem('creds') !== "") {
+        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
             this.props.history.push("/")
         }
     }
@@ -71,7 +71,7 @@ class Register extends React.Component {
                 axios.post(baseUrl + "users/new?creds=" + creds + "&email=" + document.getElementById("email").value
                     + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value)
                     .then((response) => {
-                        localStorage.setItem('creds', window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value));
+                        localStorage.setItem('token', response.data.token);
                         localStorage.setItem('userId', response.data.userId);
                         localStorage.setItem('userName', response.data.userName);
                         document.getElementById("registerForm").style.display = 'none';
