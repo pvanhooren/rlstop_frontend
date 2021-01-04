@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
 
+import AuthenticationService from '../../services/AuthenticationService';
 import '../Overview.css';
 import FilterListIcon from "@material-ui/icons/FilterList";
 
@@ -28,10 +29,6 @@ class PeopleOverview extends React.Component {
         }
     }
 
-    isLoggedIn() {
-        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
-    }
-
     getAllUsers = () => {
             axios.get(baseUrl + "users/all", {
                 headers: {
@@ -42,7 +39,11 @@ class PeopleOverview extends React.Component {
                 result => {
                     this.setState({users: result.data})
                 }).catch((e) => {
-                document.getElementById('serverError').style.display = 'block';
+                    if(e.response != null) {
+                        document.getElementById('serverError').style.display = 'block';
+                    } else {
+                        AuthenticationService.logOut(this.props.history)
+                    }
             });
     }
 
@@ -122,7 +123,7 @@ class PeopleOverview extends React.Component {
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getAllUsers();
         } else {
             this.props.history.push("/me/login")

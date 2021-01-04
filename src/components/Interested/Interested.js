@@ -9,6 +9,8 @@ import CheckIcon from "@material-ui/icons/Check";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 
+import AuthenticationService from "../../services/AuthenticationService";
+
 const baseUrl = "http://localhost:8080/";
 
 class Interested extends React.Component {
@@ -19,14 +21,6 @@ class Interested extends React.Component {
             interests: [],
             busy: false,
             interestId: 0
-        }
-    }
-
-    isLoggedIn() {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
-            return true
-        } else {
-            return false
         }
     }
 
@@ -41,11 +35,15 @@ class Interested extends React.Component {
                 self.setState({interests: result.data});
             }).catch((e) => {
                 console.log(e);
-                if (e.response.status != '404') {
-                    document.getElementById('serverError').style.display = 'block'
+                if(e.response != null) {
+                    if (e.response.status != '404') {
+                        document.getElementById('serverError').style.display = 'block'
+                    } else {
+                        document.getElementById('noInterests').style.display = 'block';
+                        this.setState({interests: []})
+                    }
                 } else {
-                    document.getElementById('noInterests').style.display = 'block';
-                    this.setState({interests: []})
+                    AuthenticationService.logOut(this.props.history)
                 }
             });
     }
@@ -82,7 +80,7 @@ class Interested extends React.Component {
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getAllInterests();
         } else {
             this.props.history.push("/me/login")

@@ -18,6 +18,7 @@ import '../Overview.css'
 import TextField from "@material-ui/core/TextField";
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
+import AuthenticationService from "../../services/AuthenticationService";
 
 const baseUrl = "http://localhost:8080/";
 
@@ -33,14 +34,6 @@ class TradeOverview extends Component {
             userId: 0,
             wants: "",
             offers: ""
-        }
-    }
-
-    isLoggedIn() {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
-            return true
-        } else {
-            return false
         }
     }
 
@@ -128,7 +121,7 @@ class TradeOverview extends Component {
                 self.setState({trades: result.data});
             }).catch((e) => {
             if (e.response == null) {
-                document.getElementById('serverError').style.display = 'block';
+                AuthenticationService.logOut(this.props.history)
             } else if (e.response.status == '404') {
                 document.getElementById('noTrades').style.display = 'block';
             }
@@ -269,7 +262,7 @@ class TradeOverview extends Component {
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getAllTrades();
             this.getAllInterests();
         } else {

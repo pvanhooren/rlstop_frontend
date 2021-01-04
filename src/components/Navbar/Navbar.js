@@ -13,6 +13,7 @@ import {withRouter} from "react-router-dom";
 import "./Navbar.css";
 import PermIdentity from '@material-ui/icons/PermIdentity';
 import Avatar from "@material-ui/core/Avatar";
+import AuthenticationService from "../../services/AuthenticationService";
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
@@ -63,8 +64,7 @@ const Navbar = props => {
     };
 
     function signOut() {
-        localStorage.clear();
-        history.push("/me/login")
+        AuthenticationService.logOut(history);
         setAnchorEl(null);
     }
 

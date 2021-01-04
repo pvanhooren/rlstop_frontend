@@ -1,8 +1,0 @@
-.inline{
-    display:flex;
-    flex-direction: row;
-}
-
-.spacedBtn{
-    margin-left:5px !important;
-}

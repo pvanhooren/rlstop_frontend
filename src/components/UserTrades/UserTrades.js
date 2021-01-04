@@ -14,6 +14,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 
 import "../Overview.css";
 import "../userSelection.css";
+import AuthenticationService from "../../services/AuthenticationService";
 
 const baseUrl = "http://localhost:8080/";
 
@@ -31,14 +32,6 @@ class UserTrades extends React.Component {
         }
     }
 
-    isLoggedIn() {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
-            return true
-        } else {
-            return false
-        }
-    }
-
     getUserTrades() {
         axios.get(baseUrl + "trades/user?id=" + localStorage.getItem('userId'), {
                 headers: {
@@ -52,11 +45,14 @@ class UserTrades extends React.Component {
             }
         ).catch((e) => {
             if (e.response == null) {
-                console.log(e);
-                // document.getElementById('serverError').style.display = 'block';
+                AuthenticationService.logOut(this.props.history)
             } else {
-                document.getElementById('noTrades').style.display = 'block';
-                this.setState({trades: []})
+                if(e.response.status=='404') {
+                    document.getElementById('noTrades').style.display = 'block';
+                    this.setState({trades: []})
+                } else {
+                    document.getElementById('serverError').style.display = 'block';
+                }
             }
         })
     }
@@ -168,7 +164,7 @@ class UserTrades extends React.Component {
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getUserTrades();
         } else {
             this.props.history.push("/me/login")

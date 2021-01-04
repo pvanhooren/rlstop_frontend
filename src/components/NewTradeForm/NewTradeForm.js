@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 import './NewTradeForm.css'
+import AuthenticationService from "../../services/AuthenticationService";
 
 const baseUrl = "http://localhost:8080/";
 
@@ -20,10 +21,6 @@ class NewTradeForm extends Component {
         }
     }
 
-    isLoggedIn() {
-        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
-    }
-
     submitForm = async () => {
         this.setState({offersError: false, wantsError: false, errorText: ""})
         if (document.getElementById("newWants").value !== "" && document.getElementById("newOffers").value !== "" && localStorage.getItem("userId") != null) {
@@ -33,7 +30,7 @@ class NewTradeForm extends Component {
                     authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
-                if (e.response.data != null) {
+                if (e.response != null) {
                     this.setState({offersError: true, wantsError: true, errorText: e.response.data.message})
                 } else {
                     this.setState({
@@ -64,12 +61,16 @@ class NewTradeForm extends Component {
                 this.setState({user: response.data})
             }
         ).catch((e) => {
-            document.getElementById('serverError').style.display = 'block'
+            if(e.response != null) {
+                document.getElementById('serverError').style.display = 'block'
+            } else {
+                AuthenticationService.logOut(this.props.history)
+            }
         });
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getUserInfo();
         } else {
             this.props.history.push("/me/login")

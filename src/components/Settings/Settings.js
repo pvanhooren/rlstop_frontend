@@ -12,6 +12,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 
 import '../userSelection.css';
+import AuthenticationService from "../../services/AuthenticationService";
 
 const regExp = RegExp(
     /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
@@ -35,14 +36,6 @@ class Settings extends React.Component {
         }
     }
 
-    isLoggedIn() {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
-            return true
-        } else {
-            return false
-        }
-    }
-
     getUserInfo() {
         axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
             headers: {
@@ -56,12 +49,16 @@ class Settings extends React.Component {
                 document.getElementById("platformID").value = response.data.platformID;
             }
         ).catch((e) => {
-            document.getElementById('serverError').style.display = 'block'
+            if(e.response != null) {
+                document.getElementById('serverError').style.display = 'block'
+            } else {
+                AuthenticationService.logOut(this.props.history)
+            }
         });
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getUserInfo();
         } else {
             this.props.history.push("/me/login")
@@ -83,8 +80,7 @@ class Settings extends React.Component {
                 authorization: 'Bearer ' + localStorage.getItem("token")
             }
         }).then((response) => {
-            localStorage.clear()
-            this.props.history.push("/me/login")
+            AuthenticationService.logOut(this.props.history)
         }).catch((e) => {
             document.getElementById('serverError').style.display = 'block'
         });

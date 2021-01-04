@@ -12,6 +12,7 @@ import "../Overview.css";
 import "../userSelection.css";
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
+import AuthenticationService from "../../services/AuthenticationService";
 
 const baseUrl = "http://localhost:8080/";
 
@@ -27,10 +28,6 @@ class WishlistEditor extends React.Component {
         }
     }
 
-    isLoggedIn() {
-        return !!(localStorage.getItem('token') != null & localStorage.getItem('token') !== "");
-    }
-
     getWishlist() {
         axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
             headers: {
@@ -42,7 +39,11 @@ class WishlistEditor extends React.Component {
                 this.setState({wishlist: result.data.wishlist})
                 console.log(this.state.wishlist);
             }).catch((e) => {
-            document.getElementById('serverError').style.display = 'block'
+                if(e.response!=null) {
+                    document.getElementById('serverError').style.display = 'block'
+                } else {
+                    AuthenticationService.logOut(this.props.history)
+                }
         })
     }
 
@@ -107,7 +108,7 @@ class WishlistEditor extends React.Component {
     }
 
     componentDidMount() {
-        if (this.isLoggedIn()) {
+        if (AuthenticationService.isLoggedIn()) {
             this.getWishlist();
         } else {
             this.props.history.push("/me/login")
