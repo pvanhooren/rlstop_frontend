@@ -77,13 +77,22 @@ export default function SignIn(props) {
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId);
                     localStorage.setItem('userName', response.data.userName);
+                    localStorage.setItem('isAdmin', response.data.isAdmin);
                     history.push("/");
                 }
             ).catch((e) => {
                     setUserNameError(true);
                     setPasswordError(true);
-
-                    setPasswordErrorText("Incorrect username or password. Please try again!");
+                    if (e.response != null) {
+                        setPasswordErrorText(e.response.data.message);
+                        // if(e.response.status == '400') {
+                        //     setPasswordErrorText("Your account has been banned from the application. Send an email to support@rlstop.com if you'd like to discuss the ban.")
+                        // } else {
+                        //     setPasswordErrorText("Incorrect username or password. Please try again!");
+                        // }
+                    } else {
+                        setPasswordErrorText("Something went wrong at our end. Please visit again later!")
+                    }
                 }
             )
         } else {

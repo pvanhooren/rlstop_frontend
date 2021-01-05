@@ -74,6 +74,7 @@ class Register extends React.Component {
                         localStorage.setItem('token', response.data.token);
                         localStorage.setItem('userId', response.data.userId);
                         localStorage.setItem('userName', response.data.userName);
+                        localStorage.setItem('isAdmin', response.data.isAdmin);
                         document.getElementById("registerForm").style.display = 'none';
                         document.getElementById("welcome").style.display = 'block';
                     }).catch((e) => {

@@ -15,7 +15,7 @@ import '../userSelection.css';
 import AuthenticationService from "../../services/AuthenticationService";
 
 const regExp = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+    /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
 const baseUrl = "http://localhost:8080/";
@@ -32,7 +32,6 @@ class Settings extends React.Component {
             emailErrorText: "",
             friendCodeError: false,
             friendCodeErrorText: "",
-            anyError: false
         }
     }
 
@@ -88,7 +87,6 @@ class Settings extends React.Component {
 
     saveSettings = async () => {
         this.setState({
-            anyError: false,
             emailError: false,
             userNameError: false,
             userNameErrorText: "",
@@ -97,6 +95,7 @@ class Settings extends React.Component {
             friendCodeErrorText: ""
         })
 
+        var anyError = false;
         var selectedPlatform = this.state.user.platform;
         if (document.getElementById("switch").checked) {
             selectedPlatform = "NINTENDOSWITCH"
@@ -115,21 +114,19 @@ class Settings extends React.Component {
                     authorization: 'Bearer ' + localStorage.getItem("token")
                 }
             }).catch((e) => {
+                anyError=true;
                 if (e.response.data.message.includes("username")) {
                     this.setState({
-                        anyError: true,
                         userNameError: true,
                         userNameErrorText: e.response.data.message
                     })
                 } else if (e.response.data.message.includes("email")) {
                     this.setState({
-                        anyError: true,
                         emailError: true,
                         emailErrorText: e.response.data.message
                     })
                 } else {
                     this.setState({
-                        anyError: true,
                         emailError: true,
                         userNameError: true,
                         friendCodeError: true,
@@ -139,13 +136,13 @@ class Settings extends React.Component {
             })
         } else {
             this.setState({
-                anyError: true,
                 emailError: true,
                 emailErrorText: "The provided email address is not recognized as an email address. Please correct it."
             })
+            anyError=true;
         }
 
-        if (!this.state.anyError) {
+        if (!anyError) {
             this.props.history.push("/");
         }
     }
@@ -224,7 +221,7 @@ class Settings extends React.Component {
                         </Grid>
                     </Grid>
                     <div className="saveBtn">
-                        <Button variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
+                        <Button className="marginBtn" variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
                         <Button variant="contained" color="secondary" onClick={this.promptDelete}>Delete account</Button>
                     </div>
                 </div>

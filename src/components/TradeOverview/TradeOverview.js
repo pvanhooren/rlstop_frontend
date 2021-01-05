@@ -141,9 +141,11 @@ class TradeOverview extends Component {
             self.setState({interests: response.data})
         }).catch((e) => {
             if (e.response == null) {
-                document.getElementById('serverError').style.display = 'block';
+                AuthenticationService.logOut(this.props.history)
             } else if (e.response.status == '404') {
                 self.setState({interests: []})
+            } else {
+                document.getElementById('serverError').style.display = 'block';
             }
         })
     }
