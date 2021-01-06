@@ -20,7 +20,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class TradeOverview extends Component {
     constructor(props) {
@@ -64,13 +65,8 @@ class TradeOverview extends Component {
     editTrade = async () => {
         const self = this;
         if (document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId,
-                {
-                    headers: {
-                        withCredentials: true,
-                        authorization: 'Bearer ' + localStorage.getItem("token")
-                    }
-                }).catch((e) => {
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId, null, headers
+            ).catch((e) => {
                 alert("Something went wrong editing the trade. Please try again!");
             });
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
@@ -96,12 +92,8 @@ class TradeOverview extends Component {
     }
 
     deleteTrade(tradeId) {
-        axios.delete(baseUrl + "trades/" + tradeId, {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(() => {
+        axios.delete(baseUrl + "trades/" + tradeId, headers
+        ).then(() => {
             this.setState({busy: false})
         }).catch((e) => {
             alert("Something went wrong deleting the trade. Please try again!")
@@ -111,13 +103,8 @@ class TradeOverview extends Component {
     getAllTrades = () => {
         const self = this;
 
-        axios.get(baseUrl + "trades/all", {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(
-            result => {
+        axios.get(baseUrl + "trades/all", headers
+        ).then(result => {
                 self.setState({trades: result.data});
             }).catch((e) => {
             if (e.response == null) {
@@ -132,12 +119,8 @@ class TradeOverview extends Component {
     getAllInterests = () => {
         const self = this;
 
-        axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then((response) => {
+        axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), headers
+        ).then((response) => {
             self.setState({interests: response.data})
         }).catch((e) => {
             if (e.response == null) {
@@ -151,12 +134,8 @@ class TradeOverview extends Component {
     }
 
     removeInterest = async () => {
-        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(() => {
+        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, headers
+        ).then(() => {
                 this.setState({busy: false})
             }
         ).catch((e) => {
@@ -171,12 +150,8 @@ class TradeOverview extends Component {
     }
 
     showInterest = async () => {
-        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(() => {
+        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, headers
+        ).then(() => {
                 this.setState({busy: false})
             }
         ).catch((e) => {
@@ -194,13 +169,8 @@ class TradeOverview extends Component {
         if (!this.state.busy) {
             const self = this;
             if (document.getElementById("switch").checked) {
-                axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
-                    headers: {
-                        withCredentials: true,
-                        authorization: 'Bearer ' + localStorage.getItem("token")
-                    }
-                }).then(
-                    result => {
+                axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", headers
+                ).then(result => {
                         self.setState({trades: result.data});
                     }).catch((e) => {
                     if (e.response == null) {
@@ -210,13 +180,8 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("playstation").checked) {
-                axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
-                    headers: {
-                        withCredentials: true,
-                        authorization: 'Bearer ' + localStorage.getItem("token")
-                    }
-                }).then(
-                    result => {
+                axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", headers
+                ).then(result => {
                         self.setState({trades: result.data});
                     }).catch((e) => {
                     if (e.response == null) {
@@ -226,13 +191,8 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("xbox").checked) {
-                axios.get(baseUrl + "trades/filter?platform=XBOX", {
-                    headers: {
-                        withCredentials: true,
-                        authorization: 'Bearer ' + localStorage.getItem("token")
-                    }
-                }).then(
-                    result => {
+                axios.get(baseUrl + "trades/filter?platform=XBOX", headers
+                ).then(result => {
                         self.setState({trades: result.data});
                     }).catch((e) => {
                     if (e.response == null) {
@@ -242,13 +202,8 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("pc").checked) {
-                axios.get(baseUrl + "trades/filter?platform=PC", {
-                    withCredentials: true,
-                    headers: {
-                        authorization: 'Bearer ' + localStorage.getItem("token")
-                    }
-                }).then(
-                    result => {
+                axios.get(baseUrl + "trades/filter?platform=PC", headers
+                ).then(result => {
                         self.setState({trades: result.data});
                     }).catch((e) => {
                     if (e.response == null) {

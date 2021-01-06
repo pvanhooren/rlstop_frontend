@@ -16,7 +16,8 @@ import "../Overview.css";
 import "../userSelection.css";
 import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class UserTrades extends React.Component {
     constructor(props) {
@@ -33,12 +34,7 @@ class UserTrades extends React.Component {
     }
 
     getUserTrades() {
-        axios.get(baseUrl + "trades/user?id=" + localStorage.getItem('userId'), {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }
+        axios.get(baseUrl + "trades/user?id=" + localStorage.getItem('userId'), headers
         ).then(
             result => {
                 this.setState({trades: result.data})
@@ -62,12 +58,8 @@ class UserTrades extends React.Component {
             this.setState({tradeId: tradeId, busy: true})
             const self = this;
 
-            await axios.get(baseUrl + "interests/trade?id=" + tradeId, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then((response) => {
+            await axios.get(baseUrl + "interests/trade?id=" + tradeId, headers
+            ).then((response) => {
                 self.setState({interests: response.data})
                 document.getElementById("view" + tradeId).style.display = "none";
                 document.getElementById("interests" + tradeId).style.display = "block";
@@ -105,12 +97,8 @@ class UserTrades extends React.Component {
     editTrade = async () => {
         const self = this;
         if (document.getElementById("wants" + self.state.tradeId).value !== "" && document.getElementById("offers" + self.state.tradeId).value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), null, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).catch((e) => {
+            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants" + self.state.tradeId).value + "&offers=" + document.getElementById("offers" + self.state.tradeId).value + "&userId=" + localStorage.getItem('userId'), null, headers
+            ).catch((e) => {
                 document.getElementById('serverError').style.display = 'block'
             });
             //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
@@ -124,12 +112,7 @@ class UserTrades extends React.Component {
     }
 
     deleteTrade = async () => {
-        await axios.delete(baseUrl + "trades/" + this.state.tradeId, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }
+        await axios.delete(baseUrl + "trades/" + this.state.tradeId, headers
         ).catch((e) => {
             alert("Something went wrong deleting this trade. Please try again!")
         })

@@ -14,7 +14,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class WishlistEditor extends React.Component {
     constructor(props) {
@@ -29,12 +30,8 @@ class WishlistEditor extends React.Component {
     }
 
     getWishlist() {
-        axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(
+        axios.get(baseUrl + "users/" + localStorage.getItem('userId'), headers
+        ).then(
             result => {
                 this.setState({wishlist: result.data.wishlist})
                 console.log(this.state.wishlist);
@@ -63,12 +60,7 @@ class WishlistEditor extends React.Component {
     }
 
     deleteItem = async () => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, headers
         ).catch((e) => {
             alert("Something went wrong deleting this item. Please try again!")
         })
@@ -78,12 +70,8 @@ class WishlistEditor extends React.Component {
     }
 
     addItem = async () => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).catch((e) => {
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, headers
+        ).catch((e) => {
             alert("Something went wrong adding this item. Please try again!")
         })
 
@@ -94,12 +82,8 @@ class WishlistEditor extends React.Component {
         var r = window.confirm("Are you sure you want to clear your wishlist?");
 
         if (r) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).catch((e) => {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, headers
+            ).catch((e) => {
                 alert("Something went wrong clearing this wishlist. Please try again!")
             });
 

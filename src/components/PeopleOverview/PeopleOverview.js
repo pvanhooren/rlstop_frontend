@@ -18,7 +18,8 @@ import AuthenticationService from '../../services/AuthenticationService';
 import '../Overview.css';
 import FilterListIcon from "@material-ui/icons/FilterList";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class PeopleOverview extends React.Component {
     constructor(props) {
@@ -30,12 +31,8 @@ class PeopleOverview extends React.Component {
     }
 
     getAllUsers = () => {
-            axios.get(baseUrl + "users/all", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(
+            axios.get(baseUrl + "users/all", headers
+            ).then(
                 result => {
                     this.setState({users: result.data})
                 }).catch((e) => {
@@ -50,12 +47,8 @@ class PeopleOverview extends React.Component {
     getFilteredUsers = () => {
         const self = this;
         if (document.getElementById("switch").checked) {
-            axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(
+            axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", headers
+            ).then(
                 result => {
                     self.setState({users: result.data});
                 }).catch((e) => {
@@ -67,12 +60,8 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("playstation").checked) {
-            axios.get(baseUrl + "users/filter?platform=PLAYSTATION", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(
+            axios.get(baseUrl + "users/filter?platform=PLAYSTATION", headers
+            ).then(
                 result => {
                     self.setState({users: result.data});
                 }).catch((e) => {
@@ -84,12 +73,8 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("xbox").checked) {
-            axios.get(baseUrl + "users/filter?platform=XBOX", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(
+            axios.get(baseUrl + "users/filter?platform=XBOX", headers
+            ).then(
                 result => {
                     self.setState({users: result.data});
                 }).catch((e) => {
@@ -101,12 +86,8 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("pc").checked) {
-            axios.get(baseUrl + "users/filter?platform=PC", {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(
+            axios.get(baseUrl + "users/filter?platform=PC", headers
+            ).then(
                 result => {
                     self.setState({users: result.data});
                 }).catch((e) => {

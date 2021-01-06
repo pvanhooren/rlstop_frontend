@@ -13,12 +13,13 @@ import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 
 import "./Register.css"
+import AuthenticationService from "../../services/AuthenticationService";
 
 const regExp = RegExp(
     /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
-const baseUrl = "http://localhost:8080/";
+const baseUrl = AuthenticationService.baseUrl;
 
 class Register extends React.Component {
     constructor(props) {

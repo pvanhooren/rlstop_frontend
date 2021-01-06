@@ -12,8 +12,9 @@ import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const baseUrl = AuthenticationService.baseUrl;
 
 const pictures = ["https://external-preview.redd.it/imgbPVFzVG6Z2JCWMlZad5f7j_owyrXhdfl1hWxdODw.jpg?auto=webp&s=6d5843694cafc8d35373d1a127db89583944c0df", "https://cdn.arstechnica.net/wp-content/uploads/2020/07/rocket-league-f2p-800x450.jpg", "https://i.imgur.com/VKTRyTo.jpg", "https://images.nintendolife.com/ccf6773e6c081/1280x720.jpg", "https://i.redd.it/wzo7vby81n011.png"]
 

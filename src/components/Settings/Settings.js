@@ -18,7 +18,8 @@ const regExp = RegExp(
     /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class Settings extends React.Component {
     constructor(props) {
@@ -36,12 +37,8 @@ class Settings extends React.Component {
     }
 
     getUserInfo() {
-        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(response => {
+        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), headers
+        ).then(response => {
                 this.setState({user: response.data})
                 document.getElementById("email").value = response.data.emailAddress;
                 document.getElementById("username").value = response.data.userName;
@@ -73,12 +70,8 @@ class Settings extends React.Component {
     }
 
     deleteAccount = async () => {
-        await axios.delete(baseUrl + "users/" + this.state.user.userId, {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then((response) => {
+        await axios.delete(baseUrl + "users/" + this.state.user.userId, headers
+        ).then((response) => {
             AuthenticationService.logOut(this.props.history)
         }).catch((e) => {
             document.getElementById('serverError').style.display = 'block'
@@ -108,12 +101,8 @@ class Settings extends React.Component {
         }
 
         if (regExp.test(document.getElementById("email").value)) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).catch((e) => {
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, headers
+            ).catch((e) => {
                 anyError=true;
                 if (e.response.data.message.includes("username")) {
                     this.setState({

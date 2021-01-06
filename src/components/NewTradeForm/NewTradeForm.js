@@ -7,7 +7,8 @@ import Button from "@material-ui/core/Button";
 import './NewTradeForm.css'
 import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class NewTradeForm extends Component {
     constructor(props) {
@@ -24,12 +25,8 @@ class NewTradeForm extends Component {
     submitForm = async () => {
         this.setState({offersError: false, wantsError: false, errorText: ""})
         if (document.getElementById("newWants").value !== "" && document.getElementById("newOffers").value !== "" && localStorage.getItem("userId") != null) {
-            await axios.post(baseUrl + "trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), null, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }).catch((e) => {
+            await axios.post(baseUrl + "trades/new?wants=" + document.getElementById("newWants").value + "&offers=" + document.getElementById("newOffers").value + "&userId=" + localStorage.getItem("userId"), null, headers
+            ).catch((e) => {
                 if (e.response != null) {
                     this.setState({offersError: true, wantsError: true, errorText: e.response.data.message})
                 } else {
@@ -52,12 +49,8 @@ class NewTradeForm extends Component {
     }
 
     getUserInfo() {
-        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
-            headers: {
-                withCredentials: true,
-                authorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(response => {
+        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), headers
+        ).then(response => {
                 this.setState({user: response.data})
             }
         ).catch((e) => {

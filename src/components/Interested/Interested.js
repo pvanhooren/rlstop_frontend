@@ -11,7 +11,8 @@ import axios from "axios";
 
 import AuthenticationService from "../../services/AuthenticationService";
 
-const baseUrl = "http://localhost:8080/";
+const headers = AuthenticationService.headers;
+const baseUrl = AuthenticationService.baseUrl;
 
 class Interested extends React.Component {
     constructor(props) {
@@ -26,12 +27,8 @@ class Interested extends React.Component {
 
     getAllInterests() {
             const self = this;
-            axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem('token')
-                }
-            }).then(result => {
+            axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), headers
+            ).then(result => {
                 self.setState({interests: result.data});
             }).catch((e) => {
                 console.log(e);
@@ -57,12 +54,7 @@ class Interested extends React.Component {
     }
 
     removeInterest = async () => {
-        await axios.delete(baseUrl + "interests/" + this.state.interestId, {
-                headers: {
-                    withCredentials: true,
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                }
-            }
+        await axios.delete(baseUrl + "interests/" + this.state.interestId, headers
         ).then(() => {
                 this.setState({busy: false})
             }
