@@ -14,12 +14,14 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-const headers = AuthenticationService.headers;
+var headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class WishlistEditor extends React.Component {
     constructor(props) {
         super(props);
+
+        headers = AuthenticationService.getHeaders();
 
         this.state = {
             wishlist: [],
@@ -30,17 +32,19 @@ class WishlistEditor extends React.Component {
     }
 
     getWishlist() {
-        axios.get(baseUrl + "users/" + localStorage.getItem('userId'), headers
+        axios.get(baseUrl + "users/" + localStorage.getItem('userId'), {
+                headers: headers
+            }
         ).then(
             result => {
                 this.setState({wishlist: result.data.wishlist})
                 console.log(this.state.wishlist);
             }).catch((e) => {
-                if(e.response!=null) {
-                    document.getElementById('serverError').style.display = 'block'
-                } else {
-                    AuthenticationService.logOut(this.props.history)
-                }
+            if (e.response != null) {
+                document.getElementById('serverError').style.display = 'block'
+            } else {
+                AuthenticationService.logOut(this.props.history)
+            }
         })
     }
 
@@ -60,7 +64,9 @@ class WishlistEditor extends React.Component {
     }
 
     deleteItem = async () => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, headers
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, {
+                headers: headers
+            }
         ).catch((e) => {
             alert("Something went wrong deleting this item. Please try again!")
         })
@@ -70,7 +76,9 @@ class WishlistEditor extends React.Component {
     }
 
     addItem = async () => {
-        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, headers
+        await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, {
+                headers: headers
+            }
         ).catch((e) => {
             alert("Something went wrong adding this item. Please try again!")
         })
@@ -82,7 +90,9 @@ class WishlistEditor extends React.Component {
         var r = window.confirm("Are you sure you want to clear your wishlist?");
 
         if (r) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, headers
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
+                    headers: headers
+                }
             ).catch((e) => {
                 alert("Something went wrong clearing this wishlist. Please try again!")
             });

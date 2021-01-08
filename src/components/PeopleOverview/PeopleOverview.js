@@ -13,41 +13,52 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
+import GavelIcon from '@material-ui/icons/Gavel';
 
 import AuthenticationService from '../../services/AuthenticationService';
 import '../Overview.css';
 import FilterListIcon from "@material-ui/icons/FilterList";
+import ClearIcon from "@material-ui/icons/Clear";
+import CheckIcon from "@material-ui/icons/Check";
 
-const headers = AuthenticationService.headers;
+var headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class PeopleOverview extends React.Component {
     constructor(props) {
         super(props);
 
+        headers = AuthenticationService.getHeaders();
+
         this.state = {
-            users: []
+            busy: false,
+            users: [],
+            userId: 0,
         }
     }
 
     getAllUsers = () => {
-            axios.get(baseUrl + "users/all", headers
-            ).then(
-                result => {
-                    this.setState({users: result.data})
-                }).catch((e) => {
-                    if(e.response != null) {
-                        document.getElementById('serverError').style.display = 'block';
-                    } else {
-                        AuthenticationService.logOut(this.props.history)
-                    }
-            });
+        axios.get(baseUrl + "users/all", {
+                headers: headers
+            }
+        ).then(
+            result => {
+                this.setState({users: result.data})
+            }).catch((e) => {
+            if (e.response != null) {
+                document.getElementById('serverError').style.display = 'block';
+            } else {
+                AuthenticationService.logOut(this.props.history)
+            }
+        });
     }
 
     getFilteredUsers = () => {
         const self = this;
         if (document.getElementById("switch").checked) {
-            axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", headers
+            axios.get(baseUrl + "users/filter?platform=NINTENDOSWITCH", {
+                    headers: headers
+                }
             ).then(
                 result => {
                     self.setState({users: result.data});
@@ -60,7 +71,9 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("playstation").checked) {
-            axios.get(baseUrl + "users/filter?platform=PLAYSTATION", headers
+            axios.get(baseUrl + "users/filter?platform=PLAYSTATION", {
+                    headers: headers
+                }
             ).then(
                 result => {
                     self.setState({users: result.data});
@@ -73,7 +86,9 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("xbox").checked) {
-            axios.get(baseUrl + "users/filter?platform=XBOX", headers
+            axios.get(baseUrl + "users/filter?platform=XBOX", {
+                    headers: headers
+                }
             ).then(
                 result => {
                     self.setState({users: result.data});
@@ -86,7 +101,9 @@ class PeopleOverview extends React.Component {
                 }
             )
         } else if (document.getElementById("pc").checked) {
-            axios.get(baseUrl + "users/filter?platform=PC", headers
+            axios.get(baseUrl + "users/filter?platform=PC", {
+                    headers: headers
+                }
             ).then(
                 result => {
                     self.setState({users: result.data});
@@ -101,6 +118,130 @@ class PeopleOverview extends React.Component {
         } else {
             this.getAllUsers();
         }
+    }
+
+    showBanForm(userId) {
+        if (!this.state.busy) {
+            this.setState({userId: userId, busy: true})
+            document.getElementById("view" + userId).style.display = "none";
+            document.getElementById("ban" + userId).style.display = "block";
+        }
+    }
+
+    showRevokeForm(userId) {
+        if (!this.state.busy) {
+            this.setState({userId: userId, busy: true})
+            document.getElementById("view" + userId).style.display = "none";
+            document.getElementById("revoke" + userId).style.display = "block";
+        }
+    }
+
+    showAdminForm(userId) {
+        if (!this.state.busy) {
+            this.setState({userId: userId, busy: true})
+            document.getElementById("view" + userId).style.display = "none";
+            document.getElementById("admin" + userId).style.display = "block";
+        }
+    }
+
+    showRemoveForm(userId) {
+        if (!this.state.busy) {
+            this.setState({userId: userId, busy: true})
+            document.getElementById("view" + userId).style.display = "none";
+            document.getElementById("remove" + userId).style.display = "block";
+        }
+    }
+
+    banUser = async () => {
+        await axios.put(baseUrl + "users/admin/" + this.state.userId + "/deactivate", null, {
+                headers: headers
+            }
+        ).then(() => {
+                this.setState({busy: false})
+            }
+        ).catch((e) => {
+            document.getElementById('serverError').style.display = 'block';
+        })
+
+        await this.getAllUsers();
+
+        document.getElementById("ban" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    revokeBan = async () => {
+        await axios.put(baseUrl + "users/admin/" + this.state.userId + "/activate", null, {
+                headers: headers
+            }
+        ).then(() => {
+                this.setState({busy: false})
+            }
+        ).catch((e) => {
+            document.getElementById('serverError').style.display = 'block';
+        })
+
+        await this.getAllUsers();
+
+        document.getElementById("revoke" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    makeAdmin = async () => {
+        await axios.put(baseUrl + "users/admin/" + this.state.userId + "/grant", null, {
+                headers: headers
+            }
+        ).then(() => {
+                this.setState({busy: false})
+            }
+        ).catch((e) => {
+            document.getElementById('serverError').style.display = 'block';
+        })
+
+        await this.getAllUsers();
+
+        document.getElementById("admin" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    removeAdmin = async () => {
+        await axios.put(baseUrl + "users/admin/" + this.state.userId + "/remove", null, {
+                headers: headers
+            }
+        ).then(() => {
+                this.setState({busy: false})
+            }
+        ).catch((e) => {
+            document.getElementById('serverError').style.display = 'block';
+        })
+
+        await this.getAllUsers();
+
+        document.getElementById("remove" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    cancelBan = () => {
+        this.setState({busy: false})
+        document.getElementById("ban" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    cancelRevoke = () => {
+        this.setState({busy: false})
+        document.getElementById("revoke" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    cancelRemove = () => {
+        this.setState({busy: false})
+        document.getElementById("remove" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
+    }
+
+    cancelAdmin = () => {
+        this.setState({busy: false})
+        document.getElementById("admin" + this.state.userId).style.display = "none";
+        document.getElementById("view" + this.state.userId).style.display = "block";
     }
 
     componentDidMount() {
@@ -152,18 +293,150 @@ class PeopleOverview extends React.Component {
                     {this.state.users.map(user =>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography color="textSecondary" gutterBottom>
-                                    {user.userName}
-                                </Typography>
-                                <Typography variant="h5" component="h2">
+                                <div>
+                                    <div className="" id={"view" + user.userId}>
+                                        <div className="cardText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                {user.userName}
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
 
-                                </Typography>
-                                <Typography color="textSecondary">
-                                    {user.platform} ID: {user.platformID}
-                                </Typography>
-                                <Typography variant="body2" component="p">
-                                    Wishlist: {user.wishlist.toString()}
-                                </Typography>
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                {user.platform} ID: {user.platformID}
+                                            </Typography>
+                                            <Typography variant="body2" component="p">
+                                                Wishlist: {user.wishlist.toString()}
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            {localStorage.getItem('adminCode') == AuthenticationService.adminCode ? (
+                                                <div>
+                                                    {user.active ? (
+                                                        <GavelIcon className="icon2"
+                                                                   color={this.state.busy ? "disabled" : "secondary"}
+                                                                   fontSize="large" cursor="pointer"
+                                                                   onClick={() => this.showBanForm(user.userId)}/>
+                                                    ) : (
+                                                        <GavelIcon className="icon2"
+                                                                   color={this.state.busy ? "disabled" : "primary"}
+                                                                   fontSize="large" cursor="pointer"
+                                                                   onClick={() => this.showRevokeForm(user.userId)}/>
+                                                    )}
+
+                                                    {user.admin ? (
+                                                        <Button className="marginBtn" variant="contained"
+                                                                color="secondary"
+                                                                disabled={this.state.busy}
+                                                                onClick={() => this.showRemoveForm(user.userId)}>Remove
+                                                            admin</Button>
+                                                    ) : (
+                                                        <Button className="marginBtn" variant="contained"
+                                                                color="primary"
+                                                                disabled={this.state.busy}
+                                                                onClick={() => this.showAdminForm(user.userId)}>Make
+                                                            admin</Button>
+                                                    )
+
+                                                    }
+                                                </div>
+                                            ) : (
+                                                <div></div>
+                                            )
+                                            }
+
+                                        </div>
+                                    </div>
+
+                                    <div className="deleteForm" id={"ban" + user.userId}>
+                                        <div className="deleteText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Are you sure you want to ban this user?
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                Username: {user.userName} -
+                                                {user.platform} ID : {user.platformID}
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                This user's trades will be made invisible until the ban is revoked.
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            <ClearIcon color="secondary" fontSize="large" cursor="pointer"
+                                                       className="icon2"
+                                                       onClick={this.cancelBan}/>
+                                            <CheckIcon color="primary" fontSize="large" cursor="pointer"
+                                                       className="icon1"
+                                                       onClick={this.banUser}/>
+                                        </div>
+                                    </div>
+                                    <div className="deleteForm" id={"revoke" + user.userId}>
+                                        <div className="deleteText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Are you sure you want to revoke the ban on this user?
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                Username: {user.userName} -
+                                                {user.platform} ID : {user.platformID}
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                This user's trades will be made visible again.
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            <ClearIcon color="secondary" fontSize="large" cursor="pointer"
+                                                       className="icon2"
+                                                       onClick={this.cancelRevoke}/>
+                                            <CheckIcon color="primary" fontSize="large" cursor="pointer"
+                                                       className="icon1"
+                                                       onClick={this.revokeBan}/>
+                                        </div>
+                                    </div>
+                                    <div className="deleteForm" id={"admin" + user.userId}>
+                                        <div className="deleteText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Are you sure you want to make this user an admin?
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                Username: {user.userName} -
+                                                {user.platform} ID : {user.platformID}
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                Make sure this person is trusted, they might remove your rights.
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            <ClearIcon color="secondary" fontSize="large" cursor="pointer"
+                                                       className="icon2"
+                                                       onClick={this.cancelAdmin}/>
+                                            <CheckIcon color="primary" fontSize="large" cursor="pointer"
+                                                       className="icon1"
+                                                       onClick={this.makeAdmin}/>
+                                        </div>
+                                    </div>
+                                    <div className="deleteForm" id={"remove" + user.userId}>
+                                        <div className="deleteText">
+                                            <Typography color="textSecondary" gutterBottom>
+                                                Are you sure you want to remove this user's admin rights?
+                                            </Typography>
+                                            <Typography variant="h5" component="h2">
+                                                Username: {user.userName} -
+                                                {user.platform} ID : {user.platformID}
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                This user will not be able to perform admin actions anymore.
+                                            </Typography>
+                                        </div>
+                                        <div className="icons">
+                                            <ClearIcon color="secondary" fontSize="large" cursor="pointer"
+                                                       className="icon2"
+                                                       onClick={this.cancelRemove}/>
+                                            <CheckIcon color="primary" fontSize="large" cursor="pointer"
+                                                       className="icon1"
+                                                       onClick={this.removeAdmin}/>
+                                        </div>
+                                    </div>
+                                </div>
                             </CardContent>
                             <CardActions>
                             </CardActions>

@@ -68,17 +68,17 @@ export default function SignIn(props) {
         }
     })
 
-    function signIn() {
+    async function signIn() {
         setPasswordErrorText("");
         setPasswordError(false);
         setUserNameError(false);
         if (document.getElementById("username").value !== "" && document.getElementById("password").value !== "") {
-            axios.get(baseUrl + "users/auth?creds=" + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value))
+            await axios.get(baseUrl + "users/auth?creds=" + window.btoa(document.getElementById("username").value + ':' + document.getElementById("password").value))
             .then(response => {
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId);
                     localStorage.setItem('userName', response.data.userName);
-                    localStorage.setItem('isAdmin', response.data.isAdmin);
+                    localStorage.setItem('adminCode', response.data.adminCode);
                     history.push("/");
                 }
             ).catch((e) => {

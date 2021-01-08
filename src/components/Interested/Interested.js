@@ -11,12 +11,14 @@ import axios from "axios";
 
 import AuthenticationService from "../../services/AuthenticationService";
 
-const headers = AuthenticationService.headers;
+var headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class Interested extends React.Component {
     constructor(props) {
         super(props)
+
+        headers = AuthenticationService.getHeaders();
 
         this.state = {
             interests: [],
@@ -26,23 +28,25 @@ class Interested extends React.Component {
     }
 
     getAllInterests() {
-            const self = this;
-            axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), headers
-            ).then(result => {
-                self.setState({interests: result.data});
-            }).catch((e) => {
-                console.log(e);
-                if(e.response != null) {
-                    if (e.response.status != '404') {
-                        document.getElementById('serverError').style.display = 'block'
-                    } else {
-                        document.getElementById('noInterests').style.display = 'block';
-                        this.setState({interests: []})
-                    }
+        const self = this;
+        axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {
+                headers: headers
+            }
+        ).then(result => {
+            self.setState({interests: result.data});
+        }).catch((e) => {
+            console.log(e);
+            if (e.response != null) {
+                if (e.response.status == '404') {
+                    document.getElementById('noInterests').style.display = 'block'
+                    this.setState({interests: []})
                 } else {
-                    AuthenticationService.logOut(this.props.history)
+                    document.getElementById('serverError').style.display = 'block'
                 }
-            });
+            } else {
+                AuthenticationService.logOut(this.props.history)
+            }
+        });
     }
 
     showDeleteForm(interestId) {
@@ -54,7 +58,9 @@ class Interested extends React.Component {
     }
 
     removeInterest = async () => {
-        await axios.delete(baseUrl + "interests/" + this.state.interestId, headers
+        await axios.delete(baseUrl + "interests/" + this.state.interestId, {
+                headers: headers
+            }
         ).then(() => {
                 this.setState({busy: false})
             }

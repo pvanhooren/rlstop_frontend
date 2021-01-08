@@ -32,11 +32,10 @@ class Register extends React.Component {
             userNameError: false,
             passwordError: false,
             passwordErrorText: '',
+            platformErrorText: '',
             confirmPasswordError: false,
             platformError: false,
             platformIDError: false,
-            wishlistError: false,
-            wishlistErrorText: ''
         }
     }
 
@@ -59,18 +58,17 @@ class Register extends React.Component {
             userNameErrorText: "",
             passwordError: false,
             passwordErrorText: '',
+            platformErrorText: '',
             confirmPasswordError: false,
             platformError: false,
             platformIDError: false,
-            wishlistError: false,
-            wishlistErrorText: ''
         })
 
         if (document.getElementById("password").value === document.getElementById("confirmPassword").value) {
             if (regExp.test(document.getElementById("email").value)) {
                 var creds = window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value);
                 axios.post(baseUrl + "users/new?creds=" + creds + "&email=" + document.getElementById("email").value
-                    + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value + "&wishlist=" + document.getElementById("wishlist").value)
+                    + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value)
                     .then((response) => {
                         localStorage.setItem('token', response.data.token);
                         localStorage.setItem('userId', response.data.userId);
@@ -91,14 +89,13 @@ class Register extends React.Component {
                         })
                     } else {
                         self.setState({
-                            wishlistErrorText: e.response.data.message,
+                            platformErrorText: e.response.data.message,
                             emailError: true,
                             userNameError: true,
                             passwordError: true,
                             confirmPasswordError: true,
                             platformError: true,
                             platformIDError: true,
-                            wishlistError: true
                         })
                     }
 
@@ -186,6 +183,7 @@ class Register extends React.Component {
                                 value={this.state.platform}
                                 onChange={this.handleChange}
                                 error={this.state.platformError}
+                                helperText={this.state.platformErrorText}
                                 fullWidth
                             >
                                 <MenuItem value={"NINTENDOSWITCH"}>Nintendo Switch</MenuItem>
@@ -212,20 +210,6 @@ class Register extends React.Component {
                                 fullWidth
                                 autoComplete="platformID"
                                 error={this.state.platformIDError}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                variant="outlined"
-                                margin="normal"
-                                id="wishlist"
-                                name="wishlist"
-                                label="Items you really want, separated by a comma"
-                                fullWidth
-                                autoComplete="wishlist"
-                                error={this.state.wishlistError}
-                                helperText={this.state.wishlistErrorText}
                             />
                         </Grid>
                     </Grid>

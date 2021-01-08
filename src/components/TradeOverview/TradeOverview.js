@@ -13,6 +13,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import '../Overview.css'
 import TextField from "@material-ui/core/TextField";
@@ -20,12 +21,14 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-const headers = AuthenticationService.headers;
+var headers = {}
 const baseUrl = AuthenticationService.baseUrl;
 
 class TradeOverview extends Component {
     constructor(props) {
         super(props);
+
+        headers = AuthenticationService.getHeaders();
 
         this.state = {
             trades: [],
@@ -62,21 +65,35 @@ class TradeOverview extends Component {
         }
     }
 
-    editTrade = async () => {
-        const self = this;
-        if (document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
-            await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId, null, headers
-            ).catch((e) => {
-                alert("Something went wrong editing the trade. Please try again!");
-            });
-            //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
-            document.getElementById("editForm").style.display = "none";
-            document.getElementById("filter").style.display = "block";
-            this.getAllTrades();
-            this.setState({busy: false})
-        } else {
-            alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
+    showDeleteForm(tradeId) {
+        if (!this.state.busy) {
+            this.setState({tradeId: tradeId, busy: true})
+            document.getElementById("delete" + tradeId).style.display = "block";
+            document.getElementById("view" + tradeId).style.display = "none";
         }
+    }
+
+    // editTrade = async () => {
+    //     const self = this;
+    //     if (document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
+    //         await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId, null, headers
+    //         ).catch((e) => {
+    //             alert("Something went wrong editing the trade. Please try again!");
+    //         });
+    //         //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
+    //         document.getElementById("editForm").style.display = "none";
+    //         document.getElementById("filter").style.display = "block";
+    //         this.getAllTrades();
+    //         this.setState({busy: false})
+    //     } else {
+    //         alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
+    //     }
+    // }
+
+    cancelDelete = () => {
+        this.setState({busy: false})
+        document.getElementById("delete" + this.state.tradeId).style.display = "none";
+        document.getElementById("view" + this.state.tradeId).style.display = "block";
     }
 
     cancelInterest = () => {
@@ -92,7 +109,9 @@ class TradeOverview extends Component {
     }
 
     deleteTrade(tradeId) {
-        axios.delete(baseUrl + "trades/" + tradeId, headers
+        axios.delete(baseUrl + "trades/" + tradeId, {
+                headers: headers
+            }
         ).then(() => {
             this.setState({busy: false})
         }).catch((e) => {
@@ -103,10 +122,10 @@ class TradeOverview extends Component {
     getAllTrades = () => {
         const self = this;
 
-        axios.get(baseUrl + "trades/all", headers
+        axios.get(baseUrl + "trades/all", {headers: headers}
         ).then(result => {
-                self.setState({trades: result.data});
-            }).catch((e) => {
+            self.setState({trades: result.data});
+        }).catch((e) => {
             if (e.response == null) {
                 AuthenticationService.logOut(this.props.history)
             } else if (e.response.status == '404') {
@@ -119,7 +138,7 @@ class TradeOverview extends Component {
     getAllInterests = () => {
         const self = this;
 
-        axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), headers
+        axios.get(baseUrl + "interests/user?id=" + localStorage.getItem('userId'), {headers: headers}
         ).then((response) => {
             self.setState({interests: response.data})
         }).catch((e) => {
@@ -134,7 +153,9 @@ class TradeOverview extends Component {
     }
 
     removeInterest = async () => {
-        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, headers
+        await axios.delete(baseUrl + "interests?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId, {
+                headers: headers
+            }
         ).then(() => {
                 this.setState({busy: false})
             }
@@ -150,7 +171,9 @@ class TradeOverview extends Component {
     }
 
     showInterest = async () => {
-        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, headers
+        await axios.post(baseUrl + "interests/new?user=" + localStorage.getItem('userId') + "&trade=" + this.state.tradeId + "&comment=" + document.getElementById("comment" + this.state.tradeId).value, null, {
+                headers: headers
+            }
         ).then(() => {
                 this.setState({busy: false})
             }
@@ -169,10 +192,12 @@ class TradeOverview extends Component {
         if (!this.state.busy) {
             const self = this;
             if (document.getElementById("switch").checked) {
-                axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", headers
+                axios.get(baseUrl + "trades/filter?platform=NINTENDOSWITCH", {
+                        headers: headers
+                    }
                 ).then(result => {
-                        self.setState({trades: result.data});
-                    }).catch((e) => {
+                    self.setState({trades: result.data});
+                }).catch((e) => {
                     if (e.response == null) {
                         document.getElementById('serverError').style.display = 'block';
                     } else {
@@ -180,10 +205,12 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("playstation").checked) {
-                axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", headers
+                axios.get(baseUrl + "trades/filter?platform=PLAYSTATION", {
+                        headers: headers
+                    }
                 ).then(result => {
-                        self.setState({trades: result.data});
-                    }).catch((e) => {
+                    self.setState({trades: result.data});
+                }).catch((e) => {
                     if (e.response == null) {
                         document.getElementById('serverError').style.display = 'block';
                     } else {
@@ -191,10 +218,12 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("xbox").checked) {
-                axios.get(baseUrl + "trades/filter?platform=XBOX", headers
+                axios.get(baseUrl + "trades/filter?platform=XBOX", {
+                        headers: headers
+                    }
                 ).then(result => {
-                        self.setState({trades: result.data});
-                    }).catch((e) => {
+                    self.setState({trades: result.data});
+                }).catch((e) => {
                     if (e.response == null) {
                         document.getElementById('serverError').style.display = 'block';
                     } else {
@@ -202,10 +231,12 @@ class TradeOverview extends Component {
                     }
                 });
             } else if (document.getElementById("pc").checked) {
-                axios.get(baseUrl + "trades/filter?platform=PC", headers
+                axios.get(baseUrl + "trades/filter?platform=PC", {
+                        headers: headers
+                    }
                 ).then(result => {
-                        self.setState({trades: result.data});
-                    }).catch((e) => {
+                    self.setState({trades: result.data});
+                }).catch((e) => {
                     if (e.response == null) {
                         document.getElementById('serverError').style.display = 'block';
                     } else {
@@ -287,18 +318,27 @@ class TradeOverview extends Component {
                                     {
                                         trade.user.userId != localStorage.getItem('userId') ? (
                                             this.isInterested(trade.tradeId) ? (
-                                                <Button variant="contained" color="secondary" disabled={this.state.busy}
+                                                <Button className="marginBtn" variant="contained" color="secondary"
+                                                        disabled={this.state.busy}
                                                         onClick={() => this.showRemoveForm(trade.tradeId)}>Remove
                                                     interest</Button>
                                             ) : (
-                                                <Button variant="contained" color="primary" disabled={this.state.busy}
+                                                <Button className="marginBtn" variant="contained" color="primary"
+                                                        disabled={this.state.busy}
                                                         onClick={() => this.showInterestForm(trade.tradeId)}>I'm
                                                     interested!</Button>
                                             )) : (
                                             <></>
                                         )
                                     }
-                                    {/*<DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.deleteTrade(trade.postId)} />*/}
+
+                                    {localStorage.getItem('adminCode') == AuthenticationService.adminCode ?
+                                        <DeleteIcon className="icon2" color={this.state.busy ? "disabled" : "secondary"}
+                                                    fontSize="large" cursor="pointer"
+                                                    onClick={() => this.showDeleteForm(trade.tradeId)}/>
+                                        :
+                                        <div></div>
+                                    }
                                     {/*<CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />*/}
                                 </div>
                             </div>
@@ -338,6 +378,27 @@ class TradeOverview extends Component {
                                                onClick={this.cancelRemove}/>
                                     <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1"
                                                onClick={this.removeInterest}/>
+                                </div>
+                            </div>
+
+                            <div className="deleteForm" id={"delete" + trade.tradeId}>
+                                <div className="deleteText">
+                                    <Typography color="textSecondary" gutterBottom>
+                                        Are you sure you want to delete this trade?
+                                    </Typography>
+                                    <Typography variant="h5" component="h2">
+                                        Offers: {trade.offers} -
+                                        Wants: {trade.wants}
+                                    </Typography>
+                                    <Typography color="textSecondary">
+                                        {trade.user.userName} ({trade.user.platform})
+                                    </Typography>
+                                </div>
+                                <div className="icons">
+                                    <ClearIcon color="secondary" fontSize="large" cursor="pointer" className="icon2"
+                                               onClick={this.cancelDelete}/>
+                                    <CheckIcon color="primary" fontSize="large" cursor="pointer" className="icon1"
+                                               onClick={this.deleteTrade}/>
                                 </div>
                             </div>
 

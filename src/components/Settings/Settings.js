@@ -18,12 +18,14 @@ const regExp = RegExp(
     /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
-const headers = AuthenticationService.headers;
+var headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
+
+        headers = AuthenticationService.getHeaders();
 
         this.state = {
             user: Object,
@@ -37,7 +39,9 @@ class Settings extends React.Component {
     }
 
     getUserInfo() {
-        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), headers
+        axios.get(baseUrl + "users/" + localStorage.getItem("userId"), {
+                headers: headers
+            }
         ).then(response => {
                 this.setState({user: response.data})
                 document.getElementById("email").value = response.data.emailAddress;
@@ -45,7 +49,7 @@ class Settings extends React.Component {
                 document.getElementById("platformID").value = response.data.platformID;
             }
         ).catch((e) => {
-            if(e.response != null) {
+            if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block'
             } else {
                 AuthenticationService.logOut(this.props.history)
@@ -61,16 +65,18 @@ class Settings extends React.Component {
         }
     }
 
-    promptDelete = () =>{
+    promptDelete = () => {
         var r = prompt("Are you sure that you want to delete your account? Please type " + this.state.user.userName + " to confirm.")
 
-        if(r == this.state.user.userName){
+        if (r == this.state.user.userName) {
             this.deleteAccount();
         }
     }
 
     deleteAccount = async () => {
-        await axios.delete(baseUrl + "users/" + this.state.user.userId, headers
+        await axios.delete(baseUrl + "users/" + this.state.user.userId, {
+                headers: headers
+            }
         ).then((response) => {
             AuthenticationService.logOut(this.props.history)
         }).catch((e) => {
@@ -101,9 +107,11 @@ class Settings extends React.Component {
         }
 
         if (regExp.test(document.getElementById("email").value)) {
-            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, headers
+            await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "?name=" + document.getElementById("username").value + "&email=" + document.getElementById("email").value + "&platform=" + selectedPlatform + "&platformID=" + document.getElementById("platformID").value, null, {
+                    headers: headers
+                }
             ).catch((e) => {
-                anyError=true;
+                anyError = true;
                 if (e.response.data.message.includes("username")) {
                     this.setState({
                         userNameError: true,
@@ -128,7 +136,7 @@ class Settings extends React.Component {
                 emailError: true,
                 emailErrorText: "The provided email address is not recognized as an email address. Please correct it."
             })
-            anyError=true;
+            anyError = true;
         }
 
         if (!anyError) {
@@ -210,8 +218,10 @@ class Settings extends React.Component {
                         </Grid>
                     </Grid>
                     <div className="saveBtn">
-                        <Button className="marginBtn" variant="contained" color="primary" onClick={this.saveSettings}>Save</Button>
-                        <Button variant="contained" color="secondary" onClick={this.promptDelete}>Delete account</Button>
+                        <Button className="marginBtn" variant="contained" color="primary"
+                                onClick={this.saveSettings}>Save</Button>
+                        <Button variant="contained" color="secondary" onClick={this.promptDelete}>Delete
+                            account</Button>
                     </div>
                 </div>
             </div>

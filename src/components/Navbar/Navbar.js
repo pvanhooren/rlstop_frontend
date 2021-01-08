@@ -122,14 +122,17 @@ const Navbar = props => {
             menuTitle: "Create trade",
             pageURL: "/new"
         },
-        {
-            menuTitle: "People",
-            pageURL: "/people"
-        }
         // {
         //     menuTitle: "Sprint 2 demo",
         //     pageURL: "/demo"
         // },
+    ]
+
+    var adminItem = [
+        {
+            menuTitle: "People",
+            pageURL: "/people"
+        }
     ]
 
     return (
@@ -173,6 +176,15 @@ const Navbar = props => {
                                         </MenuItem>
                                     );
                                 })}
+                                {localStorage.getItem('adminCode') == AuthenticationService.adminCode ? (
+                                    adminItem.map(menuItem => {
+                                        const {menuTitle, pageURL} = menuItem;
+                                        return (
+                                            <MenuItem onClick={() => handleMenuClick(pageURL)}>
+                                                {menuTitle}
+                                            </MenuItem>
+                                        );
+                                    })) : <></> }
                                 {isLoggedIn ? (
                                     loggedInItems.map(menuItem => {
                                         const {menuTitle, pageURL} = menuItem;
@@ -207,12 +219,14 @@ const Navbar = props => {
                                 >
                                     NEW TRADE
                                 </Button>
-                                <Button
-                                    className="btn"
-                                    onClick={() => handleButtonClick("/people")}
-                                >
-                                    PEOPLE
-                                </Button>
+                                {localStorage.getItem('adminCode') == AuthenticationService.adminCode ?
+                                    <Button
+                                        className="btn"
+                                        onClick={() => handleButtonClick("/people")}
+                                    >
+                                        PEOPLE
+                                    </Button> : <></>
+                                }
                                 {/*<Button*/}
                                 {/*    className="btn"*/}
                                 {/*    onClick={() => handleButtonClick("/demo")}*/}
