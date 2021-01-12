@@ -17,8 +17,8 @@ docker-image:
   dependencies:
     - test
   before_script:
-    - "docker stop rlstop-frontend || true && docker container rm rlstop-frontend || true"
-    - "docker image rm rlstop-frontend || true"
+    - "docker stop rlstop-frontend | true && docker container rm rlstop-frontend | true"
+    - "docker image rm rlstop-frontend | true"
     -  "npm install"
   script: "docker build -t rlstop-frontend ."
   stage: docker-image
