@@ -20,6 +20,7 @@ docker-image:
     - "docker stop rlstop-frontend"
     - "docker container rm rlstop-frontend"
     - "docker image rm rlstop-frontend"
+    -  "npm install"
   script: "docker build -t rlstop-frontend ."
   stage: docker-image
 docker-container:
