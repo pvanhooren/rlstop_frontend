@@ -9,6 +9,8 @@ build:
 test:
   dependencies:
     - build
+  before_script:
+    - "npm install"
   script: "npm test"
   stage: test
 docker-image:
