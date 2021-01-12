@@ -73,23 +73,6 @@ class TradeOverview extends Component {
         }
     }
 
-    // editTrade = async () => {
-    //     const self = this;
-    //     if (document.getElementById("wants").value !== "" && document.getElementById("offers").value !== "") {
-    //         await axios.put(baseUrl + "trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId, null, headers
-    //         ).catch((e) => {
-    //             alert("Something went wrong editing the trade. Please try again!");
-    //         });
-    //         //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
-    //         document.getElementById("editForm").style.display = "none";
-    //         document.getElementById("filter").style.display = "block";
-    //         this.getAllTrades();
-    //         this.setState({busy: false})
-    //     } else {
-    //         alert("The trade cannot be edited because it is not complete. Please fill in the empty fields.")
-    //     }
-    // }
-
     cancelDelete = () => {
         this.setState({busy: false})
         document.getElementById("delete" + this.state.tradeId).style.display = "none";
@@ -313,8 +296,6 @@ class TradeOverview extends Component {
                                     </Typography>
                                 </div>
                                 <div className="icons">
-                                    {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
-                                    {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
                                     {
                                         trade.user.userId != localStorage.getItem('userId') ? (
                                             this.isInterested(trade.tradeId) ? (
@@ -403,9 +384,6 @@ class TradeOverview extends Component {
                             </div>
 
                         </CardContent>
-                        {/*<CardActions>*/}
-
-                        {/*</CardActions>*/}
                     </Card>
                 )}
                 <div className="nothingToDisplay" id="noTrades">

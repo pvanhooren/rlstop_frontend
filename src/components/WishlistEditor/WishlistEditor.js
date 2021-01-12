@@ -143,9 +143,6 @@ class WishlistEditor extends React.Component {
                                             </Typography>
                                         </div>
                                         <div className="icons">
-                                            {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
-                                            {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
-
                                             <DeleteIcon className="icon2"
                                                         color={this.state.busy ? "disabled" : "secondary"}
                                                         fontSize="large" cursor="pointer"

@@ -111,13 +111,9 @@ class Interested extends React.Component {
                                         </Typography>
                                     </div>
                                     <div className="icons">
-                                        {/*<Button variant="contained" color="primary" onClick={() => this.showEditForm(trade)}>Edit</Button>*/}
-                                        {/*<Button variant="contained" color="secondary" onClick={() => this.deleteTrade(trade.postId)}>Delete</Button>*/}
                                         <Button variant="contained" color="secondary" disabled={this.state.busy}
                                                 onClick={() => this.showDeleteForm(interest.interestId)}>Remove
                                             interest</Button>
-                                        {/*<DeleteIcon className="icon2" color="secondary" fontSize="large" cursor="pointer" onClick={() => this.showDeleteForm(trade.tradeId)} />*/}
-                                        {/*<CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />>*/}
                                     </div>
                                 </div>
 
@@ -142,9 +138,6 @@ class Interested extends React.Component {
                                     </div>
                                 </div>
                             </CardContent>
-                            {/*<CardActions>*/}
-
-                            {/*</CardActions>*/}
                         </Card>
                     )}
                     <div className="nothingToDisplay" id="noInterests">

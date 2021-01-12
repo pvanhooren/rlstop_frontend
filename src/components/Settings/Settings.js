@@ -186,7 +186,6 @@ class Settings extends React.Component {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                // defaultValue={this.state.user.userName}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -213,7 +212,6 @@ class Settings extends React.Component {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                // defaultValue={this.state.user.platformID}
                             />
                         </Grid>
                     </Grid>

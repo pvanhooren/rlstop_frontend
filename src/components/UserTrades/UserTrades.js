@@ -110,7 +110,6 @@ class UserTrades extends React.Component {
             ).catch((e) => {
                 document.getElementById('serverError').style.display = 'block'
             });
-            //console.log("http://localhost:8080/trades/" + self.state.tradeId + "?wants=" + document.getElementById("wants").value + "&offers=" + document.getElementById("offers").value + "&userId=" + self.state.userId);
             document.getElementById("edit" + self.state.tradeId).style.display = "none";
             document.getElementById("view" + self.state.tradeId).style.display = "block";
             self.setState({busy: false})

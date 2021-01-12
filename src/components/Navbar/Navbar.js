@@ -122,10 +122,6 @@ const Navbar = props => {
             menuTitle: "Create trade",
             pageURL: "/new"
         },
-        // {
-        //     menuTitle: "Sprint 2 demo",
-        //     pageURL: "/demo"
-        // },
     ]
 
     var adminItem = [
@@ -227,12 +223,6 @@ const Navbar = props => {
                                         PEOPLE
                                     </Button> : <></>
                                 }
-                                {/*<Button*/}
-                                {/*    className="btn"*/}
-                                {/*    onClick={() => handleButtonClick("/demo")}*/}
-                                {/*>*/}
-                                {/*    DEMO*/}
-                                {/*</Button>*/}
                             </div>
                             <div>
                                 <Button

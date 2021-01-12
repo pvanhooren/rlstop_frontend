@@ -191,13 +191,6 @@ class Register extends React.Component {
                                 <MenuItem value={"XBOX"}>XBox</MenuItem>
                                 <MenuItem value={"PC"}>PC</MenuItem>
                             </Select>
-                            {/*<h5>Platform</h5>*/}
-                            {/*<RadioGroup id="platform" className="selectGroup" name="platform">*/}
-                            {/*    <FormControlLabel value="switch" control={<Radio id="switch" />} label="Nintendo Switch" checked={true}/>*/}
-                            {/*    <FormControlLabel value="playstation" control={<Radio id="playstation" />} label="PlayStation" />*/}
-                            {/*    <FormControlLabel value="xbox" control={<Radio id="xbox" />} label="XBox"/>*/}
-                            {/*    <FormControlLabel value="pc" control={<Radio id="pc" />} label="PC"/>*/}
-                            {/*</RadioGroup>*/}
                         </Grid>
                         <Grid item xs={6}>
                             <TextField

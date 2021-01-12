@@ -86,11 +86,6 @@ export default function SignIn(props) {
                     setPasswordError(true);
                     if (e.response != null) {
                         setPasswordErrorText(e.response.data.message);
-                        // if(e.response.status == '400') {
-                        //     setPasswordErrorText("Your account has been banned from the application. Send an email to support@rlstop.com if you'd like to discuss the ban.")
-                        // } else {
-                        //     setPasswordErrorText("Incorrect username or password. Please try again!");
-                        // }
                     } else {
                         setPasswordErrorText("Something went wrong at our end. Please visit again later!")
                     }

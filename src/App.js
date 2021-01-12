@@ -4,7 +4,6 @@ import NewTradeForm from "./components/NewTradeForm/NewTradeForm";
 import Navbar from "./components/Navbar/Navbar";
 import NotFound from "./components/NotFound/NotFound";
 import PeopleOverview from "./components/PeopleOverview/PeopleOverview";
-import Demo from "./components/Demo/Demo";
 import WishlistEditor from "./components/WishlistEditor/WishlistEditor";
 import UserTrades from "./components/UserTrades/UserTrades";
 import Interested from "./components/Interested/Interested";
@@ -24,7 +23,6 @@ function App() {
             <Route exact from="/" component={TradeOverview}/>} />
             <Route exact path="/new" component={NewTradeForm}/>} />
             <Route exact path="/people" component={PeopleOverview}/>
-            <Route exact path="/demo" component={Demo}/>} />
             <Route exact path="/me/wishlist" component={WishlistEditor}/>} />
             <Route exact path="/me/trades" component={UserTrades}/>} />
             <Route exact path="/me/interested" component={Interested}/>}/>

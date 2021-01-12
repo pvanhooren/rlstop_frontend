@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+  - docker-image
+  - docker-container
+build:
+  script: "npm install"
+  stage: build
+test:
+  dependencies:
+    - build
+  script: "npm test"
+  stage: test
+docker-image:
+  dependencies:
+    - test
+  before_script:
+    - "docker stop rlstop-frontend"
+    - "docker container rm rlstop-frontend"
+    - "docker image rm rlstop-frontend"
+  script: "docker build -t rlstop-frontend ."
+  stage: docker-image
+docker-container:
+  dependencies:
+    - docker-image
+  script: "docker run -it -p 3000:3000 --name rlstop-frontend --network rlstop -d rlstop-frontend"
+  stage: docker-container
+
+
+
+
