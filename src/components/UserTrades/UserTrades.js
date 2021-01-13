@@ -170,8 +170,8 @@ class UserTrades extends React.Component {
                 <div className="mainArea" id="userTrades">
                     <h2 className="title">Your trades</h2>
                     <div className="serverError" id="serverError">
-                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
-                        again later!
+                        Something went wrong connecting to our server, our apologies for the inconvenience. Please refresh and try
+                        again!
                     </div>
                     {this.state.trades.map(trade =>
                         <Card className="tradeCard" variant="outlined">

@@ -91,8 +91,8 @@ class Interested extends React.Component {
                 <div className="mainArea" id="interestedTrades">
                     <h2 className="title">Trades you are interested in</h2>
                     <div className="serverError" id="serverError">
-                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
-                        again later!
+                        Something went wrong connecting to our server, our apologies for the inconvenience. Please refresh and try
+                        again!
                     </div>
                     {this.state.interests.map(interest =>
                         <Card className="tradeCard" variant="outlined">

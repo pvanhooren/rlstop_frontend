@@ -125,8 +125,8 @@ class WishlistEditor extends React.Component {
                     <br/><br/>
 
                     <div className="serverError" id="serverError">
-                        It looks like something went wrong on our end, our apologies for the inconvenience. Please try
-                        again later!
+                        Something went wrong connecting to our server, our apologies for the inconvenience. Please refresh and try
+                        again!
                     </div>
 
                     {this.state.wishlist.map((item, index) =>

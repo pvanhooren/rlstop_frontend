@@ -105,8 +105,8 @@ class NewTradeForm extends Component {
                 <h2>Post new trade</h2>
 
                 <div className="serverError" id="serverError">
-                    It looks like something went wrong on our end, our apologies for the inconvenience. Please try
-                    again later!
+                    Something went wrong connecting to our server, our apologies for the inconvenience. Please refresh and try
+                    again!
                 </div>
                 <br/>
                 <TextField error={this.state.offersError} helperText={this.state.errorText} variant="outlined"
