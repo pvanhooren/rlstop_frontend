@@ -1,14 +1,8 @@
 stages:
-  - build
   - test
   - docker-image
   - docker-container
-build:
-  script: "npm install"
-  stage: build
 test:
-  dependencies:
-    - build
   before_script:
     - "npm install"
   script: "npm test"
@@ -17,10 +11,8 @@ docker-image:
   dependencies:
     - test
   before_script:
-    - "docker stop rlstop-frontend || exit 0"
-    - "docker container rm rlstop-frontend || exit 0"
-    - "docker image rm rlstop-frontend || exit 0"
-    -  "npm install"
+    - sh script.sh
+    - "npm install"
   script: "docker build -t rlstop-frontend ."
   stage: docker-image
 docker-container:
