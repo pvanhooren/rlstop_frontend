@@ -29,6 +29,7 @@ class PeopleOverview extends React.Component {
         super(props);
 
         headers = AuthenticationService.getHeaders();
+        console.log(headers);
 
         this.state = {
             busy: false,
@@ -45,6 +46,7 @@ class PeopleOverview extends React.Component {
             result => {
                 this.setState({users: result.data})
             }).catch((e) => {
+                console.log(e);
             if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block';
             } else {

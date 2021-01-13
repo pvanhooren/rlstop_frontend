@@ -1,15 +1,15 @@
 stages:
-#  - test
+  - test
   - docker-image
   - docker-container
-#test:
-#  before_script:
-#    - "npm install"
-#  script: "npm test"
-#  stage: test
+test:
+  before_script:
+    - "npm install"
+  script: "npm test"
+  stage: test
 docker-image:
-#  dependencies:
-#    - test
+  dependencies:
+    - test
   before_script:
     - sh script.sh
     - "npm install"
@@ -18,8 +18,6 @@ docker-image:
 docker-container:
   dependencies:
     - docker-image
-  before_script:
-    - sh script.sh
   script: "docker run -it -p 3000:3000 --name rlstop-frontend --network rlstop -d rlstop-frontend"
   stage: docker-container
 
