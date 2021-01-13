@@ -17,9 +17,9 @@ docker-image:
   dependencies:
     - test
   before_script:
-    - "docker stop rlstop-frontend | echo Not Found"
-    - "docker container rm rlstop-frontend | echo Not Found"
-    - "docker image rm rlstop-frontend | echo Not Found"
+    - "docker stop rlstop-frontend || exit 0"
+    - "docker container rm rlstop-frontend || exit 0"
+    - "docker image rm rlstop-frontend || exit 0"
     -  "npm install"
   script: "docker build -t rlstop-frontend ."
   stage: docker-image
