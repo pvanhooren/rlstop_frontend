@@ -44,7 +44,7 @@ const Navbar = props => {
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
     var isLoggedIn = false;
 
-    if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
+    if (localStorage.getItem('token') != null && localStorage.getItem('token') !== "") {
         isLoggedIn = true;
     }
 
@@ -54,7 +54,6 @@ const Navbar = props => {
     };
 
     const handleMenuClick = pageURL => {
-        console.log(pageURL);
         if (pageURL !== "/me/logout") {
             history.push(pageURL);
             setAnchorEl(null);
@@ -242,7 +241,7 @@ const Navbar = props => {
                                     onClose={() => setAnchorEl(null)}
                                 >
                                     {isLoggedIn ? (
-                                        <>
+                                        <div>
                                             <MenuItem
                                                 onClick={() => handleMenuClick("/me/wishlist")}>Wishlist</MenuItem>
                                             <MenuItem onClick={() => handleMenuClick("/me/trades")}>My trades</MenuItem>
@@ -251,13 +250,13 @@ const Navbar = props => {
                                             <MenuItem
                                                 onClick={() => handleMenuClick("/me/settings")}>Settings</MenuItem>
                                             <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
-                                        </>
+                                        </div>
                                     ) : (
-                                        <>
+                                        <div>
                                             <MenuItem onClick={() => handleMenuClick("/me/login")}>Sign in</MenuItem>
                                             <MenuItem
                                                 onClick={() => handleMenuClick("/me/register")}>Register</MenuItem>
-                                        </>
+                                        </div>
                                     )}
                                 </Menu>
                             </div>

@@ -70,6 +70,8 @@ class Settings extends React.Component {
 
         if (r == this.state.user.userName) {
             this.deleteAccount();
+        } else {
+            alert("The account deletion has been cancelled.")
         }
     }
 

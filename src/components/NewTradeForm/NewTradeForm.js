@@ -76,7 +76,6 @@ class NewTradeForm extends Component {
         ).then(
             result => {
                 this.setState({wishlist: result.data.wishlist})
-                console.log(this.state.wishlist);
             }).catch((e) => {
             if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block'
@@ -121,8 +120,8 @@ class NewTradeForm extends Component {
                         <div>
                             ... Or directly fill in something from your wishlist in the wants section!
                             <br/>
-                            {this.state.wishlist.map(item =>
-                                <Button color="primary" onClick={() => this.fillInWants(item)}>|| {item} ||</Button>
+                            {this.state.wishlist.map((item, index) =>
+                                <Button key={index} color="primary" onClick={() => this.fillInWants(item)}>|| {item} ||</Button>
                             )}
                         </div>
                     ) :

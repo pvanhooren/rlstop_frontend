@@ -8,13 +8,17 @@
 
 .registerForm{
     display:block;
-    text-align:center;
-    margin-left:5%;
+    /*text-align:center;*/
+    /*margin-left:5%;*/
 }
 
 .welcome{
     display:none;
     text-align:center;
+}
+
+.topBtn{
+    margin-bottom: 2% !important;
 }
 
 .welcomeText{

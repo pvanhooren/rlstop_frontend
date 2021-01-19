@@ -35,7 +35,6 @@ class Interested extends React.Component {
         ).then(result => {
             self.setState({interests: result.data});
         }).catch((e) => {
-            console.log(e);
             if (e.response != null) {
                 if (e.response.status == '404') {
                     document.getElementById('noInterests').style.display = 'block'
@@ -95,7 +94,7 @@ class Interested extends React.Component {
                         again!
                     </div>
                     {this.state.interests.map(interest =>
-                        <Card className="tradeCard" variant="outlined">
+                        <Card key={interest.interestId} className="tradeCard" variant="outlined">
                             <CardContent>
                                 <div className="view" id={"view" + interest.interestId}>
                                     <div className="cardText">

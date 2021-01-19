@@ -40,7 +40,7 @@ class Register extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
+        if (localStorage.getItem('token') != null && localStorage.getItem('token') !== "") {
             this.props.history.push("/")
         }
     }
@@ -118,7 +118,7 @@ class Register extends React.Component {
     render() {
         return (
             <div>
-                <div classname="registerForm" id="registerForm">
+                <div className="registerForm" id="registerForm">
                     <h2 className="title">Create your account!</h2>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
@@ -183,7 +183,6 @@ class Register extends React.Component {
                                 value={this.state.platform}
                                 onChange={this.handleChange}
                                 error={this.state.platformError}
-                                helperText={this.state.platformErrorText}
                                 fullWidth
                             >
                                 <MenuItem value={"NINTENDOSWITCH"}>Nintendo Switch</MenuItem>
@@ -203,6 +202,7 @@ class Register extends React.Component {
                                 fullWidth
                                 autoComplete="platformID"
                                 error={this.state.platformIDError}
+                                helperText={this.state.platformErrorText}
                             />
                         </Grid>
                     </Grid>
@@ -225,9 +225,13 @@ class Register extends React.Component {
                                         <Typography variant="subtitle1">
                                             Enjoy using RLStop. Good luck trading!
                                         </Typography>
-                                        <Button color="primary" variant="contained"
+                                        <Button className="topBtn" color="primary" variant="contained"
                                                 onClick={() => this.props.history.push("/")}>
                                             Go to trades
+                                        </Button><br/>
+                                        <Button color="primary" variant="outlined"
+                                                onClick={() => this.props.history.push("/me/wishlist")}>
+                                            Make a wishlist
                                         </Button>
                                     </div>
                                 </Container>

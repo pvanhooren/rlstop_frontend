@@ -74,6 +74,10 @@
     text-align: center;
 }
 
+.greenText {
+    color: limegreen;
+}
+
 .tradeCard {
     min-height: 15%;
     height: 20% !important;

@@ -29,7 +29,6 @@ class PeopleOverview extends React.Component {
         super(props);
 
         headers = AuthenticationService.getHeaders();
-        console.log(headers);
 
         this.state = {
             busy: false,
@@ -46,7 +45,6 @@ class PeopleOverview extends React.Component {
             result => {
                 this.setState({users: result.data})
             }).catch((e) => {
-                console.log(e);
             if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block';
             } else {
@@ -247,11 +245,19 @@ class PeopleOverview extends React.Component {
     }
 
     componentDidMount() {
+        var cont = true;
         if (AuthenticationService.isLoggedIn()) {
-            this.getAllUsers();
-        } else {
+            if(localStorage.getItem('adminCode') != AuthenticationService.adminCode){
+                cont = false;
+                this.props.history.push("/404")
+            }
+
+            if(cont){this.getAllUsers();}
+        } else if(cont){
             this.props.history.push("/me/login")
         }
+
+
     }
 
     render() {
@@ -293,7 +299,7 @@ class PeopleOverview extends React.Component {
 
                 <div className="cards">
                     {this.state.users.map(user =>
-                        <Card variant="outlined">
+                        <Card key={user.userId} variant="outlined">
                             <CardContent>
                                 <div>
                                     <div className="" id={"view" + user.userId}>
@@ -312,7 +318,7 @@ class PeopleOverview extends React.Component {
                                             </Typography>
                                         </div>
                                         <div className="icons">
-                                            {localStorage.getItem('adminCode') == AuthenticationService.adminCode ? (
+                                            {localStorage.getItem('userId') != user.userId ? (
                                                 <div>
                                                     {user.active ? (
                                                         <GavelIcon className="icon2"
@@ -343,7 +349,7 @@ class PeopleOverview extends React.Component {
                                                     }
                                                 </div>
                                             ) : (
-                                                <div></div>
+                                                <div className="greenText">This is you!</div>
                                             )
                                             }
 

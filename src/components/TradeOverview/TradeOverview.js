@@ -280,7 +280,7 @@ class TradeOverview extends Component {
 
                 <br/>
                 {this.state.trades.map(trade =>
-                    <Card variant="outlined">
+                    <Card key={trade.tradeId} variant="outlined">
                         <CardContent>
                             <div className="view" id={"view" + trade.tradeId}>
                                 <div className="cardText">

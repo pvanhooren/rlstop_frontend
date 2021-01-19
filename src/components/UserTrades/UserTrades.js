@@ -83,7 +83,6 @@ class UserTrades extends React.Component {
 
     showEditForm(trade) {
         if (!this.state.busy) {
-            console.log(trade);
             this.setState({tradeId: trade.tradeId, wants: trade.wants, offers: trade.offers, busy: true})
             document.getElementById("edit" + trade.tradeId).style.display = "block";
             document.getElementById("view" + trade.tradeId).style.display = "none";
@@ -138,7 +137,6 @@ class UserTrades extends React.Component {
     }
 
     cancelNoInterests = () => {
-        console.log(this.state.tradeId);
         this.setState({busy: false})
         document.getElementById("noInterests" + this.state.tradeId).style.display = "none";
         document.getElementById("view" + this.state.tradeId).style.display = "block";
@@ -174,7 +172,7 @@ class UserTrades extends React.Component {
                         again!
                     </div>
                     {this.state.trades.map(trade =>
-                        <Card className="tradeCard" variant="outlined">
+                        <Card key={trade.tradeId} className="tradeCard" variant="outlined">
                             <CardContent>
                                 <div className="view" id={"view" + trade.tradeId}>
                                     <div className="cardText">

@@ -22,7 +22,7 @@ const random = Math.round(Math.random() * 4);
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '90.1vh',
+        height: '90.08vh',
     },
     image: {
         backgroundImage: 'url(' + pictures[random] + ')',

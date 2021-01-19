@@ -38,7 +38,6 @@ class WishlistEditor extends React.Component {
         ).then(
             result => {
                 this.setState({wishlist: result.data.wishlist})
-                console.log(this.state.wishlist);
             }).catch((e) => {
             if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block'
@@ -130,7 +129,7 @@ class WishlistEditor extends React.Component {
                     </div>
 
                     {this.state.wishlist.map((item, index) =>
-                        <Card className="itemCard" variant="outlined">
+                        <Card key={index} className="itemCard" variant="outlined">
                             <CardContent>
                                 <div>
                                     <div id={"view" + index}>
