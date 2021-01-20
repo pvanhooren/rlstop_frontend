@@ -18,7 +18,7 @@ const regExp = RegExp(
     /^[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[A-Za-z]+$/
 )
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class Settings extends React.Component {
@@ -66,7 +66,7 @@ class Settings extends React.Component {
     }
 
     promptDelete = () => {
-        var r = prompt("Are you sure that you want to delete your account? Please type " + this.state.user.userName + " to confirm.")
+        let r = prompt("Are you sure that you want to delete your account? Please type " + this.state.user.userName + " to confirm.")
 
         if (r == this.state.user.userName) {
             this.deleteAccount();
@@ -79,9 +79,9 @@ class Settings extends React.Component {
         await axios.delete(baseUrl + "users/" + this.state.user.userId, {
                 headers: headers
             }
-        ).then((response) => {
+        ).then(() => {
             AuthenticationService.logOut(this.props.history)
-        }).catch((e) => {
+        }).catch(() => {
             document.getElementById('serverError').style.display = 'block'
         });
     }
@@ -96,8 +96,8 @@ class Settings extends React.Component {
             friendCodeErrorText: ""
         })
 
-        var anyError = false;
-        var selectedPlatform = this.state.user.platform;
+        let anyError = false;
+        let selectedPlatform = this.state.user.platform;
         if (document.getElementById("switch").checked) {
             selectedPlatform = "NINTENDOSWITCH"
         } else if (document.getElementById("playstation").checked) {

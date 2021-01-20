@@ -21,7 +21,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class PeopleOverview extends React.Component {
@@ -41,9 +41,8 @@ class PeopleOverview extends React.Component {
         axios.get(baseUrl + "users/all", {
                 headers: headers
             }
-        ).then(
-            result => {
-                this.setState({users: result.data})
+        ).then(result => {
+            this.setState({users: result.data})
             }).catch((e) => {
             if (e.response != null) {
                 document.getElementById('serverError').style.display = 'block';
@@ -159,7 +158,7 @@ class PeopleOverview extends React.Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -176,7 +175,7 @@ class PeopleOverview extends React.Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -193,7 +192,7 @@ class PeopleOverview extends React.Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -210,7 +209,7 @@ class PeopleOverview extends React.Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -245,7 +244,7 @@ class PeopleOverview extends React.Component {
     }
 
     componentDidMount() {
-        var cont = true;
+        let cont = true;
         if (AuthenticationService.isLoggedIn()) {
             if(localStorage.getItem('adminCode') != AuthenticationService.adminCode){
                 cont = false;

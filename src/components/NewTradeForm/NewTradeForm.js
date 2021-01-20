@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import './NewTradeForm.css'
 import AuthenticationService from "../../services/AuthenticationService";
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class NewTradeForm extends Component {
@@ -110,9 +110,9 @@ class NewTradeForm extends Component {
                 <br/>
                 <TextField error={this.state.offersError} helperText={this.state.errorText} variant="outlined"
                            className="textfield" id="newOffers" multiline rows={7} label="I offer..."
-                           InputLabelProps={{shrink: true,}}></TextField>
+                           InputLabelProps={{shrink: true,}}/>
                 <TextField error={this.state.wantsError} variant="outlined" className="textfield" id="newWants"
-                           multiline rows={7} label="In trade for..." InputLabelProps={{shrink: true,}}></TextField>
+                           multiline rows={7} label="In trade for..." InputLabelProps={{shrink: true,}}/>
                 <br/><br/>
                 <Button className="marginButton" variant="contained" color="primary"
                         onClick={this.submitForm}>Post</Button><br/><br/><br/>
@@ -125,7 +125,7 @@ class NewTradeForm extends Component {
                             )}
                         </div>
                     ) :
-                    <div></div>
+                    <div/>
                 }
 
             </div>

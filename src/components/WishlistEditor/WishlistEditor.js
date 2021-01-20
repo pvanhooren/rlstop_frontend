@@ -14,7 +14,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class WishlistEditor extends React.Component {
@@ -66,7 +66,7 @@ class WishlistEditor extends React.Component {
         await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/remove/" + this.state.item, null, {
                 headers: headers
             }
-        ).catch((e) => {
+        ).catch(() => {
             alert("Something went wrong deleting this item. Please try again!")
         })
 
@@ -78,7 +78,7 @@ class WishlistEditor extends React.Component {
         await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/add/" + document.getElementById("newItem").value, null, {
                 headers: headers
             }
-        ).catch((e) => {
+        ).catch(() => {
             alert("Something went wrong adding this item. Please try again!")
         })
 
@@ -86,13 +86,13 @@ class WishlistEditor extends React.Component {
     }
 
     clearWishlist = async () => {
-        var r = window.confirm("Are you sure you want to clear your wishlist?");
+        let r = window.confirm("Are you sure you want to clear your wishlist?");
 
         if (r) {
             await axios.put(baseUrl + "users/" + localStorage.getItem('userId') + "/clear", null, {
                     headers: headers
                 }
-            ).catch((e) => {
+            ).catch(() => {
                 alert("Something went wrong clearing this wishlist. Please try again!")
             });
 
@@ -113,7 +113,7 @@ class WishlistEditor extends React.Component {
             <div>
                 <div className="mainArea" id="wishlistEditor">
                     <h2 className="title">Your wishlist</h2>
-                    <TextField className="input" id="newItem" label="New wishlist item"></TextField><br/><br/>
+                    <TextField className="input" id="newItem" label="New wishlist item"/><br/><br/>
                     <div className="btnGroup">
                         <br/>
                         <Button className="marginBtn" onClick={this.addItem} variant="contained" color="primary">Add to

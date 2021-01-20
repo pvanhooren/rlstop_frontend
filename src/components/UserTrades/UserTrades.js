@@ -16,7 +16,7 @@ import "../Overview.css";
 import "../userSelection.css";
 import AuthenticationService from "../../services/AuthenticationService";
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class UserTrades extends React.Component {
@@ -106,7 +106,7 @@ class UserTrades extends React.Component {
                     headers: headers
 
                 }
-            ).catch((e) => {
+            ).catch(() => {
                 document.getElementById('serverError').style.display = 'block'
             });
             document.getElementById("edit" + self.state.tradeId).style.display = "none";
@@ -122,7 +122,7 @@ class UserTrades extends React.Component {
         await axios.delete(baseUrl + "trades/" + this.state.tradeId, {
                 headers: headers
             }
-        ).catch((e) => {
+        ).catch(() => {
             alert("Something went wrong deleting this trade. Please try again!")
         })
 
@@ -207,9 +207,9 @@ class UserTrades extends React.Component {
                                             {trade.user.userName}
                                         </Typography>
                                         <TextField className="marginField" id={"offers" + trade.tradeId}
-                                                   label="Offers..." InputLabelProps={{shrink: true}}></TextField>
+                                                   label="Offers..." InputLabelProps={{shrink: true}}/>
                                         <TextField id={"wants" + trade.tradeId} label="In trade for..."
-                                                   InputLabelProps={{shrink: true}}></TextField>
+                                                   InputLabelProps={{shrink: true}}/>
                                     </div>
 
                                     <div className="icons">

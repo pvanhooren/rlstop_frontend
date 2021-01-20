@@ -21,7 +21,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import CheckIcon from "@material-ui/icons/Check";
 import AuthenticationService from "../../services/AuthenticationService";
 
-var headers = {}
+let headers = {}
 const baseUrl = AuthenticationService.baseUrl;
 
 class TradeOverview extends Component {
@@ -97,7 +97,7 @@ class TradeOverview extends Component {
             }
         ).then(() => {
             this.setState({busy: false})
-        }).catch((e) => {
+        }).catch(() => {
             alert("Something went wrong deleting the trade. Please try again!")
         });
     }
@@ -142,7 +142,7 @@ class TradeOverview extends Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -160,7 +160,7 @@ class TradeOverview extends Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             document.getElementById('serverError').style.display = 'block';
         })
 
@@ -318,7 +318,7 @@ class TradeOverview extends Component {
                                                     fontSize="large" cursor="pointer"
                                                     onClick={() => this.showDeleteForm(trade.tradeId)}/>
                                         :
-                                        <div></div>
+                                        <div/>
                                     }
                                     {/*<CreateIcon className="icon1" color="primary" fontSize="large" cursor="pointer" onClick={() => this.showEditForm(trade)} />*/}
                                 </div>
@@ -330,7 +330,7 @@ class TradeOverview extends Component {
                                         Offers: {trade.offers}, wants: {trade.wants}
                                     </Typography>
                                     <TextField className={"interestField"} id={"comment" + trade.tradeId}
-                                               label="Comment (optional)"></TextField>
+                                               label="Comment (optional)"/>
                                 </div>
 
                                 <div className="icons">

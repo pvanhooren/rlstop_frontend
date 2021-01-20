@@ -66,7 +66,7 @@ class Register extends React.Component {
 
         if (document.getElementById("password").value === document.getElementById("confirmPassword").value) {
             if (regExp.test(document.getElementById("email").value)) {
-                var creds = window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value);
+                let creds = window.btoa(document.getElementById("userName").value + ":" + document.getElementById("password").value);
                 axios.post(baseUrl + "users/new?creds=" + creds + "&email=" + document.getElementById("email").value
                     + "&platform=" + self.state.platform + "&platformID=" + document.getElementById("platformID").value)
                     .then((response) => {

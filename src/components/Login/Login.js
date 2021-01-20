@@ -63,7 +63,7 @@ export default function SignIn(props) {
     const {history} = props;
 
     useEffect(() => {
-        if (localStorage.getItem('token') != null & localStorage.getItem('token') !== "") {
+        if (localStorage.getItem('token') != null && localStorage.getItem('token') !== "") {
             history.push("/")
         }
     })

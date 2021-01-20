@@ -9,7 +9,7 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "./Navbar.css";
 import PermIdentity from '@material-ui/icons/PermIdentity';
 import Avatar from "@material-ui/core/Avatar";
@@ -42,7 +42,7 @@ const Navbar = props => {
     const open = Boolean(anchorEl);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
-    var isLoggedIn = false;
+    let isLoggedIn = false;
 
     if (localStorage.getItem('token') != null && localStorage.getItem('token') !== "") {
         isLoggedIn = true;
@@ -112,7 +112,7 @@ const Navbar = props => {
         }
     ]
 
-    var menuItems = [
+    const menuItems = [
         {
             menuTitle: "Trades",
             pageURL: "/"
@@ -123,7 +123,7 @@ const Navbar = props => {
         },
     ]
 
-    var adminItem = [
+    const adminItem = [
         {
             menuTitle: "People",
             pageURL: "/people"

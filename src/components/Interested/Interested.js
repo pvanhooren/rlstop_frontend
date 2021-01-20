@@ -11,7 +11,7 @@ import axios from "axios";
 
 import AuthenticationService from "../../services/AuthenticationService";
 
-var headers = {};
+let headers = {};
 const baseUrl = AuthenticationService.baseUrl;
 
 class Interested extends React.Component {
@@ -63,7 +63,7 @@ class Interested extends React.Component {
         ).then(() => {
                 this.setState({busy: false})
             }
-        ).catch((e) => {
+        ).catch(() => {
             alert("The interest couldn't be deleted, please try again!")
         })
 
